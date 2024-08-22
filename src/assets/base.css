@@ -1,41 +1,24 @@
-/* color palette from <https://github.com/vuejs/theme> */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 :root {
-  --vt-c-white: #ffffff;
-  --vt-c-white-soft: #f8f8f8;
-  --vt-c-white-mute: #f2f2f2;
-
-  --vt-c-black: #181818;
-  --vt-c-black-soft: #222222;
-  --vt-c-black-mute: #282828;
-
-  --vt-c-indigo: #2c3e50;
-
-  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
-  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
-  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
-  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
-
-  --vt-c-text-light-1: var(--vt-c-indigo);
-  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
-  --vt-c-text-dark-1: var(--vt-c-white);
-  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+  --red-color: #dd0034;
+  --blue-color: #0e1f87;
+  --lila-color: #7C4EA0;
+  --purple-color: #5f3d79;
+  --button-red-color: rgb(212, 65, 65);
+  --black--color: #181818;
+  --slate--Gray--color: rgba(126, 126, 126, 0.466);
+  --dark--slate--gray--color: rgba(19, 18, 18, 0.184);
+  --color-background: white;
+  --indigo--color: #2c3e50;
+ --font: "Inter", sans-serif;
+ --max-width: 2560px;
+ --bs-pagination-active-color: #fff;
+ --bs-pagination-active-bg: #0e1f87;
+ --bs-pagination-active-border-color: #0e1f87;
 }
 
-/* semantic color variables for this project */
-:root {
-  --color-background: var(--vt-c-white);
-  --color-background-soft: var(--vt-c-white-soft);
-  --color-background-mute: var(--vt-c-white-mute);
-
-  --color-border: var(--vt-c-divider-light-2);
-  --color-border-hover: var(--vt-c-divider-light-1);
-
-  --color-heading: var(--vt-c-text-light-1);
-  --color-text: var(--vt-c-text-light-1);
-
-  --section-gap: 160px;
-}
-
+/*revisar si se coloca dark, buscar los colores lcth */
 @media (prefers-color-scheme: dark) {
   :root {
     --color-background: var(--vt-c-black);
@@ -48,6 +31,19 @@
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
   }
+}
+#app {
+  max-width: --max-width;
+  margin: 0 auto;
+  padding: 0;
+  font-weight: normal;
+  font-family:var(--font); 
+}
+
+/* ********** Reset ********** */
+html {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
 *,
@@ -66,21 +62,6 @@ body {
     color 0.5s,
     background-color 0.5s;
   line-height: 1.6;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    sans-serif;
   font-size: 15px;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }

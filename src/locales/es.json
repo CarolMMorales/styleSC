@@ -1,0 +1,30 @@
+{
+  "copyright": "Todos los derechos reservados",
+  "title": "Registro y control",
+  "pagination": {
+    "first": "Primero",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "last": "Último"
+  },
+
+  "titles":{
+    "stylecs": "Styles Management"
+  },
+
+  "login": {
+    "title": "Iniciar Sesión",
+    "email": "Ingrese su correo institucional",
+    "password": "Ingrese su Contraseña",
+    "Terms": "Aceptar términos y condiciones",
+    "Forget": "Recuperar contraseña",
+    "Register": "Registrarse",
+    "ForgetPassword": "Las credenciales proporcionadas no son válidas. Por favor, revisa tu usuario y contraseña e inténtalo nuevamente.",
+    "AccessDenied": "Acceso denegado: No tienes permiso para acceder a este recurso. Por favor, contacta al administrador para obtener ayuda.",
+    "UserNotExist": "El usuario no existe.",
+    "session": "Detectamos que su cuenta está actualmente activa en otro dispositivo. Por favor, cierre esa sesión y vuelva a iniciar sesión aquí. Si continúa experimentando problemas, le recomendamos esperar 24 horas antes de intentarlo nuevamente. ¡Gracias por su comprensión!",
+    "Login": "Ingresar"
+  }
+  
+
+}
