@@ -6,12 +6,13 @@
       <main class="main-content">
         <RouterView></RouterView>
       </main>
-      <!-- <FooterComponent></FooterComponent> -->
+      <FooterComponent></FooterComponent>
     </div>
   </template>
   
   <script setup>
   import headerMain from '../header/headerMainComponent.vue';
+  import FooterComponent from '../FooterComponent.vue';
 
   </script>
  

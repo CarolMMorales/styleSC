@@ -1,11 +1,11 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 :root {
-  --red-color: #dd0034;
+
   --blue-color: #0e1f87;
   --lila-color: #7C4EA0;
   --purple-color: #5f3d79;
-  --button-red-color: rgb(212, 65, 65);
+ 
   --black--color: #181818;
   --slate--Gray--color: rgba(126, 126, 126, 0.466);
   --dark--slate--gray--color: rgba(19, 18, 18, 0.184);
@@ -14,8 +14,7 @@
  --font: "Inter", sans-serif;
  --max-width: 2560px;
  --bs-pagination-active-color: #fff;
- --bs-pagination-active-bg: #0e1f87;
- --bs-pagination-active-border-color: #0e1f87;
+ 
 }
 
 /*revisar si se coloca dark, buscar los colores lcth */

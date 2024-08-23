@@ -12,6 +12,12 @@
     "stylecs": "Styles Management"
   },
 
+  "footer":{
+"createby": "Creado por : Laura Montaña y Carol Morales",
+
+"context":"Pagina web de Style C&S para la gestión de inventario"
+  },
+
   "login": {
     "title": "Iniciar Sesión",
     "email": "Ingrese su correo institucional",
