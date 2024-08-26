@@ -9,7 +9,17 @@
   },
 
   "titles":{
-    "stylecs": "Styles Management"
+    "stylecs": "Styles Management",
+    "categories": "Categorias",
+    "Proveedores": "Proveedores",
+    "Products": "Productos",
+    "Stock": "Inventario",
+    "Ventas": "Ventas",
+    "Asesores": "Asesoras"
+  },
+
+  "profile":{
+    
   },
 
   "footer":{
