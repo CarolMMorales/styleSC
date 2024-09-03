@@ -1,5 +1,4 @@
 import './assets/main.css'
-// import pdfMake from "pdfmake/build/pdfmake";
 
 import { createApp, markRaw } from 'vue'
 import { createPinia } from 'pinia'
@@ -14,17 +13,6 @@ import App from './App.vue'
 import router from './router'
 import { i18n } from './i18n/index.js'
 
-// (pdfMake).fonts = {
-//     Roboto: {
-//       normal:
-//         "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf",
-//       bold: "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf",
-//       italics:
-//         "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Italic.ttf",
-//       bolditalics:
-//         "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-MediumItalic.ttf",
-//     },
-//   };
 
 const app = createApp(App)
 const baseUrl = import.meta.env.VITE_BASE_URL;
@@ -46,8 +34,6 @@ pinia.use(createPersistedState)
 app.use(pinia)
 app.use(router)
 app.use(VueAxios, axios)
-// app.use(BootstrapVue)
-// app.use(IconsPlugin)
 app.use(i18n)
 
 app.mount('#app')

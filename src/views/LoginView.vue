@@ -3,14 +3,19 @@
   <div class="container d-flex justify-content-center align-items-center mt-5">
         <div class="card p-4 shadow-lg p-3 mb-5 bg-body-tertiary rounded" style="width: 300px;">
             <h2 class="text-center mb-4 ">{{ $t('login.title') }}</h2>
-            <form >
+            <form @submit.prevent="handleSubmit">
                 <div class="mb-3">
                     <label for="username" class="form-label">{{
                 $t('login.email')
               }}</label>
+              <div class="input-group flex-nowrap">
+                <span class="input-group-text">
+                  <i class="bi bi-envelope-at-fill"></i>
+                </span>
                     <input type="text" id="username" 
-                    v-model="use_mail" class="form-control" :placeholder="$t('login.email')" required>
-                    <span v-if="use_mail === '' && mailError" v-bind:class="{
+                    v-model="use_email" class="form-control" :placeholder="$t('login.email')" required>
+                    </div>
+                    <span v-if="use_email === '' && mailError" v-bind:class="{
                   ' bi bi-exclamation-lg ': !mailError.isEmpty,
                   ' text-secondary ': !mailError.isEmpty
               }">
@@ -93,21 +98,38 @@
 
 <script setup>
 import { validateEmails, showPassword } from '../validation'
+import { useAuthStore } from '@/stores/authStore';
+import { useRouter } from 'vue-router'
+
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
-const use_mail = ref('')
+const use_email = ref('')
 const use_password = ref('')
-
+const authStore = useAuthStore()
+const router = useRouter()
 const validateMailWrapper = () => {
   return validateEmails(
-    use_mail.value,
+    use_email.value,
     t('correo no valido')
   )
 }
 const mailError = computed(() => {
   return validateMailWrapper()
 })
+
+const handleSubmit = async () => {
+  await authStore.access(use_email.value, use_password.value)
+  const localStoragePassword = localStorage.getItem('pass');
+    const localStorageDocument = localStorage.getItem('doct');
+    if (localStoragePassword === localStorageDocument) {
+        // Si las contraseñas cifradas y los documentos cifrados son iguales, redirigir a "/resetPassword"
+        router.push("/updatePassword");
+    } else {
+        // Si no son iguales, redirigir a "/userProfile"
+        router.push('/userProfile');
+    }
+}
 
 </script>
 

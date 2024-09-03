@@ -128,3 +128,78 @@ export const validateEmails = (email, errorMessage) => {
       return mensaje
     }
   }
+  export const handleErrorLog = (error) => {
+    if (error.response) {
+      // Error de respuesta (por ejemplo, error HTTP)
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: `${error.response.status} - ${error.response.data.message}`,
+        confirmButtonColor: '#dd0034'
+      })
+      console.error(error.response.data)
+    }
+    if (error.request) {
+      const messageToShow = error.response.data.message.message
+  
+      if (messageToShow.includes('passw')) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          confirmButtonColor: '#dd0034',
+          text: `${error.response.data.message.message}`
+        })
+        showSwalAlert(null, messageToShow, 'error')
+      }
+  
+      console.error('Error de solicitud:', error.response.data)
+    } else {
+      // Otros tipos de errores
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        confirmButtonColor: '#dd0034',
+        text: 'Error: Se produjo un error inesperado'
+      })
+      console.error('Error inesperado:', error.message)
+    }
+  }
+  export const handleResponseauth = (res, name, successMessage, duplicateAlert, invalidFormat) => {
+    const array_errors = ['name has already been taken']
+  
+  
+    if (res.data && res.data.status === false && res.data.message) {
+      let messageToShow = res.data.message[0]
+      for (let i = 0; i < array_errors.length; i++) {
+        if (array_errors.includes(array_errors[i])) {
+          messageToShow = duplicateAlert
+          showSwalAlert('', messageToShow, 'error')
+        }
+      }
+  
+      let password = res.data.message
+      //let messageToShows = res.data.message;
+  
+      /*if (messageToShow.includes('name has already been taken')) {
+        messageToShow = duplicateAlert;
+        showSwalAlert(name, messageToShow, 'error');
+      }
+      else*/ if (messageToShow.includes('format invalidate')) {
+        messageToShow = invalidFormat
+        showSwalAlert(null, messageToShow, 'error')
+      } else if (password.includes('No reservation made')) {
+        password = invalidFormat
+        showSwalAlert(null, password, 'error')
+      } else if (messageToShow.includes('No users registered')) {
+        messageToShow = invalidFormat
+        showSwalAlert(null, messageToShow, 'error')
+      } else if (messageToShow.includes('Access denied')) {
+        messageToShow = invalidFormat
+        showSwalAlert(null, messageToShow, 'error')
+      }
+    }
+    if (res.data && res.data.status === true) {
+      let messageToShow = successMessage
+      showSwalAlert(name, messageToShow, 'success')
+    }
+  }
