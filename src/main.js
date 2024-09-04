@@ -15,14 +15,18 @@ import { i18n } from './i18n/index.js'
 
 
 const app = createApp(App)
-const baseUrl = import.meta.env.VITE_BASE_URL;
-window.axios = axios;
-window.axios.defaults.baseURL = baseUrl;
-window.axios.defaults.headers.common['Accept'] ='application/json'
-window.axios.defaults.headers.common['Content-Type']='application/json'
-window.axios.defaults.headers.common['X-Requested-with'] = 'XMLHttpRequest'
-window.axios.defaults.withCredentials = true
-window.axios.defaults.silent = true;
+//const baseUrl = import.meta.env.VITE_BASE_URL;
+// window.axios = axios;
+// window.axios.defaults.baseURL = baseUrl;
+// window.axios.defaults.headers.common['Accept'] = 'application/json';
+// window.axios.defaults.headers.common['Content-Type'] = 'application/json';
+// window.axios.defaults.headers.common['X-Requested-with'] = 'XMLHttpRequest';
+// window.axios.defaults.withCredentials = true;
+// window.axios.defaults.silent = true;
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
+axios.defaults.headers.common['Accept'] = 'application/json';
+axios.defaults.headers.common['Content-Type'] = 'application/json';
+axios.defaults.withCredentials = true;
 
 
 const pinia = createPinia()
