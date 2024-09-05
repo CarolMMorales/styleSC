@@ -1,5 +1,4 @@
 import axios from 'axios';
-import CryptoJS from 'crypto-js';
 import { useI18n } from 'vue-i18n';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
@@ -11,7 +10,7 @@ export const useAuthStore = defineStore('user', () => {
   const { t } = useI18n();
   const router = useRouter(); // Inicializar useRouter
   const URL_LOGIN = '/auth/login'; // Actualiza la URL si es necesario
-  const URL_LOGOUT = 'auth/logout'; // Actualiza la URL si es necesario
+  const URL_LOGOUT = '/auth/logout'; // Asegúrate de que la URL esté correcta
 
   const token = ref(null);
   const use_id = ref(null);
@@ -25,21 +24,16 @@ export const useAuthStore = defineStore('user', () => {
             return;
         }
 
-        const hashedPassword = CryptoJS.SHA256(use_password).toString();
         const res = await axios.post(URL_LOGIN, {
             use_email,
-            use_password: hashedPassword,
+            use_password, // No encriptes la contraseña aquí
         });
 
         token.value = res.data.token;
         use_id.value = res.data.use_id;
 
-        const secretKey = 'TuClaveSecreta'
-        const encryptedId = CryptoJS.AES.encrypt(String(use_id.value), secretKey).toString();
-
         localStorage.setItem('Accept', token.value);
-        localStorage.setItem('id', encryptedId);
-        localStorage.setItem('pass', hashedPassword);
+        localStorage.setItem('id', use_id.value);
 
         router.push('/userProfile');
     } catch (error) {
@@ -64,18 +58,12 @@ export const useAuthStore = defineStore('user', () => {
     }
 };
 
-  
   // Función para cerrar la sesión del usuario
   const logout = async () => {
     try {
-      await axios({
-        url: URL_LOGOUT,
-        method: 'POST',
+      await axios.post(URL_LOGOUT, {}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('Accept')}`,
-        },
-        data: {
-          use_id: use_id.value,
         },
       });
     } catch (error) {
@@ -92,21 +80,17 @@ export const useAuthStore = defineStore('user', () => {
     use_id.value = null;
     localStorage.removeItem('Accept');
     localStorage.removeItem('id');
-    localStorage.removeItem('pass');
   };
 
   // Función para restablecer la contraseña
   const reset = async (newPassword, confirmPassword, code) => {
     try {
-      const res = await axios({
-        url: `/reset/password`,
-        method: 'POST',
-        data: {
-          new_password: newPassword,
-          password_confirmation: confirmPassword,
-          res_pas_code: code,
-        },
+      const res = await axios.post(`/reset/password`, {
+        new_password: newPassword,
+        password_confirmation: confirmPassword,
+        res_pas_code: code,
       });
+
       if (res.data.status === false) {
         showSwalAlert(res.data.message, 'error');
       } else if (res.data.status === true) {
@@ -120,12 +104,8 @@ export const useAuthStore = defineStore('user', () => {
   // Función para enviar correo de recuperación de contraseña
   const mail = async (email) => {
     try {
-      const res = await axios({
-        url: `/send/email`,
-        method: 'POST',
-        data: {
-          use_mail: email,
-        },
+      const res = await axios.post(`/send/email`, {
+        use_mail: email,
       });
 
       handleResponseauth(
