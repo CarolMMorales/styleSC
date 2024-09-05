@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../stores/authStore.js'
-import CryptoJS from 'crypto-js'
+//import CryptoJS from 'crypto-js'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_URL),
@@ -14,14 +14,6 @@ const router = createRouter({
           name: 'login',
           component: () => import('../views/LoginView.vue')
         }
-        // {
-        //   path: 'profile',
-        //   name: 'profile',
-        //   component: () => import('../views/ProfileView.vue'),
-        //   meta:{
-        //     auth:true
-        //   }
-        // }
       ]
     },
     {
@@ -89,47 +81,19 @@ router.beforeEach(async (to, from, next) => {
   const requiredAuth = to.meta.auth;
   const UserStore = useAuthStore();
 
-  // Si el token ya está presente en el almacenamiento local, establecerlo en el almacén de estado
-  const localStorageToken = localStorage.getItem("Accept");
-  const localStorageId = localStorage.getItem('id');
-  const secretKey = 'TuClaveSecreta';
-
-  let use_id = null;
-  if (localStorageId) {
-    try {
-      use_id = CryptoJS.AES.decrypt(localStorageId, secretKey).toString(CryptoJS.enc.Utf8);
-    } catch (error) {
-      console.error('Error al desencriptar localStorageId:', error);
-      return next('/'); // Redirigir al inicio si hay un error en la desencriptación
-    }
-  }
-
+  // Verifica si el token está en localStorage y establece en el store si es necesario
+  const localStorageToken = localStorage.getItem('Accept');
   if (localStorageToken) {
     UserStore.token = localStorageToken;
   }
 
-  // Si la ruta requiere autenticación
-  if (requiredAuth) {
-    if (!UserStore.token) {
-      // Si no hay token, redirigir al inicio de sesión
-      return next('/');
-    } else {
-      // Si hay token, verifica la validez del token o haz la lógica adicional que requieras aquí
-      try {
-        const isLoggedOut = await UserStore.logout(use_id);
-        if (isLoggedOut) {
-          return next('/'); // Redirigir al inicio si el usuario ha cerrado sesión
-        }
-      } catch (error) {
-        console.error('Error al intentar cerrar sesión:', error);
-        return next('/'); // Redirigir al inicio en caso de error
-      }
-    }
+  // Si la ruta requiere autenticación y no hay token, redirigir al login
+  if (requiredAuth && !UserStore.token) {
+    return next({ name: 'login' });
   }
 
-  // Permitir el acceso a rutas públicas
+  // Si el usuario está autenticado, permitir el acceso
   return next();
 });
 
-
-export default router
+export default router;

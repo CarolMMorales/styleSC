@@ -2,61 +2,70 @@ import axios from 'axios';
 import { useI18n } from 'vue-i18n';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { useRouter } from 'vue-router'; // Importar useRouter
+import { useRouter } from 'vue-router';
 
 import { handleErrorLog, showSwalAlert, handleResponseauth } from '../validation.js';
 
 export const useAuthStore = defineStore('user', () => {
   const { t } = useI18n();
-  const router = useRouter(); // Inicializar useRouter
-  const URL_LOGIN = '/auth/login'; // Actualiza la URL si es necesario
-  const URL_LOGOUT = '/auth/logout'; // Asegúrate de que la URL esté correcta
+  const router = useRouter();
+  const URL_LOGIN = '/auth/login';
+  const URL_LOGOUT = '/auth/logout';
 
-  const token = ref(null);
-  const use_id = ref(null);
+  // Recuperar token y ID del usuario desde localStorage al cargar la aplicación
+  const token = ref(localStorage.getItem('Accept') || null);
+  const use_id = ref(localStorage.getItem('id') || null);
   const authUser = ref(null);
+
+  // Variable que verifica si el usuario está autenticado
+  const isAuthenticated = ref(!!token.value);
 
   // Función para iniciar sesión
   const access = async (use_email, use_password) => {
     try {
-        if (!use_email || !use_password) {
-            showSwalAlert(null, 'Email y contraseña son obligatorios', 'error');
-            return;
-        }
+      if (!use_email || !use_password) {
+        showSwalAlert(null, 'Email y contraseña son obligatorios', 'error');
+        return;
+      }
 
-        const res = await axios.post(URL_LOGIN, {
-            use_email,
-            use_password, // No encriptes la contraseña aquí
-        });
+      const res = await axios.post(URL_LOGIN, {
+        use_email,
+        use_password,
+      });
 
-        token.value = res.data.token;
-        use_id.value = res.data.use_id;
+      token.value = res.data.token;
+      use_id.value = res.data.use_id;
 
-        localStorage.setItem('Accept', token.value);
-        localStorage.setItem('id', use_id.value);
+      // Guardar el token y el ID del usuario en localStorage
+      localStorage.setItem('Accept', token.value);
+      localStorage.setItem('id', use_id.value);
 
-        router.push('/userProfile');
+      // Marcar al usuario como autenticado
+      isAuthenticated.value = true;
+
+      // Redirigir al perfil del usuario
+      router.push('/userProfile');
     } catch (error) {
-        if (error.response) {
-            let messageToShow = error.response.data.message || '';
-            if (messageToShow.includes('Invalid email or password')) {
-                messageToShow = t('login.ForgetPassword');
-                showSwalAlert(null, messageToShow, 'error');
-            } else if (messageToShow.includes('no access')) {
-                messageToShow = t('login.AccessDenied');
-                showSwalAlert(null, messageToShow, 'warning');
-            } else {
-                showSwalAlert(null, messageToShow || 'Error desconocido', 'error');
-            }
-        } else if (error.request) {
-            console.error('Error de solicitud:', error.request);
-            showSwalAlert(null, 'Request error', 'error');
+      if (error.response) {
+        let messageToShow = error.response.data.message || '';
+        if (messageToShow.includes('Invalid email or password')) {
+          messageToShow = t('login.ForgetPassword');
+          showSwalAlert(null, messageToShow, 'error');
+        } else if (messageToShow.includes('no access')) {
+          messageToShow = t('login.AccessDenied');
+          showSwalAlert(null, messageToShow, 'warning');
         } else {
-            console.error('Error inesperado:', error.message);
-            showSwalAlert(null, 'Unexpected error', 'error');
+          showSwalAlert(null, messageToShow || 'Error desconocido', 'error');
         }
+      } else if (error.request) {
+        console.error('Error de solicitud:', error.request);
+        showSwalAlert(null, 'Request error', 'error');
+      } else {
+        console.error('Error inesperado:', error.message);
+        showSwalAlert(null, 'Unexpected error', 'error');
+      }
     }
-};
+  };
 
   // Función para cerrar la sesión del usuario
   const logout = async () => {
@@ -73,13 +82,15 @@ export const useAuthStore = defineStore('user', () => {
     }
   };
 
-  // Función para restablecer el estado del almacén
+  // Función para restablecer el estado del store
   const resetStore = () => {
     token.value = null;
     authUser.value = null;
     use_id.value = null;
     localStorage.removeItem('Accept');
     localStorage.removeItem('id');
+    isAuthenticated.value = false;
+    router.push('/login');
   };
 
   // Función para restablecer la contraseña
@@ -123,7 +134,6 @@ export const useAuthStore = defineStore('user', () => {
         }
         console.error('Error de solicitud:', error.response.data);
       } else {
-        // Otros tipos de errores
         showSwalAlert({
           icon: 'error',
           title: 'Error',
@@ -136,6 +146,9 @@ export const useAuthStore = defineStore('user', () => {
 
   return {
     token,
+    use_id,
+    authUser,
+    isAuthenticated,
     access,
     logout,
     reset,

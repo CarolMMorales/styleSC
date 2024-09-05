@@ -13,8 +13,8 @@
    <FooterComponent></FooterComponent>
   </template>
   <script setup>
-  import  FooterComponent from '../../components/FooterComponent.vue'
-import HeaderProtected from '../header/HeaderProtected.vue';
+  import FooterComponent from '../../components/FooterComponent.vue'
+  import HeaderProtected from '../header/headerProtected.vue';
   </script>
   <style>
   
