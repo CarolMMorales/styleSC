@@ -10,8 +10,8 @@ import { handleErrorLog, showSwalAlert, handleResponseauth } from '../validation
 export const useAuthStore = defineStore('user', () => {
   const { t } = useI18n();
   const router = useRouter(); // Inicializar useRouter
-  const URL_LOGIN = '/api/auth/login'; // Actualiza la URL si es necesario
-  const URL_LOGOUT = '/api/auth/logout'; // Actualiza la URL si es necesario
+  const URL_LOGIN = '/auth/login'; // Actualiza la URL si es necesario
+  const URL_LOGOUT = 'auth/logout'; // Actualiza la URL si es necesario
 
   const token = ref(null);
   const use_id = ref(null);
