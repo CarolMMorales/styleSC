@@ -11,12 +11,25 @@
   "titles":{
     "stylecs": "Styles Management",
     "categories": "Categorias",
-    "Proveedores": "Proveedores",
-    "Products": "Productos",
-    "Stock": "Inventario",
-    "Ventas": "Ventas",
-    "Asesores": "Asesoras"
+    "proveedores": "Proveedores",
+    "products": "Productos",
+    "stock": "Inventario",
+    "ventas": "Ventas",
+    "asesores": "Asesoras"
   },
+
+"buttons":{
+  "add": "Agregar",
+  "edit": "Editar",
+  "delete": "Eliminar"
+},
+
+"proveedores":{
+  "prove_name": "Nombre proveedor",
+  "prove_address": "Dirección",
+  "prove_email": "Correo",
+  "prove_phone": "Telefono" 
+},
 
   "profile":{
     

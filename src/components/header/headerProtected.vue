@@ -24,7 +24,7 @@
                   active-class="active" 
                   to="/categories"
                 >
-                  Categorías
+                {{ $t ('titles.categories') }}
                 </router-link>
               </li>
               <li class="nav-item">
@@ -33,7 +33,7 @@
                   active-class="active" 
                   to="/proveedores"
                 >
-                  Proveedores
+                {{ $t ('titles.proveedores') }}
                 </router-link>
               </li>
               <li class="nav-item">
@@ -42,7 +42,7 @@
                   active-class="active" 
                   to="/product"
                 >
-                  Productos
+                {{ $t ('titles.products') }}
                 </router-link>
               </li>
               <li class="nav-item">
@@ -51,7 +51,7 @@
                   active-class="active" 
                   to="/stocks"
                 >
-                  Inventario
+                {{ $t ('titles.stock') }}
                 </router-link>
               </li>
               <li class="nav-item">
@@ -60,7 +60,7 @@
                   active-class="active" 
                   to="/stocks"
                 >
-                  Ventas
+                {{ $t ('titles.ventas') }}
                 </router-link>
               </li>
               <li class="nav-item">
@@ -69,7 +69,7 @@
                   active-class="active" 
                   to="/asesores"
                 >
-                  Asesores
+                {{ $t ('titles.asesores') }}
                 </router-link>
               </li>
             </ul>

@@ -19,6 +19,7 @@
     "bootstrap": "^5.3.3",
     "bootstrap-vue": "^2.23.1",
     "crypto-js": "^4.2.0",
+    "datatables.net-bs5": "^2.1.5",
     "pinia": "^2.2.2",
     "pinia-plugin-persistedstate": "^3.2.1",
     "sweetalert2": "^11.12.4",
