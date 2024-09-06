@@ -32,7 +32,7 @@ const router = createRouter({
           }
         },
         {
-          path: 'asesores',
+          path: '/asesores',
           name: 'asesores',
           component: () => import('../views/AsesoresView.vue'),
           meta:{
@@ -40,7 +40,7 @@ const router = createRouter({
           }
         },
         {
-          path: 'categories',
+          path: '/categories',
           name: 'categories',
           component: () => import('../views/CategoriesView.vue'),
           meta:{
@@ -48,7 +48,7 @@ const router = createRouter({
           }
         },
         {
-          path: 'product',
+          path: '/product',
           name: 'product',
           component: () => import('../views/ProductView.vue'),
           meta:{
@@ -56,7 +56,7 @@ const router = createRouter({
           }
         },
         {
-          path: 'proveedores',
+          path: '/proveedores',
           name: 'proveedores',
           component: () => import('../views/ProveedoresView.vue'),
           meta:{
@@ -64,7 +64,7 @@ const router = createRouter({
           }
         },
         {
-          path: 'stocks',
+          path: '/stocks',
           name: 'stocks',
           component: () => import('../views/StocksView.vue'),
           meta:{
