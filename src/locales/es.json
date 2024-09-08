@@ -15,20 +15,34 @@
     "products": "Productos",
     "stock": "Inventario",
     "ventas": "Ventas",
-    "asesores": "Asesoras"
+    "asesores": "Asesoras",
+    "search": "Buscar",
+    "profile": "Perfil",
+    "exit": "Cerrar Sesión"
   },
 
 "buttons":{
   "add": "Agregar",
   "edit": "Editar",
-  "delete": "Eliminar"
+  "delete": "Eliminar",
+  "save": "Guardar",
+  "cancel": "Cancelar",
+  "confirmDelete": "Eliminar"
 },
+
+"messages": {
+    "confirmDelete": "¿Estás seguro de que deseas eliminar este proveedor?"
+  },
 
 "proveedores":{
   "prove_name": "Nombre proveedor",
+  "prove_lastname": "Apellido proveedor",
   "prove_address": "Dirección",
   "prove_email": "Correo",
-  "prove_phone": "Telefono" 
+  "prove_phone": "Telefono",
+  "edit": "Editar Proveedor",
+  "delete": "Eliminar Proveedor",
+  "add": "Agregar Proveedor" 
 },
 
   "profile":{

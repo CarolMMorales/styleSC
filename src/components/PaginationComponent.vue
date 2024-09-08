@@ -36,19 +36,19 @@ function changePage(pageNumber) {
 
 <style>
 .page-link {
-  color: var(--blue-color);;
+  color: var(--lila-color);;
 }
 .page-link.active, .active > .page-link {
     z-index: 3;
     color: var(--bs-pagination-active-color);
-    background-color: var(--blue-color);
-    border-color: var(--blue-color);;
+    background-color: var(--lila-color);
+    border-color: var(--lila-color);;
 }
 .page-item.active .page-link {
     z-index: 1;
     color: #fff;
-    background-color: var(--blue-color);
-    border-color:  var(--blue-color);
+    background-color: var(--lila-color);
+    border-color:  var(--lila-color);
 }
 
 </style>

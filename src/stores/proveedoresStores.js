@@ -3,7 +3,7 @@ import CryptoJS from 'crypto-js';
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useAuthStore } from './authStore'
-import { showSwalAlert} from '../validation'
+import { showSwalAlert, handleResponse} from '../validation'
 //import { useI18n } from "vue-i18n";
 import { useRouter } from 'vue-router'
 export const useProveedorStore = defineStore('proveedores', () => {
@@ -16,7 +16,7 @@ export const useProveedorStore = defineStore('proveedores', () => {
   const prove = ref([])
 
 
-  // Esta función se utiliza para registrar los contactos 
+  // Funcion para registrar 
   const registerProveedor = async (prove_name, prove_lastname, prove_address, prove_phone, prove_email) => {
     try {
       const res = await axios({
@@ -31,36 +31,26 @@ export const useProveedorStore = defineStore('proveedores', () => {
           prove_address: prove_address,
           prove_phone: prove_phone,
           prove_email: prove_email,
-          use_id:user
-
+          use_id: user
         }
-      })
-    //   handleResponsePersons(
-    //     res,
-    //     prove_name,
-    //     t('contacts.messageSuccess'),
-    //     t('errors.invalidFormat'),
-    //     t('telephones.numberCharacters'),
-    //     t('telephones.number15Characters'),
-    //     t('validation.mails.invalidFormat'),
-    //   )
-      
-      const newProveedorId = res.data;
-        return newProveedorId;
+      });
+      handleResponse(res, prove_name);
+      await readProveedor();  // Asegúrate de que esta llamada esté presente
+      return true;
     } catch (error) {
-      
-      console.log(error.response?.data || error)
+      console.log(error.response?.data || error);
     }
-  }
+  };
+  
 
 
-// Esta función se utiliza para editar los contactos
-const updateProveedor = async (prove_id, new_prove_name, new_prove_lastname, new_prove_address, new_prove_phone,new_prove_email) => {
+// Funcion para editar
+const updateProveedor = async (prove_id, new_prove_name, new_prove_lastname, new_prove_address, new_prove_phone, new_prove_email) => {
   try {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + authStore.token;
     const res = await axios({
-      url: `${URL_PROVEEDORES}/${prove_id}`, 
-      method: 'PUT', 
+      url: `${URL_PROVEEDORES}/${prove_id}`,
+      method: 'PUT',
       headers: {
         Authorization: 'Bearer ' + authStore.token
       },
@@ -70,31 +60,20 @@ const updateProveedor = async (prove_id, new_prove_name, new_prove_lastname, new
         prove_address: new_prove_address,
         prove_phone: new_prove_phone,
         prove_email: new_prove_email,
-        use_id:user
+        use_id: user
       }
     });
-    //   handleResponsePersons(
-    //     res,
-    //     new_prove_name,
-    //     t('contacts.edited'),
-    //     t('errors.invalidFormat'),
-    //     t('telephones.numberCharacters'),
-    //     t('telephones.number15Characters'),
-    //     t('validation.mails.invalidFormat'),
-    //   )
-      
-
-
-      const newProveedorId = res.data;
-      return newProveedorId ;
-    
+    handleResponse(res, new_prove_name);
+    await readProveedor(); 
+    return true;  
   } catch (error) {
-    console.error(error.response?.data || error);
     handleError(error);
+    return false;  
   }
 };
 
-// Esta función se utiliza para leer los contactos
+
+//funcion para leer y utilizar datos
 const readProveedor = async () => {
   try {
     const res = await axios({
@@ -104,27 +83,46 @@ const readProveedor = async () => {
         Authorization: 'Bearer ' + authStore.token
       }
     })
-    prove.value = res.data.data.map((item) => {
+    prove.value = res.data.map((item) => {
       return {
+          prove_id: item.prove_id,
           prove_name: item.prove_name,
           prove_lastname: item.prove_lastname,
           prove_address: item.prove_address,
           prove_phone: item.prove_phone,
           prove_email: item.prove_email
       };
+
   });
+  console.log(prove.value);
     return prove.value;
+    
   } catch (error) {
     handleError(error)
   }
 };  
+// Función para eliminar 
+const deleteProveedor = async (prove_id) => {
+  try {
+    const res = await axios({
+      url: `${URL_PROVEEDORES}/${prove_id}`,
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Bearer ' + authStore.token
+      }
+    });
+    handleResponse(res, "Proveedor eliminado");
+    
+   
+    await readProveedor();
+    return true;
+  } catch (error) {
+    handleError(error);
+    return false;
+  }
+};
 
-// Esta función se utiliza para obtener los detalles de los teléfonos asociados a una persona por su ID
 
-// const getContactByPersonId = (docType, document) => {
-//   return prove.value.filter(contactItem => 
-//     contactItem.doc_typ_id === docType && contactItem.per_document === document);
-//   };
 
   const handleError =(error)=>{
     if (error.response && error.response.status === 401) {
@@ -143,6 +141,7 @@ return {
   registerProveedor,
   readProveedor,
   updateProveedor,
+  deleteProveedor,
   useProveedorStore,
   prove
 }

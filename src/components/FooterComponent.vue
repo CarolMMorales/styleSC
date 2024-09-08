@@ -1,6 +1,6 @@
 <template>
     
-<footer class=" text-lg-start w-100 footer ">
+<footer class=" text-lg-start w-100 footer mt-3">
     <div class="text center m-2">
         <h2>{{ $t('titles.stylecs') }}</h2>
         <p>{{ $t('footer.context') }}</p>
@@ -9,6 +9,7 @@
 </footer>
 
 </template>
+
 <style>
 .footer {
   /* Establece el pie de página como un elemento flexible */

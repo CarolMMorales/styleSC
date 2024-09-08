@@ -20,9 +20,10 @@
             <div class="col-10">
               <div>
                 <p class="name fw-semibold mb-1">
-                  nombre
+                  {{ profileStore.profile.per_name }}
+                  {{ profileStore.profile.per_lastname }}
                 </p>
-                <p class="mail mb-0">use</p>
+                <p class="mail mb-0">{{ profileStore.profile.use_mail }}</p>
               </div>
             </div>
           </div>
@@ -33,7 +34,7 @@
         <div class="container">
           <RouterLink to="/userProfile" class="text-decoration-none"  >
             <div class="link ">
-              <div class="dropdown-item">{{ $t("header.profile") }}</div>
+              <div class="dropdown-item">{{ $t("titles.profile") }}</div>
             </div>
           </RouterLink>
         </div>
@@ -41,12 +42,12 @@
       <li>
         <div class="container">
           <div class="link ">
-            <a @click="logoutUser" class="dropdown-item">{{ $t("header.exit") }}</a>
+            <a @click="logoutUser" class="dropdown-item">{{ $t("titles.exit") }}</a>
           </div>
         </div>
       </li>
       <li><hr class="dropdown-divider"></li>
-      
+
     </ul>
   </div>
   <!-- <changePhoto></changePhoto> -->
@@ -54,49 +55,49 @@
 
 <script setup>
 
-// import changePhoto from "./changePhoto.vue";
-// import { useAuthStore } from "../stores/authStore";
-//import { RouterLink } from "vue-router";
-// import { useRouter } from "vue-router";
-// import CryptoJS from "crypto-js";
-// // import { useProfileStore } from "../stores/profileStore";
-// import { ref, onMounted, watch } from "vue";
+//import changePhoto from "./changePhoto.vue";
+import { useAuthStore } from "../stores/authStore";
+import { RouterLink } from "vue-router";
+import { useRouter } from "vue-router";
+import CryptoJS from "crypto-js";
+import { useProfileStore } from "../stores/profileStore";
+import { ref, onMounted, watch } from "vue";
 
-// const router = useRouter();
-// // const userAuth = useAuthStore();
-// // const profileStore = useProfileStore();
+const router = useRouter();
+const userAuth = useAuthStore();
+const profileStore = useProfileStore();
 
-// const secretKey = "TuClaveSecreta";
+const secretKey = "TuClaveSecreta";
 
-// const use_id = CryptoJS.AES.decrypt(localStorage.getItem("id"), secretKey).toString(
-//   CryptoJS.enc.Utf8
-// );
+const use_id = CryptoJS.AES.decrypt(localStorage.getItem("id"), secretKey).toString(
+  CryptoJS.enc.Utf8
+);
 
-// const profileImage = ref(profileStore.profile.use_photo);
+const profileImage = ref(profileStore.profile.use_photo);
 
-// const updateProfileImage = (event) => {
-//   profileImage.value = event.detail.newImage;
-// };
+const updateProfileImage = (event) => {
+  profileImage.value = event.detail.newImage;
+};
 
-// onMounted(() => {
-//   // Actualizar la imagen durante la montura inicial
-//   updateProfileImage({ detail: { newImage: profileStore.profile.use_photo } });
-//   // Escuchar evento para actualizar la imagen
-//   window.addEventListener("update-profile-image", updateProfileImage);
-// });
+onMounted(() => {
+  // Actualizar la imagen durante la montura inicial
+  updateProfileImage({ detail: { newImage: profileStore.profile.use_photo } });
+  // Escuchar evento para actualizar la imagen
+  window.addEventListener("update-profile-image", updateProfileImage);
+});
 
-// // Actualizar la imagen si cambia en el store
-// watch(
-//   () => profileStore.profile.use_photo,
-//   (newValue) => {
-//     profileImage.value = newValue;
-//   }
-// );
+// Actualizar la imagen si cambia en el store
+watch(
+  () => profileStore.profile.use_photo,
+  (newValue) => {
+    profileImage.value = newValue;
+  }
+ );
 
-// const logoutUser = async () => {
-//   await userAuth.logout(use_id);
-//   router.push("/");
-// };
+const logoutUser = async () => {
+  await userAuth.logout(use_id);
+  router.push("/");
+};
 </script>
 
 <style lang="scss" scoped>

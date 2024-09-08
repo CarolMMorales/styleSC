@@ -50,7 +50,7 @@
                       @click="prepareEditForm(Item)"
                       type="button"
                       data-bs-toggle="modal"
-                      data-bs-target="#editModalMail"
+                      data-bs-target="#editModal"
                       class="btn btn-outline-success"
                     >
                       <i class="ri-pencil-fill"></i> {{ $t('buttons.edit') }}
@@ -60,13 +60,13 @@
                 <td>
                   <div class="text-light text-center align-items-center justify-content-center">
                     <button
-                      @click="prepareEditForm(Item)"
+                      @click="prepareDeleteForm(Item)"
                       type="button"
                       data-bs-toggle="modal"
-                      data-bs-target="#editModalMail"
-                      class="btn btn-outline-success"
+                      data-bs-target="#deleteModal"
+                      class="btn btn-outline-danger"
                     >
-                      <i class="ri-pencil-fill"></i> {{ $t('buttons.edit') }}
+                      <i class="bi bi-trash-fill"></i> {{ $t('buttons.delete') }}
                     </button>
                   </div>
                 </td>
@@ -89,9 +89,11 @@
       :prove_lastname="prove_lastname"
       :prove_address="prove_address"
       :prove_phone="prove_phone"
+      :prove_email="prove_email"
       :edit="true"
     ></ModalProveedores>
-    <pre>{{ prove }}</pre>
+    <ModalDelete :prove_id="parseInt(prove_id)"></ModalDelete>
+   
   </template>
   
   <script setup>
@@ -100,14 +102,15 @@
   import LoadingComponent from '../LoadingComponent.vue'
   import ModalProveedores from './ModalComponent.vue'
   import { ref, computed, onMounted, watch } from 'vue'
-
+  import ModalDelete from './DeleteComponent.vue'
   const proveStore = useProveedorStore()
   const prove_name = ref('')
   const prove_lastname = ref('')
   const prove_id = ref('')
   const prove_address = ref('')
-  const prove_email = ref('')
   const prove_phone = ref('')
+  const prove_email = ref('')
+
 
   const editing = ref(false)
 
@@ -123,14 +126,18 @@
   })
   
 
-const prepareEditForm = async (proItem) => {
+const prepareEditForm =  (proItem) => {
+  prove_id.value = proItem.prove_id
   prove_name.value = proItem.prove_name
   prove_lastname.value = proItem.prove_lastname
   prove_address.value = proItem.prove_address
-  prove_email.value = proItem.prove_email
   prove_phone.value = proItem.prove_phone
+  prove_email.value = proItem.prove_email
   editing.value = true
 
+}
+const prepareDeleteForm = (proItem)=>{
+  prove_id.value = proItem.prove_id
 }
   
   const filter = computed(() => {
@@ -142,7 +149,7 @@ const prepareEditForm = async (proItem) => {
       const matchesAddress = Item.prove_address.toLowerCase().includes(lowerSearchTerm)
       const matchesEmail = Item.prove_email.toLowerCase().includes(lowerSearchTerm)
       const matchesPhone = Item.prove_phone.toString().includes(lowerSearchTerm)
-      const fullName = `${Item.per_name} ${Item.per_lastname}`.toLowerCase()
+      const fullName = `${Item.prove_name} ${Item.prove_lastname}`
       const matchesFullName = fullName.includes(lowerSearchTerm)
       return (
         matchesLastname ||

@@ -1,7 +1,7 @@
 <template>
-  <div class="m-sm-0 m-mt-5">
+  <div class="container-fluid justify-content-center m-2 mb-3">
     <div class="card  shadow bg-body-tertiary rounded">
-      <h2 class="fw-bold text-center mt-3">{{ $t ('titles.proveedores') }}</h2>
+      <h2 class="fw-bold text-center mt-3 fs-3">{{ $t ('titles.proveedores') }}</h2>
       <div class="card-header">
         <div class="row p-3">
           <div class="col-12 col-md-12 col-lg-12 text-end">

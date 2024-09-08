@@ -3,7 +3,7 @@
    <section class="container-fluid">
      <div class="row">
        
-       <div class="col-12 col-lg-10 ">
+       <div class="col-12 col-lg-12 ">
          <main>
            <RouterView></RouterView>
          </main>
