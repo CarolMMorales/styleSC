@@ -9,7 +9,7 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="deleteModalLabel">{{ $t('proveedores.delete') }}</h5>
+            <h5 class="modal-title" id="deleteModalLabel">{{ $t('categories.delete') }}</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body text-center">
@@ -26,7 +26,7 @@
             <button
               type="button"
               class="btn btn-danger btn-custom2"
-              @click="deleteProveedor"
+              @click="deleteCategory"
               data-bs-dismiss="modal"
             >
               {{ $t('buttons.confirmDelete') }}
@@ -38,19 +38,19 @@
   </template>
   
   <script setup>
-  import { useProveedorStore } from '../../stores/proveedoresStores'
+  import { useCategoryStore } from '../../stores/categoriesStores'
   
-  const proveStore = useProveedorStore()
+  const cateStore = useCategoryStore()
   const props = defineProps({
-    prove_id: Number
+    cate_id: Number
   })
   
-  const deleteProveedor = async () => {
-    const success = await proveStore.deleteProveedor(props.prove_id)
+  const deleteCategory = async () => {
+    const success = await cateStore.deleteCategory(props.cate_id)
     if (success) {
-      console.log('Proveedor eliminado correctamente')
+      console.log('Categoría eliminada correctamente')
     } else {
-      console.log('Error al eliminar el proveedor')
+      console.log('Error al eliminar la categoría')
     }
   }
   </script>

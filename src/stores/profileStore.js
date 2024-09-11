@@ -5,7 +5,7 @@ import { ref  } from 'vue'
 import { useI18n } from "vue-i18n";
 import { useAuthStore } from './authStore.js'
 import { useRouter } from 'vue-router'
-import { showSwalAlert, handleResponsePassword, handleResponse } from '../validations.js'
+import { showSwalAlert, handleResponsePassword, handleResponse } from '../validation.js'
 
 
 export const useProfileStore = defineStore('profile', () => {

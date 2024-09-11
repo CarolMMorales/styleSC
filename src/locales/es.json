@@ -34,6 +34,15 @@
     "confirmDelete": "¿Estás seguro de que deseas eliminar este proveedor?"
   },
 
+"categories":{
+  "cate_name": "Nombre categoría",
+  "cate_description": "Descripción categoría",
+  "cate_medida": "Medida",
+  "edit": "Editar Categoría",
+  "delete": "Eliminar Categoría",
+  "add": "Agregar Categoría" 
+},
+
 "proveedores":{
   "prove_name": "Nombre proveedor",
   "prove_lastname": "Apellido proveedor",
