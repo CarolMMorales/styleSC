@@ -104,34 +104,21 @@
                       {{ $t('contacts.edit') }}
                     </button>
                   </div>
-                <div class="col-12 col-md-12 col-lg-5 overflow-auto">
+                <div class="col-12 col-md-12 col-lg-12 overflow-auto">
                   <table class="table bg-body-tertiary">
-                    <tbody>
-                      <tr>
-                        <td class="bg-body-tertiary">
-                          <strong>{{ $t('profile.doctype') }}: </strong>
-                        </td>
-                        <td class="bg-body-tertiary">{{ profileStore.profile.con_phone }}</td>
-                      </tr>
-                      
-                     
-                    </tbody>
-                  </table>
-                </div>
-                <div class="col-12 col-md-12 col-lg-7 overflow-auto">
-                  <table class="table text-truncate">
-                    <tbody>
-                      <tr>
-                        <td class="bg-body-tertiary">
-                          <strong>{{ $t('profile.email') }}: </strong>
-                        </td>
-                        <td class="bg-body-tertiary text-truncate">
-                          {{ profileStore.profile.con_email }}
-                        </td>
-                      </tr>
-                      
-                    </tbody>
-                  </table>
+                <thead>
+                  <tr>
+                    <th>{{ $t('profile.phone') }}</th>
+                    <th>{{ $t('profile.email') }}</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-body-tertiary">
+                  <tr v-for="contact in contactStore.contact" :key="contact.con_id">
+                    <td class="bg-body-tertiary">{{ contact.con_phone }}</td>
+                    <td class="bg-body-tertiary">{{ contact.con_email }}</td>
+                  </tr>
+                </tbody>
+              </table>
                 </div>
               </div>
             </div>
@@ -141,6 +128,8 @@
     </div>
   </div>
   <changePassword></changePassword>
+  <contactsModal  ></contactsModal>
+  <contactsModalCreate></contactsModalCreate>
   <changePhoto></changePhoto>
 </template>
 
@@ -149,7 +138,8 @@ import { ref, onMounted, watchEffect, watch } from 'vue'
 import changePhoto from '../../src/components/changePhoto.vue'
 import LoadingComponent from '../../src/components/LoadingComponent.vue'
 import changePassword from '../../src/components/changePassword.vue'
-
+import contactsModalCreate from '../../src/components/contact/CreateModalComponent.vue'
+import contactsModal from '../../src/components/contact/ModalComponent.vue'
 import { useProfileStore } from '../stores/profileStore'
 //import { formatDocument } from '../validations'
 import { useContactsStore} from '../stores/contactStore.js'
@@ -184,7 +174,9 @@ watch(
 )
 
 onMounted(async () => {
+  // Cargar detalles del perfil y contactos durante la montura inicial
   await profileStore.readPersonDetailsById()
+  await contactStore.readContactsByPersonId() // Asegúrate de que esta función esté en contactStore
   photo.value = profileStore.profile.use_photo
   loading.value = false
 })

@@ -16,38 +16,11 @@ export const useProfileStore = defineStore('profile', () => {
   //const secretKey = 'TuClaveSecreta';
   const authStore = useAuthStore();
   
-  // const readUserLocal = () => {
-  //   const encryptedId = localStorage.getItem('id');
-  //   if (!encryptedId) {
-  //     console.error('No se encontró el ID en localStorage.');
-  //     return null;
-  //   }
-    
-  //   try {
-  //     console.log('id: ' + encryptedId+ ' secret: '+secretKey);
-  //     const decryptedBytes = CryptoJS.AES.decrypt(encryptedId, secretKey);
-  //     console.log('decryptedBytes: '+decryptedBytes);
-      
-  //     // const decryptedId = decryptedBytes.toString(CryptoJS.enc.Utf8);
-      
-  //     console.log('decryptedId: '+decryptedId);
-  //     const decryptedId = encryptedId;//decryptedBytes.toString(CryptoJS.enc.Utf8);
-
-  //     if (!decryptedId) {
-  //       console.error('No se pudo desencriptar el ID.');
-  //       return null;
-  //     }
-
-  //     return decryptedId;
-  //   } catch (error) {
-  //     console.error('Error al desencriptar el ID:', error);
-  //     return null;
-  //   }
-  // };
+ 
 
   const URL_PASSWORD = `/profile/change-password`;
   const profile = ref([]);
-
+  const personId = ref(null);
 
   
 
@@ -69,13 +42,18 @@ export const useProfileStore = defineStore('profile', () => {
       });
   
       profile.value = res.data;
-      
+      personId.value = res.data.per_id;
       
     } catch (error) {
       handleError(error);
     }
   };
   
+
+
+
+
+
 
   const updatePassword = async (currentPassword, newPassword, confirmPassword) => {
     try {
@@ -168,6 +146,7 @@ export const useProfileStore = defineStore('profile', () => {
     //readUserLocal,
     updatePassword,
     updatePhoto,
-    profile
+    profile,
+    personId
   };
 });
