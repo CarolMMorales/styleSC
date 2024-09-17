@@ -45,7 +45,7 @@
                 </RouterLink>
               </div>
               <div class="menu-item">
-                <RouterLink to="/product" @click="closeMenu" active-class="active" class="side-btn">
+                <RouterLink to="/products" @click="closeMenu" active-class="active" class="side-btn">
                   {{ $t('titles.products') }}
                 </RouterLink>
               </div>
@@ -56,7 +56,7 @@
               </div>
               <div class="menu-item">
                 <RouterLink to="/stocks" @click="closeMenu" active-class="active" class="side-btn">
-                  {{ $t('titles.ventas') }}
+                  {{ $t('titles.stock') }}
                 </RouterLink>
               </div>
             </div>

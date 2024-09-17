@@ -45,6 +45,26 @@
   "add": "Agregar Categoría" 
 },
 
+"products":{
+  "produc_name": "Nombre producto",
+  "produc_code": "Código",
+  "produc_description": "Descripción",
+  "produc_status": "Estatus",
+  "produc_size": "Talla",
+  "edit": "Editar Producto",
+  "delete": "Eliminar Producto",
+  "add": "Agregar Producto" 
+},
+
+"stocks":{
+  "stock_costo": "Costo",
+  "stock_precioVenta": "Precio de venta",
+  "stock_cantidad": "Cantidad",
+  "edit": "Editar Stock",
+  "delete": "Eliminar Stock",
+  "add": "Agregar Stock" 
+},
+
 "proveedores":{
   "prove_name": "Nombre proveedor",
   "prove_lastname": "Apellido proveedor",
