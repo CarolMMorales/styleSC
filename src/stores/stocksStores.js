@@ -33,7 +33,7 @@ export const useStockStore = defineStore('stocks', () => {
           use_id: user
         }
       });
-      handleResponse(res, produc_name);
+      handleResponse(res, stock_costo);
       await readStock();  // Asegúrate de que esta llamada esté presente
       return true;
     } catch (error) {
@@ -44,7 +44,7 @@ export const useStockStore = defineStore('stocks', () => {
 
 
 // Funcion para editar
-const updateStock = async (stock_id, new_produc_id, new_produc_name, new_stock_costo, new_stock_precioVenta, new_stock_cantidad) => {
+const updateStock = async (stock_id, new_produc_id, new_stock_costo, new_stock_precioVenta, new_stock_cantidad) => {
   try {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + authStore.token;
     const res = await axios({
@@ -55,14 +55,13 @@ const updateStock = async (stock_id, new_produc_id, new_produc_name, new_stock_c
       },
       data: {
         produc_id: new_produc_id,
-        produc_name: new_produc_name,
         stock_costo: new_stock_costo,
         stock_precioVenta: new_stock_precioVenta,
         stock_cantidad: new_stock_cantidad,
         use_id: user
       }
     });
-    handleResponse(res, new_produc_name);
+    handleResponse(res, new_stock_costo);
     await readStock(); 
     return true;  
   } catch (error) {
