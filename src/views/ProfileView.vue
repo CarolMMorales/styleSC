@@ -64,6 +64,13 @@
                         </td>
                         <td class="bg-body-tertiary">{{ profileStore.profile.per_document }}</td>
                       </tr>
+                      
+                    </tbody>
+                  </table>
+                </div>
+                <div class="col-12 col-md-12 col-lg-7 overflow-auto">
+                  <table class="table text-truncate">
+                    <tbody>
                       <tr>
                         <td class="bg-body-tertiary">
                           <strong>{{ $t('profile.adress') }}: </strong>
@@ -79,6 +86,38 @@
                     </tbody>
                   </table>
                 </div>
+              </div>
+              <div class="row">
+                <div class="d-flex justify-content-end m-2">
+                    <button
+                      class="btn btn-danger me-2"
+                      data-bs-toggle="modal"
+                      data-bs-target="#EditarContactos"
+                    >
+                      {{ $t('contacts.create') }}
+                    </button>
+                    <button
+                      class="btn btn-danger"
+                      data-bs-toggle="modal"
+                      data-bs-target="#CrearContactos"
+                    >
+                      {{ $t('contacts.edit') }}
+                    </button>
+                  </div>
+                <div class="col-12 col-md-12 col-lg-5 overflow-auto">
+                  <table class="table bg-body-tertiary">
+                    <tbody>
+                      <tr>
+                        <td class="bg-body-tertiary">
+                          <strong>{{ $t('profile.doctype') }}: </strong>
+                        </td>
+                        <td class="bg-body-tertiary">{{ profileStore.profile.con_phone }}</td>
+                      </tr>
+                      
+                     
+                    </tbody>
+                  </table>
+                </div>
                 <div class="col-12 col-md-12 col-lg-7 overflow-auto">
                   <table class="table text-truncate">
                     <tbody>
@@ -87,26 +126,10 @@
                           <strong>{{ $t('profile.email') }}: </strong>
                         </td>
                         <td class="bg-body-tertiary text-truncate">
-                          {{ profileStore.profile.use_email }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="bg-body-tertiary">
-                          <strong>{{ $t('profile.emailPer') }}: </strong>
-                        </td>
-                        <td class="bg-body-tertiary text-truncate">
                           {{ profileStore.profile.con_email }}
                         </td>
                       </tr>
-                      <tr>
-                        <td class="bg-body-tertiary">
-                          <strong>{{ $t('profile.phone') }}: </strong>
-                        </td>
-                        <td class="bg-body-tertiary text-truncate">
-                          {{ profileStore.profile.con_phone }}
-                        </td>
-                      </tr>
-                     
+                      
                     </tbody>
                   </table>
                 </div>
@@ -122,45 +145,43 @@
 </template>
 
 <script setup>
-import { ref, onMounted,  watchEffect, watch} from 'vue';
-import changePhoto from "../../src/components/changePhoto.vue";
+import { ref, onMounted, watchEffect, watch } from 'vue'
+import changePhoto from '../../src/components/changePhoto.vue'
 import LoadingComponent from '../../src/components/LoadingComponent.vue'
 import changePassword from '../../src/components/changePassword.vue'
 
 import { useProfileStore } from '../stores/profileStore'
 //import { formatDocument } from '../validations'
-
-
-
-
+import { useContactsStore} from '../stores/contactStore.js'
+const contactStore = useContactsStore()
 const profileStore = useProfileStore()
 const loading = ref(true)
 const photo = ref(profileStore.profile.use_photo)
 
-
 const updatephoto = (event) => {
-  photo.value = event.detail.newImage;
-};
+  photo.value = event.detail.newImage
+}
 
 onMounted(() => {
   // Actualizar la imagen durante la montura inicial
-  updatephoto({ detail: { newImage: profileStore.profile.use_photo } });
+  updatephoto({ detail: { newImage: profileStore.profile.use_photo } })
   // Escuchar evento para actualizar la imagen
-  window.addEventListener("update-profile-image", updatephoto);
-});
+  window.addEventListener('update-profile-image', updatephoto)
+})
 
 // Actualizar la imagen si cambia en el store
 watchEffect(
   () => profileStore.profile.use_photo,
   (newValue) => {
-    photo.value = newValue;
+    photo.value = newValue
   }
-);
-watch(() => profileStore.profile.use_photo, (newValue) => {
-  photo.value = newValue;
-});
-
-
+)
+watch(
+  () => profileStore.profile.use_photo,
+  (newValue) => {
+    photo.value = newValue
+  }
+)
 
 onMounted(async () => {
   await profileStore.readPersonDetailsById()

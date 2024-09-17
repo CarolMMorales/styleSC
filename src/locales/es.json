@@ -45,6 +45,13 @@
   "add": "Agregar Categoría" 
 },
 
+"contacts": {
+ "create": "Agregar contacto",
+ "edit": "Editar contactos",
+ "delete": "Eliminar contacto"
+},
+
+
 "products":{
   "produc_name": "Nombre producto",
   "produc_code": "Código",
