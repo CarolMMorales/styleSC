@@ -82,14 +82,14 @@
       
     </div>
     
-    <Modalstocks
+    <ModalStocks
       :stock_id="parseInt(stock_id)"
       :produc_name="produc_name"
       :stock_costo="parseFloat(stock_costo)"
       :stock_precioVenta="parseFloat(stock_precioVenta)"
       :stock_cantidad="parseInt(stock_cantidad)"
       :edit="true"
-    ></Modalstocks>
+    ></ModalStocks>
     <ModalDelete :stock_id="parseInt(stock_id)"></ModalDelete>
    
   </template>
@@ -98,7 +98,7 @@
   import { useStockStore } from '../../stores/stocksStores'
   import PaginationComponent from '../PaginationComponent.vue'
   import LoadingComponent from '../LoadingComponent.vue'
-  import Modalstocks from './ModalComponent.vue'
+  import ModalStocks from './ModalComponent.vue'
   import { ref, computed, onMounted, watch } from 'vue'
   import ModalDelete from './DeleteComponent.vue'
   const stockStore = useStockStore()
@@ -118,7 +118,7 @@
   
   onMounted(async () => {
     loading.value = true
-    await stockStore.readstock()
+    await stockStore.readStock()
     loading.value = false
   })
   
@@ -130,7 +130,6 @@ const prepareEditForm =  (proItem) => {
   stock_precioVenta.value = proItem.stock_precioVenta
   stock_cantidad.value = proItem.stock_cantidad
   editing.value = true
-
 }
 const prepareDeleteForm = (proItem)=>{
   stock_id.value = proItem.stock_id
