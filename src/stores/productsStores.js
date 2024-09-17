@@ -17,7 +17,7 @@ export const useProductsStore = defineStore('products', () => {
 
 
   // Funcion para registrar 
-  const registerProduct = async (produc_id, produc_code, produc_name, produc_description, produc_size, cate_id, cate_name) => {
+  const registerProduct = async ( produc_code, produc_name, produc_description, produc_size, cate_id) => {
     try {
       const res = await axios({
         url: URL_PRODUCTS,
@@ -26,13 +26,11 @@ export const useProductsStore = defineStore('products', () => {
           Authorization: 'Bearer ' + authStore.token
         },
         data: {
-          produc_id: produc_id,
           produc_code: produc_code,
           produc_name: produc_name,
           produc_description: produc_description,
           produc_size: produc_size,
           cate_id: cate_id,
-          cate_name: cate_name,
           use_id: user
         }
       });
@@ -47,7 +45,7 @@ export const useProductsStore = defineStore('products', () => {
 
 
 // Funcion para editar
-const updateProduct = async (produc_id, new_produc_code, new_produc_name, new_produc_description, new_produc_size, new_cate_id, new_cate_name ) => {
+const updateProduct = async (produc_id, new_produc_code, new_produc_name, new_produc_description, new_produc_size, new_cate_id ) => {
   try {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + authStore.token;
     const res = await axios({
@@ -62,7 +60,6 @@ const updateProduct = async (produc_id, new_produc_code, new_produc_name, new_pr
         produc_description: new_produc_description,
         produc_size: new_produc_size,
         cate_id: new_cate_id,
-        cate_name: new_cate_name,
         use_id: user
       }
     });
@@ -90,8 +87,8 @@ const readProduct = async () => {
     // Asignar los datos extraídos a produc.value
     produc.value = res.data.data;
     
-    /* console.log(produc.value);
-    return produc.value;  */
+    console.log(produc.value);
+    return produc.value;  
 
   } catch (error) {
     handleError(error);

@@ -26,7 +26,9 @@
             <form @submit.prevent="handleSubmit">
               <div class="row p-2">
                 <div class="mb-3 col-12">
-                  <label for="exampleInputName1" class="form-label">{{ $t('products.produc_code') }}</label>
+                  <label for="exampleInputName1" class="form-label">{{
+                    $t('products.produc_code')
+                  }}</label>
                   <input
                     type="text"
                     v-model="produc_code"
@@ -60,18 +62,26 @@
                   />
                 </div>
                 <div class="mb-3 col-12">
-                    <label for="exampleInputName1" class="form-label">{{ $t('products.produc_size') }}</label>
-                    <input type="number" v-model="produc_size" class="form-control" id="exampleInputName1" aria-describedby="NameHelp" />
-                </div> 
-                <div class="mb-3 col-12">
-                  <label for="exampleInputName1" class="form-label">{{ $t('categories.cate_name') }}</label>
+                  <label for="exampleInputName1" class="form-label">{{
+                    $t('products.produc_size')
+                  }}</label>
                   <input
                     type="text"
-                    v-model="cate_name"
+                    v-model="produc_size"
                     class="form-control"
                     id="exampleInputName1"
                     aria-describedby="NameHelp"
                   />
+                </div>
+                <div class="mb-3 col-12">
+                  <label for="exampleInputName1" class="form-label">{{
+                    $t('categories.cate_name')
+                  }}</label>
+                  <select class="form-select" id="exampleInputDocumentType" aria-describedby="DocumentTypeHelp" v-model="cate_id" >
+                      <option v-for="(Item, index) in filteredCate" :key="index" :value="Item.cate_id" >
+                          {{ Item.cate_name }}
+                      </option>
+                  </select>
                 </div>
               </div>
 
@@ -101,13 +111,14 @@
   </div>
 </template>
 
-
 <script setup>
-import { ref, computed, defineProps, watchEffect } from 'vue'
+import { ref, computed, defineProps, watchEffect, onMounted } from 'vue'
 import { useProductsStore } from '../../stores/productsStores'
+import { useCategoryStore } from '../../stores/categoriesStores'
 
 const loading = ref(false)
 const produc = useProductsStore()
+const cateStore = useCategoryStore()
 
 const props = defineProps({
   produc_id: Number,
@@ -115,17 +126,20 @@ const props = defineProps({
   produc_name: String,
   produc_description: String,
   cate_id: Number,
-  cate_name: Number,
   produc_size: Number,
   edit: Boolean
+})
+
+const filteredCate = computed(() => {
+  return cateStore.cate.filter((item) => item.cate_name != 0)
 })
 
 const produc_code = ref(props.produc_code)
 const produc_name = ref(props.produc_name)
 const produc_description = ref(props.produc_description)
 const produc_size = ref(props.produc_size)
-//const cate_id = ref(props.cate_id)
-const cate_name = ref(props.cate_name)
+const cate_id = ref(props.cate_id)
+//const cate_name = ref(props.cate_name)
 
 const editing = ref(props.edit)
 const submitting = ref(false)
@@ -134,7 +148,14 @@ const closeModal = ref(false)
 
 // Computed para verificar si todos los campos tienen valor
 const isFormValid = computed(() => {
-  return produc_code.value && produc_name.value && produc_description.value && cate_name.value && produc_size.value
+  return (
+    produc_code.value &&
+    produc_name.value &&
+    produc_description.value &&
+    produc_size.value &&
+    cate_id.value 
+    
+  )
 })
 
 watchEffect(() => {
@@ -142,15 +163,15 @@ watchEffect(() => {
   produc_name.value = props.produc_name
   produc_description.value = props.produc_description
   produc_size.value = props.produc_size
-  cate_name.value = props.cate_name
+  cate_id.value = props.cate_id
   editing.value = props.edit
   modalId.value = editing.value ? 'editModal' : 'createModal'
 })
 
 const handleSubmit = async () => {
-  if (submitting.value) return;
-  submitting.value = true;
-  loading.value = true;
+  if (submitting.value) return
+  submitting.value = true
+  loading.value = true
   try {
     if (editing.value) {
       const success = await produc.updateProduct(
@@ -159,38 +180,39 @@ const handleSubmit = async () => {
         produc_name.value.toUpperCase(),
         produc_description.value.toUpperCase(),
         produc_size.value,
-        cate_name.value
-      );
+        cate_id.value
+      )
       if (success) {
-        closeModal.value = true;
+        closeModal.value = true
       }
-      editing.value = false;
+      editing.value = false
     } else {
       await produc.registerProduct(
         produc_code.value,
         produc_name.value.toUpperCase(),
         produc_description.value.toUpperCase(),
         produc_size.value,
-        cate_name.value
-      );
-
+        cate_id.value
+      )
     }
-    clearForm();
+    clearForm()
   } catch (error) {
-    console.log(error);
+    console.log(error)
   } finally {
-    submitting.value = false;
-    loading.value = false;
-    closeModal.value = true;
+    submitting.value = false
+    loading.value = false
+    closeModal.value = true
   }
-};
+}
 
+onMounted (async () => {
+  await cateStore.readCategory()
+})
 
 const cancelChanges = () => {
   if (!editing.value) {
     clearForm()
-    closeModal.value = true;
-
+    closeModal.value = true
   }
 }
 
@@ -199,12 +221,9 @@ const clearForm = () => {
   produc_name.value = ''
   produc_description.value = ''
   produc_size.value = ''
-  cate_name.value = ''
+  cate_id.value = ''
 }
 </script>
-
-
-
 
 <style lang="scss" scoped>
 .btn-custom {

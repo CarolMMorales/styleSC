@@ -70,8 +70,7 @@ export const useProfileStore = defineStore('profile', () => {
   
       profile.value = res.data;
       
-      console.log('ID del usuario:', userId);
-      console.log('Detalles del perfil:', profile.value);
+      
     } catch (error) {
       handleError(error);
     }
