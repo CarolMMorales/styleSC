@@ -59,7 +59,7 @@
 import { useAuthStore } from "../stores/authStore";
 import { RouterLink } from "vue-router";
 import { useRouter } from "vue-router";
-import CryptoJS from "crypto-js";
+//import CryptoJS from "crypto-js";
 import { useProfileStore } from "../stores/profileStore";
 import { ref, onMounted, watch } from "vue";
 
@@ -67,19 +67,24 @@ const router = useRouter();
 const userAuth = useAuthStore();
 const profileStore = useProfileStore();
 
-const secretKey = "TuClaveSecreta";
+//const secretKey = "TuClaveSecreta";
 
-const use_id = CryptoJS.AES.decrypt(localStorage.getItem("id"), secretKey).toString(
-  CryptoJS.enc.Utf8
-);
+onMounted(async () => {
+  await profileStore.readPersonDetailsById();
+  profileImage.value = profileStore.profile.use_photo;
+});
 
-const profileImage = ref(profileStore.profile.use_photo);
+
+const profileImage = ref(profileStore.profile?.use_photo || 'perfil.jpg');
+
 
 const updateProfileImage = (event) => {
   profileImage.value = event.detail.newImage;
 };
 
-onMounted(() => {
+onMounted(async() => {
+  await profileStore.readPersonDetailsById();
+  profileImage.value = profileStore.profile.use_photo;
   // Actualizar la imagen durante la montura inicial
   updateProfileImage({ detail: { newImage: profileStore.profile.use_photo } });
   // Escuchar evento para actualizar la imagen

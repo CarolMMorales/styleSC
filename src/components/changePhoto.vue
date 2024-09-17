@@ -46,7 +46,7 @@
                   </button>
                   <button
                     type="button"
-                    class="btn btn-cancel ml-5 fw-semibold"
+                    class="btn btn-danger ml-5 fw-semibold"
                     data-bs-dismiss="modal"
                   >
                     {{ $t('buttons.close') }}
@@ -110,7 +110,7 @@ const checkFileValidity = () => {
 
 <style lang="scss" scoped>
 .btn-custom {
-  background-color: var(--blue-color);
+  background-color: hsla(229, 100%, 74%, 0.493);
   color: #ffffff;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
@@ -118,14 +118,14 @@ const checkFileValidity = () => {
 
 .btn-custom:hover {
   background-color: var(----color-background);
-  color: var(--blue-color);
-  border: 2px solid var(--blue-color);
+  color: hsla(229, 100%, 74%, 0.493);
+  border: 2px solid hsla(229, 100%, 74%, 0.493);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
   transition: 0.5s ease;
 }
 
 .btn-cancel {
-  background-color: var(--button-red-color);
+  background-color: red;
   color: #ffffff;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
@@ -133,8 +133,8 @@ const checkFileValidity = () => {
 
 .btn-cancel:hover {
   background-color: var(----color-background);
-  color: var(--button-red-color);
-  border: 2px solid var(--button-red-color);
+  color: red;
+  border: 2px solid red;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
   transition: 0.5s ease;
 }

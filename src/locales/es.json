@@ -27,7 +27,9 @@
   "delete": "Eliminar",
   "save": "Guardar",
   "cancel": "Cancelar",
-  "confirmDelete": "Eliminar"
+  "confirmDelete": "Eliminar",
+  "send":"Enviar",
+  "close": "Cerrar"
 },
 
 "messages": {
@@ -54,9 +56,38 @@
   "add": "Agregar Proveedor" 
 },
 
-  "profile":{
-    
-  },
+"profile": {
+  "title": "Bienvenido,",
+  "doctype":"Tipo de Documento",
+  "document":"Documento",
+  "name": "Nombre ",
+  "email": "Correo",
+  "emailPer": "Correo personal",
+  "phone": "Celular",
+  "photoAlt": "Foto de Perfi",
+  "password": "Contraseña actual",
+  "passwordConfirm": "Confirmar contraseña",
+  "button": "Cambiar Contraseña",
+  "changePassword": "Nueva contraseña",
+  "titleModal": "Cambiar Contraseña",
+  "status": "Estado",
+  
+  "adress": "Dirección",
+  
+  "rol": "Rol",
+  
+  
+  "change": "Cambiar contraseña",
+  "resetPassword": "Recuperar Contraseña",
+  "code": "Codigo de verificación",
+  "photo": "Cambiar foto de perfil",
+  "imagen": "Cargar imagen",
+  
+  
+  "personalData": "Datos personales",
+ 
+  "note": "Formatos aceptados: .jpeg .png .jpg y tamaño máximo de 2048KB"
+},
 
   "footer":{
 "createby": "Creado por : Laura Montaña y Carol Morales",

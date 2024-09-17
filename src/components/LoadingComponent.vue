@@ -3,7 +3,7 @@
     <span class="visually-hidden">Loading...</span>
   
     <div class="loading">
-      <img src="../assets/carga.jpg" alt="Logo de la empresa">
+      <img src="../assets/cargando.png" alt="Logo de la empresa">
     </div>
   </template>
   
