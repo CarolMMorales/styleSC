@@ -26,14 +26,12 @@
             <form @submit.prevent="handleSubmit">
               <div class="row p-2">
                 <div class="mb-3 col-12">
-                  <label for="exampleInputName1" class="form-label">{{ $t('stocks.produc_name') }}</label>
-                  <input
-                    type="text"
-                    v-model="produc_name"
-                    class="form-control"
-                    id="exampleInputName1"
-                    aria-describedby="NameHelp"
-                  />
+                  <label for="exampleInputName1" class="form-label">{{ $t('products.produc_name') }}</label>
+                  <select class="form-select" id="exampleInputDocumentType" aria-describedby="DocumentTypeHelp" v-model="produc_id" >
+                      <option v-for="(Item, index) in filteredProduc" :key="index" :value="Item.produc_id" >
+                          {{ Item.produc_name }}
+                      </option>
+                  </select>
                 </div>
                 <div class="mb-3 col-12">
                   <label for="exampleInputName1" class="form-label">{{
@@ -100,22 +98,30 @@
 
 
 <script setup>
-import { ref, computed, defineProps, watchEffect } from 'vue'
+import { ref, computed, defineProps, watchEffect, onMounted } from 'vue'
 import { useStockStore } from '../../stores/stocksStores'
+import { useProductsStore } from '../../stores/productsStores'
 
 const loading = ref(false)
 const stock = useStockStore()
+const productStore = useProductsStore()
 
 const props = defineProps({
+  produc_id: Number,
+  //produc_name: String,
   stock_id: Number,
-  produc_name: String,
-  stock_costo: String,
-  stock_precioVenta: String,
-  stock_cantidad: String,
+  stock_costo: Number,
+  stock_precioVenta: Number,
+  stock_cantidad: Number,
   edit: Boolean
 })
 
-const produc_name = ref(props.produc_name)
+const filteredProduc = computed(() => {
+  return productStore.produc.filter((item) => item.produc_name != 0)
+})
+
+const produc_id = ref(props.produc_id)
+//const produc_name = ref(props.produc_name)
 const stock_costo = ref(props.stock_costo)
 const stock_precioVenta = ref(props.stock_precioVenta)
 const stock_cantidad = ref(props.stock_cantidad)
@@ -127,11 +133,16 @@ const closeModal = ref(false)
 
 // Computed para verificar si todos los campos tienen valor
 const isFormValid = computed(() => {
-  return produc_name.value && stock_costo.value && stock_precioVenta.value && stock_cantidad.value
+  return (
+    produc_id.value &&
+    stock_costo.value &&
+    stock_precioVenta.value &&
+    stock_cantidad.value
+  )
 })
 
 watchEffect(() => {
-  produc_name.value = props.produc_name
+  produc_id.value = props.produc_id
   stock_costo.value = props.stock_costo
   stock_precioVenta.value = props.stock_precioVenta
   stock_cantidad.value = props.stock_cantidad
@@ -145,9 +156,9 @@ const handleSubmit = async () => {
   loading.value = true;
   try {
     if (editing.value) {
-      const success = await stock.updatestock(
+      const success = await stock.updateStock(
         props.stock_id,
-        produc_name.value.toUpperCase(),
+        produc_id.value,
         stock_costo.value,
         stock_precioVenta.value,
         stock_cantidad.value
@@ -157,8 +168,8 @@ const handleSubmit = async () => {
       }
       editing.value = false;
     } else {
-      await stock.registerstock(
-        produc_name.value.toUpperCase(),
+      await stock.registerStock(
+        produc_id.value,
         stock_costo.value,
         stock_precioVenta.value,
         stock_cantidad.value
@@ -175,6 +186,9 @@ const handleSubmit = async () => {
   }
 };
 
+onMounted (async () => {
+  await productStore.readProduct()
+})
 
 const cancelChanges = () => {
   if (!editing.value) {
@@ -185,7 +199,8 @@ const cancelChanges = () => {
 }
 
 const clearForm = () => {
-  produc_name.value = ''
+  produc_id.value = ''
+  //produc_name.value = ''
   stock_costo.value = ''
   stock_precioVenta.value = ''
   stock_cantidad.value = ''

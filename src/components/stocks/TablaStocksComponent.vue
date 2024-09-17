@@ -84,7 +84,7 @@
     
     <ModalStocks
       :stock_id="parseInt(stock_id)"
-      :produc_name="produc_name"
+      :produc_id="parseInt(produc_id)"
       :stock_costo="parseFloat(stock_costo)"
       :stock_precioVenta="parseFloat(stock_precioVenta)"
       :stock_cantidad="parseInt(stock_cantidad)"
@@ -102,6 +102,7 @@
   import { ref, computed, onMounted, watch } from 'vue'
   import ModalDelete from './DeleteComponent.vue'
   const stockStore = useStockStore()
+  const produc_id = ref('')
   const produc_name = ref('')
   const stock_id = ref('')
   const stock_costo = ref('')
@@ -124,8 +125,9 @@
   
 
 const prepareEditForm =  (proItem) => {
-  stock_id.value = proItem.stock_id
+  produc_id.value = proItem.stock_id
   produc_name.value = proItem.produc_name
+  stock_id.value = proItem.stock_id
   stock_costo.value = proItem.stock_costo
   stock_precioVenta.value = proItem.stock_precioVenta
   stock_cantidad.value = proItem.stock_cantidad
@@ -134,23 +136,24 @@ const prepareEditForm =  (proItem) => {
 const prepareDeleteForm = (proItem)=>{
   stock_id.value = proItem.stock_id
 }
-  
+
   const filter = computed(() => {
-    const lowerSearchTerm = searchTerm.value.toLowerCase()
-  
-    return stockStore.stock.filter((Item) => {
-      const matchesProduct = Item.produc_name.toLowerCase().includes(lowerSearchTerm)
-      const matchesCosto = Item.stock_costo
-      const matchesPrecioVenta = Item.stock_precioVenta
-      const matchesCantidad = Item.stock_cantidad
-      return (
-        matchesProduct ||
-        matchesCosto ||
-        matchesPrecioVenta ||
-        matchesCantidad
-      )
-    })
-  })
+  const lowerSearchTerm = searchTerm.value.toLowerCase();
+
+  return Array.isArray(stockStore.stock) ? stockStore.stock.filter((item) => {
+    const producName = item.produc_name ? item.produc_name.toLowerCase() : '';
+    const stockCosto = item.stock_costo ? item.stock_costo.toString() : '';
+    const stockPrecioVenta = item.stock_precioVenta ? item.stock_precioVenta.toString() : '';
+    const stockCantidad = item.stock_cantidad ? item.stock_cantidad.toString() : '';
+
+    const matchesName = producName.includes(lowerSearchTerm);
+    const matchesCosto = stockCosto.includes(lowerSearchTerm);
+    const matchesPrecioVenta = stockPrecioVenta.includes(lowerSearchTerm);
+    const matchesCantidad = stockCantidad.includes(lowerSearchTerm);
+
+    return matchesCosto || matchesName || matchesPrecioVenta || matchesCantidad;
+  }) : [];
+});
   
   const paginated = computed(() => {
     const startIndex = (currentPage.value - 1) * itemsPerPage
