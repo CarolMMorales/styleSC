@@ -48,7 +48,11 @@
 "contacts": {
  "create": "Agregar contacto",
  "edit": "Editar contactos",
- "delete": "Eliminar contacto"
+ "delete": "Eliminar contacto",
+ "add": "Agregar",
+    
+    "phone": "Teléfono",
+    "emailPer": "Correo electrónico"
 },
 
 

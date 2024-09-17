@@ -10,11 +10,7 @@
             <div class="col-12 mt-4">
               <div class="position-relative text-center">
                 <figure class="figure">
-                  <img
-                    :src="photo"
-                    class="figure-img img-fluid object-fit-cover"
-                    :alt="$t('profile.photoAlt')"
-                  />
+                  <img :src="photo" class="figure-img img-fluid object-fit-cover" :alt="$t('profile.photoAlt')" />
                 </figure>
                 <div class="overlayPefil" data-bs-toggle="modal" data-bs-target="#updatePhoto">
                   <i class="ri-pencil-line"></i>
@@ -41,11 +37,7 @@
             <div class="row p-3">
               <div class="row">
                 <div class="col-6 col-md-12 col-lg-12 text-end m-2">
-                  <button
-                    class="btn btn-danger"
-                    data-bs-toggle="modal"
-                    data-bs-target="#CambiarContrasena"
-                  >
+                  <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#CambiarContrasena">
                     {{ $t('profile.button') }}
                   </button>
                 </div>
@@ -64,7 +56,7 @@
                         </td>
                         <td class="bg-body-tertiary">{{ profileStore.profile.per_document }}</td>
                       </tr>
-                      
+
                     </tbody>
                   </table>
                 </div>
@@ -89,36 +81,28 @@
               </div>
               <div class="row">
                 <div class="d-flex justify-content-end m-2">
-                    <button
-                      class="btn btn-danger me-2"
-                      data-bs-toggle="modal"
-                      data-bs-target="#EditarContactos"
-                    >
-                      {{ $t('contacts.create') }}
-                    </button>
-                    <button
-                      class="btn btn-danger"
-                      data-bs-toggle="modal"
-                      data-bs-target="#CrearContactos"
-                    >
-                      {{ $t('contacts.edit') }}
-                    </button>
-                  </div>
+                  <button @click="openModal(false)" class="btn btn-danger me-2" data-bs-toggle="modal" data-bs-target="#EditarContactos">
+                    {{ $t('contacts.create') }}
+                  </button>
+                  <button  @click="openModal(true, selectedContact)" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#CrearContactos">
+                    {{ $t('contacts.edit') }}
+                  </button>
+                </div>
                 <div class="col-12 col-md-12 col-lg-12 overflow-auto">
                   <table class="table bg-body-tertiary">
-                <thead>
-                  <tr>
-                    <th>{{ $t('profile.phone') }}</th>
-                    <th>{{ $t('profile.email') }}</th>
-                  </tr>
-                </thead>
-                <tbody class="bg-body-tertiary">
-                  <tr v-for="contact in contactStore.contact" :key="contact.con_id">
-                    <td class="bg-body-tertiary">{{ contact.con_phone }}</td>
-                    <td class="bg-body-tertiary">{{ contact.con_email }}</td>
-                  </tr>
-                </tbody>
-              </table>
+                    <thead>
+                      <tr>
+                        <th>{{ $t('profile.phone') }}</th>
+                        <th>{{ $t('profile.email') }}</th>
+                      </tr>
+                    </thead>
+                    <tbody class="bg-body-tertiary">
+                      <tr v-for="contact in contactStore.contact" :key="contact.con_id">
+                        <td class="bg-body-tertiary">{{ contact.con_phone }}</td>
+                        <td class="bg-body-tertiary">{{ contact.con_email }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -128,8 +112,14 @@
     </div>
   </div>
   <changePassword></changePassword>
-  <contactsModal  ></contactsModal>
-  <contactsModalCreate></contactsModalCreate>
+  <contactsModal
+    :con_id="parseInt(con_id)"
+    :con_phone="con_phone"
+    :con_email="con_email"
+    :edit="isEditing"
+    @close="closeModal"
+  ></contactsModal>
+
   <changePhoto></changePhoto>
 </template>
 
@@ -138,16 +128,18 @@ import { ref, onMounted, watchEffect, watch } from 'vue'
 import changePhoto from '../../src/components/changePhoto.vue'
 import LoadingComponent from '../../src/components/LoadingComponent.vue'
 import changePassword from '../../src/components/changePassword.vue'
-import contactsModalCreate from '../../src/components/contact/CreateModalComponent.vue'
 import contactsModal from '../../src/components/contact/ModalComponent.vue'
 import { useProfileStore } from '../stores/profileStore'
 //import { formatDocument } from '../validations'
-import { useContactsStore} from '../stores/contactStore.js'
+import { useContactsStore } from '../stores/contactStore.js'
 const contactStore = useContactsStore()
 const profileStore = useProfileStore()
 const loading = ref(true)
 const photo = ref(profileStore.profile.use_photo)
-
+const isEditing = ref(false)
+const con_id = ref(null)
+const con_phone = ref('')
+const con_email = ref('')
 const updatephoto = (event) => {
   photo.value = event.detail.newImage
 }
@@ -158,6 +150,25 @@ onMounted(() => {
   // Escuchar evento para actualizar la imagen
   window.addEventListener('update-profile-image', updatephoto)
 })
+
+const openModal = (edit, contact = null) => {
+  isEditing.value = edit
+  if (edit && contact) {
+    // Preparar datos del contacto para edición
+    con_id.value = contact.con_id
+    con_phone.value = contact.con_phone
+    con_email.value = contact.con_email
+  } else {
+    // Limpiar datos para agregar nuevo contacto
+    con_id.value = null
+    con_phone.value = ''
+    con_email.value = ''
+  }
+}
+const closeModal = () => {
+  // Opcional: Puedes resetear los valores aquí si es necesario
+  isEditing.value = false
+}
 
 // Actualizar la imagen si cambia en el store
 watchEffect(
@@ -209,6 +220,7 @@ onMounted(async () => {
   transform: translate(50%);
   /* Centra la imagen vertical y horizontalmente */
 }
+
 .btn-custom {
   background-color: var(--blue-color);
   color: #ffffff;
@@ -255,13 +267,15 @@ onMounted(async () => {
   top: 0;
   left: 0;
   object-fit: cover;
-  object-position: center top; /* La imagen se recortará desde la parte superior si es necesario, pero se centrará en la parte inferior */
+  object-position: center top;
+  /* La imagen se recortará desde la parte superior si es necesario, pero se centrará en la parte inferior */
 }
 
 .overlayPefil {
   position: absolute;
   margin-left: 25%;
-  bottom: 22px; /* Coloca el elemento en la parte inferior del div */
+  bottom: 22px;
+  /* Coloca el elemento en la parte inferior del div */
   left: 0;
   width: 50%;
   height: 20%;
@@ -271,17 +285,20 @@ onMounted(async () => {
   align-items: center;
   transition: opacity 0.3s ease;
 }
+
 .overlayPefil:hover {
   cursor: pointer;
 }
 
 .ri-pencil-line {
   color: #fff;
-  font-size: 24px; /* Tamaño del icono */
+  font-size: 24px;
+  /* Tamaño del icono */
 }
 
 .ri-pencil-line {
   color: #fff;
-  font-size: 24px; /* Tamaño del icono */
+  font-size: 24px;
+  /* Tamaño del icono */
 }
 </style>
