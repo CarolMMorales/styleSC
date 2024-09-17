@@ -48,8 +48,8 @@ const router = createRouter({
           }
         },
         {
-          path: '/product',
-          name: 'product',
+          path: '/products',
+          name: 'products',
           component: () => import('../views/ProductView.vue'),
           meta:{
             auth:true
