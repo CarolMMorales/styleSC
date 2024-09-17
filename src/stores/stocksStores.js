@@ -17,7 +17,7 @@ export const useStockStore = defineStore('stocks', () => {
 
 
   // Funcion para registrar 
-  const registerStock = async (produc_name, stock_costo, stock_precioVenta, stock_cantidad) => {
+  const registerStock = async (produc_name, stock_id, stock_costo, stock_precioVenta, stock_cantidad) => {
     try {
       const res = await axios({
         url: URL_STOCKS,
@@ -27,6 +27,7 @@ export const useStockStore = defineStore('stocks', () => {
         },
         data: {
           produc_name: produc_name,
+          stock_id: stock_id,
           stock_costo: stock_costo,
           stock_precioVenta: stock_precioVenta,
           stock_cantidad: stock_cantidad,
@@ -44,7 +45,7 @@ export const useStockStore = defineStore('stocks', () => {
 
 
 // Funcion para editar
-const updateStock = async (stock_id, new_produc_name, new_stock_costo, new_stock_precioVenta, new_stock_cantidad) => {
+const updateStock = async (stock_id, new_produc_name, new_stock_id, new_stock_costo, new_stock_precioVenta) => {
   try {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + authStore.token;
     const res = await axios({
@@ -55,9 +56,9 @@ const updateStock = async (stock_id, new_produc_name, new_stock_costo, new_stock
       },
       data: {
         produc_name: new_produc_name,
+        stock_id: new_stock_id,
         stock_costo: new_stock_costo,
         stock_precioVenta: new_stock_precioVenta,
-        stock_cantidad: new_stock_cantidad,
         use_id: user
       }
     });
@@ -85,9 +86,9 @@ const readStock = async () => {
       return {
           stock_id: item.stock_id,
           produc_name: item.produc_name,
+          stock_id: item.stock_id,
           stock_costo: item.stock_costo,
-          stock_precioVenta: item.stock_precioVenta,
-          stock_cantidad: item.stock_cantidad
+          stock_precioVenta: item.stock_precioVenta
       };
 
   });
