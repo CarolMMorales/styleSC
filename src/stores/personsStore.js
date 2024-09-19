@@ -1,5 +1,5 @@
 import axios from 'axios'
-import CryptoJS from 'crypto-js';
+//import CryptoJS from 'crypto-js';
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useAuthStore } from './authStore'
@@ -10,8 +10,12 @@ export const usePersonStore = defineStore('persons', () => {
 //   const { t } = useI18n();
   const router = useRouter()
   const authStore = useAuthStore()
-  const secretKey = 'TuClaveSecreta';
+  /* const secretKey = 'TuClaveSecreta';
   const user = CryptoJS.AES.decrypt(localStorage.getItem('id'), secretKey).toString(CryptoJS.enc.Utf8);
+  const storedId = localStorage.getItem('id');
+  console.log('Stored ID:', storedId); */
+  const user = localStorage.getItem('id');
+  console.log('use_id: ', user);
   const URL_PERSONS = `/persons`
   const person = ref([]) // CONSTANTE CATE QUE CONTIENE EL ARREGLO PRINCIPAL
 
