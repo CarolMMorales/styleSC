@@ -106,7 +106,8 @@
   "title": "Bienvenido,",
   "doctype":"Tipo de Documento",
   "document":"Documento",
-  "name": "Nombre ",
+  "name": "Nombres ",
+  "lastname": "Apellidos",
   "email": "Correo",
   "emailPer": "Correo personal",
   "phone": "Celular",
@@ -117,7 +118,7 @@
   "changePassword": "Nueva contraseña",
   "titleModal": "Cambiar Contraseña",
   "status": "Estado",
-  
+  "editPerfil": "Editar Datos Personales",
   "adress": "Dirección",
   
   "rol": "Rol",

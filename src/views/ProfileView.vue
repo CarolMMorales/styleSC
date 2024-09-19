@@ -42,7 +42,15 @@
               <div class="row">
                 <div class="col-6 col-md-12 col-lg-12 text-end m-2">
                   <button
-                    class="btn btn-danger"
+                    @click="editPerfil(item)"
+                    class="btn btn-custom me-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#EditPerfil"
+                  >
+                    {{ $t('profile.editPerfil') }}
+                  </button>
+                  <button
+                    class="btn btn-custom me-2"
                     data-bs-toggle="modal"
                     data-bs-target="#CambiarContrasena"
                   >
@@ -90,7 +98,7 @@
                 <div class="d-flex justify-content-end m-2">
                   <button
                     @click="prepareCreateForm(Item)"
-                    class="btn btn-danger me-2"
+                    class="btn btn-custom me-2"
                     data-bs-toggle="modal"
                     data-bs-target="#Create"
                   >
@@ -167,6 +175,7 @@
   ></contactsModal>
 <createContactsModal :per_id="parseInt(per_id)"></createContactsModal>
 <deleteContact :con_id="parseInt(con_id)"></deleteContact>
+<editProfile :per_id="parseInt(per_id)" :per_name="per_name" :per_lastname="per_lastname" :typ_doc_id="typ_doc_id" :per_document="per_document" :per_address="per_address"></editProfile>
   <changePhoto></changePhoto>
 </template>
 
@@ -178,6 +187,7 @@ import changePassword from '../../src/components/changePassword.vue'
 import contactsModal from '../../src/components/contact/ModalComponent.vue'
 import deleteContact from '../../src/components/contact/DeleteComponent.vue'
 import createContactsModal from '../../src/components/contact/CreateModalComponent.vue'
+import editProfile from '../../src/components/persons/EditPerfilComponent.vue'
 import { useProfileStore } from '../stores/profileStore'
 //import {useAuthStore } from '../stores/authStore'
 //import { formatDocument } from '../validations'
@@ -192,6 +202,11 @@ const con_id = ref('')
 const con_phone = ref('')
 const con_email = ref('')
 const per_id = ref('')
+const per_name = ref('')
+const per_lastname = ref('')
+const typ_doc_id = ref('')
+const per_document = ref('')
+const per_address = ref('')
 const updatephoto = (event) => {
   photo.value = event.detail.newImage
 }
@@ -200,6 +215,14 @@ const prepareCreateForm = () => {
   per_id.value = profileStore.personId
 }
 
+const editPerfil = () => {
+  per_id.value = profileStore.personId
+  per_name.value = profileStore.per_name
+  per_lastname.value = profileStore.per_lastname
+  typ_doc_id.value = profileStore.typ_doc_id
+  per_document.value = profileStore.per_document
+  per_address.value = profileStore.per_address
+}
 
 const prepareEditContact = (contact) => {
   con_id.value = contact.con_id
@@ -251,7 +274,7 @@ onMounted(async () => {
 }
 
 .back {
-  background-color: hsla(229, 100%, 74%, 0.493);
+  background-color: #B2B5E0;
   margin: 2%;
   border-radius: 15px;
   position: relative;
@@ -273,16 +296,16 @@ onMounted(async () => {
 }
 
 .btn-custom {
-  background-color: var(--lila-color);
+  background-color: #a186a8;
   color: #ffffff;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
+  padding: 0.65rem 1.2rem;
+  font-size: 0.9rem;
 }
 
 .btn-custom:hover {
   background-color: var(----color-background);
-  color: var(--lila-color);
-  border: 2px solid var(--lila-color);
+  color: #C5ADC5;
+  border: 2px solid #C5ADC5;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
   transition: 0.5s ease;
 }

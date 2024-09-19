@@ -15,7 +15,7 @@ export const useAuthStore = defineStore('user', () => {
   // Recuperar token y ID del usuario desde localStorage al cargar la aplicación
   const token = ref(localStorage.getItem('Accept') || null);
   const use_id = ref(localStorage.getItem('id') || null);
-  const per_id = ref(localStorage.getItem('per_id') || null);
+  
   const authUser = ref(null);
 
   // Variable que verifica si el usuario está autenticado
@@ -36,11 +36,11 @@ export const useAuthStore = defineStore('user', () => {
 
       token.value = res.data.token;
       use_id.value = res.data.use_id;
-per_id.value = res.data.per_id;
+
       // Guardar el token y el ID del usuario en localStorage
       localStorage.setItem('Accept', token.value);
       localStorage.setItem('id', use_id.value);
-      localStorage.setItem('id', per_id.value);
+      
       // Marcar al usuario como autenticado
       isAuthenticated.value = true;
 
@@ -111,7 +111,7 @@ per_id.value = res.data.per_id;
     use_id.value = null;
     localStorage.removeItem('Accept');
     localStorage.removeItem('id');
-    localStorage.removeItem('per_id');
+    
 
     isAuthenticated.value = false;
     router.push('/login');
