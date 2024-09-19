@@ -33,7 +33,19 @@
                 </div>
                 <div class="mb-3 col-12">
                   <label for="doctyp" class="form-label">{{ $t('profile.doctype') }}</label>
-                  <input type="text" v-model="typ_doc_id" class="form-control" id="doctyp" />
+                  <select v-model="typ_doc_id" class="form-select" id="doctyp" aria-describedby="NameHelp">
+                    <option v-for="(Item, index) in filteredTypDoc" :key="index" :value="Item.typ_doc_id" >
+                          {{ Item.typ_doc_name }}
+                      </option>
+                  </select>
+                </div>
+                <div class="mb-3 col-12">
+                  <label for="document" class="form-label">{{ $t('profile.document') }}</label>
+                  <input type="text" v-model="per_document" class="form-control" id="document" />
+                </div>
+                <div class="mb-3 col-12">
+                  <label for="address" class="form-label">{{ $t('profile.adress') }}</label>
+                  <input type="text" v-model="per_address" class="form-control" id="address" />
                 </div>
               </div>
               <div class="row">
@@ -55,31 +67,46 @@
   </template>
   
   <script setup>
-  import { ref, watchEffect } from 'vue'
-  import { useContactsStore } from '../../stores/contactStore'
-  
+  import { ref, watchEffect, computed } from 'vue'
+ import {usePersonStore} from '../../stores/personsStore'
+  import {useTypDocStore} from '../../stores/typDocumentStore'
   const closeModal = ref(false)
   const loading = ref(false)
-  const contactStore = useContactsStore()
+  const typDocStore = useTypDocStore()
+  const personStore = usePersonStore()
   const props = defineProps({
-      con_id: Number,
-      con_email: String,
-      con_phone: String,
+      per_id: Number,
+      per_name: String,
+      per_lastname: String,
+      typ_doc_id: Number,
+      per_document: String,
+      per_address: String,
       edit:Boolean
     })
-  //const con_id = ref(props.con_id)
-  const con_phone = ref(props.con_phone)
-  const con_email = ref(props.con_email)
+ 
+  const per_name = ref(props.per_name)
+  const per_lastname = ref(props.per_name)
+  const typ_doc_id = ref(props.typ_doc_id)
+  const per_document = ref(props.per_document)
+  const per_address = ref(props.per_address)
   const editing = ref(props.edit)
-  // const isFormValid = computed(() => con_phone.value || con_email.value)
   
+  const filteredTypDoc= computed(() => {
+  return typDocStore.typDoc.filter((item) => item.typ_doc_name != 0)
+})
+
+
+
   const handleSubmit = async () => {
     try {
       if (editing.value) {
-        const success = await contactStore.updateContact(
-          props.con_id,
-          con_phone.value,
-          con_email.value,
+        const success = await personStore.updatePerson(
+          props.per_id,
+          per_name.value.toUpperCase(),
+          per_lastname.value.toUpperCase(),
+          typ_doc_id.value,
+          per_document.value,
+          per_address.value.toUpperCase()
       )
         if (success) {
           closeModal.value = true;
@@ -88,7 +115,7 @@
       }
     } catch {
       console.log('error')
-      //console.log(con_phone.value, con_email.value, props.per_id)
+      
     }finally{
       closeModal.value = true;
     }
@@ -96,20 +123,20 @@
   }
   
   watchEffect(() => {
-    con_phone.value = props.con_phone
-    con_email.value = props.con_email
+    per_name.value = props.per_name
+    per_lastname.value = props.per_lastname
+    typ_doc_id.value = props.typ_doc_id
+    per_document.value = props.per_document
+    per_address.value = props.per_address
     editing.value = props.edit
     
   })
   
   const cancelChanges = () => {
-    clearForm()
+   
     closeModal.value = true
   }
   
-  const clearForm = () => {
-    con_phone.value = ''
-    con_email.value = ''
-  }
+ 
   </script>
   

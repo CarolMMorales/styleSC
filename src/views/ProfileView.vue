@@ -42,7 +42,7 @@
               <div class="row">
                 <div class="col-6 col-md-12 col-lg-12 text-end m-2">
                   <button
-                    @click="editPerfil(item)"
+                    @click="editPerfil()"
                     class="btn btn-custom me-2"
                     data-bs-toggle="modal"
                     data-bs-target="#EditPerfil"
@@ -175,7 +175,7 @@
   ></contactsModal>
 <createContactsModal :per_id="parseInt(per_id)"></createContactsModal>
 <deleteContact :con_id="parseInt(con_id)"></deleteContact>
-<editProfile :per_id="parseInt(per_id)" :per_name="per_name" :per_lastname="per_lastname" :typ_doc_id="typ_doc_id" :per_document="per_document" :per_address="per_address"></editProfile>
+<editProfile :per_id="parseInt(per_id)" :per_name="per_name" :per_lastname="per_lastname" :typ_doc_id="parseInt(typ_doc_id)" :per_document="per_document" :per_address="per_address" :edit="true"></editProfile>
   <changePhoto></changePhoto>
 </template>
 
@@ -217,11 +217,11 @@ const prepareCreateForm = () => {
 
 const editPerfil = () => {
   per_id.value = profileStore.personId
-  per_name.value = profileStore.per_name
-  per_lastname.value = profileStore.per_lastname
-  typ_doc_id.value = profileStore.typ_doc_id
-  per_document.value = profileStore.per_document
-  per_address.value = profileStore.per_address
+  per_name.value = profileStore.profile.per_name
+  per_lastname.value = profileStore.profile.per_lastname
+  typ_doc_id.value = profileStore.profile.typ_doc_id
+  per_document.value = profileStore.profile.per_document
+  per_address.value = profileStore.profile.per_address
 }
 
 const prepareEditContact = (contact) => {
