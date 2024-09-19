@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { handleErrorLog, showSwalAlert, handleResponseauth } from '../validation.js';
+import { handleErrorLog, showSwalAlert, handleResponseauth, handleResponse } from '../validation.js';
 
 export const useAuthStore = defineStore('user', () => {
   const { t } = useI18n();
@@ -15,6 +15,7 @@ export const useAuthStore = defineStore('user', () => {
   // Recuperar token y ID del usuario desde localStorage al cargar la aplicación
   const token = ref(localStorage.getItem('Accept') || null);
   const use_id = ref(localStorage.getItem('id') || null);
+  const per_id = ref(localStorage.getItem('per_id') || null);
   const authUser = ref(null);
 
   // Variable que verifica si el usuario está autenticado
@@ -35,11 +36,11 @@ export const useAuthStore = defineStore('user', () => {
 
       token.value = res.data.token;
       use_id.value = res.data.use_id;
-
+per_id.value = res.data.per_id;
       // Guardar el token y el ID del usuario en localStorage
       localStorage.setItem('Accept', token.value);
       localStorage.setItem('id', use_id.value);
-
+      localStorage.setItem('id', per_id.value);
       // Marcar al usuario como autenticado
       isAuthenticated.value = true;
 
@@ -82,6 +83,27 @@ export const useAuthStore = defineStore('user', () => {
     }
   };
 
+  const registerUser = async (use_email, use_password, rol_id) => {
+    try {
+      const res = await axios({
+        url: `auth/register`,
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('Accept')}`
+        },
+        data: {
+          use_email: use_email,
+          use_password: use_password,
+          rol_id: rol_id
+        }
+      });
+      handleResponse(res);
+      return true;
+    } catch (error) {
+      console.log(error.response?.data || error);
+    }
+  };
+
   // Función para restablecer el estado del store
   const resetStore = () => {
     token.value = null;
@@ -89,6 +111,8 @@ export const useAuthStore = defineStore('user', () => {
     use_id.value = null;
     localStorage.removeItem('Accept');
     localStorage.removeItem('id');
+    localStorage.removeItem('per_id');
+
     isAuthenticated.value = false;
     router.push('/login');
   };
@@ -150,6 +174,7 @@ export const useAuthStore = defineStore('user', () => {
     authUser,
     isAuthenticated,
     access,
+    registerUser,
     logout,
     reset,
     mail,

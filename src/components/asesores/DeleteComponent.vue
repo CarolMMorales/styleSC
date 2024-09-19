@@ -13,7 +13,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body text-center">
-            <p>{{ $t('categories.messagesDelete') }}</p>
+            <p>{{ $t('messages.confirmDelete') }}</p>
           </div>
           <div class="modal-footer justify-content-center">
             <button

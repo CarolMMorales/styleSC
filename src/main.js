@@ -13,6 +13,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
  import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 
+import 'bootstrap/dist/js/bootstrap.bundle.js';
+
 import App from './App.vue'
 import router from './router'
 import { i18n } from './i18n/index.js'

@@ -4,38 +4,38 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useAuthStore } from './authStore'
 import { showSwalAlert, handleResponse} from '../validation'
-import { useProfileStore } from './profileStore';
 //import { useI18n } from "vue-i18n";
 import { useRouter } from 'vue-router'
-export const useContactsStore = defineStore('contacts', () => {
+export const usePersonStore = defineStore('persons', () => {
 //   const { t } = useI18n();
   const router = useRouter()
   const authStore = useAuthStore()
-  const profileStore = useProfileStore();
   const secretKey = 'TuClaveSecreta';
   const user = CryptoJS.AES.decrypt(localStorage.getItem('id'), secretKey).toString(CryptoJS.enc.Utf8);
-  const URL_CONTACTS = `/contacts`
-  const contact = ref([])
-  const personId = ref(null);
+  const URL_PERSONS = `/persons`
+  const person = ref([]) // CONSTANTE CATE QUE CONTIENE EL ARREGLO PRINCIPAL
+
 
   // Funcion para registrar 
-  const registerContact = async (con_phone, con_email, per_id) => {
+  const registerPerson = async (per_name, per_lastname, typ_doc_id, per_document, per_address) => {
     try {
       const res = await axios({
-        url: URL_CONTACTS,
+        url: URL_PERSONS,
         method: 'POST',
         headers: {
           Authorization: 'Bearer ' + authStore.token
         },
         data: {
-          con_phone: con_phone,
-          con_email: con_email,
-          per_id: per_id,
+          per_name: per_name,
+          per_lastname: per_lastname,
+          typ_doc_id: typ_doc_id,
+          per_document: per_document,
+          per_address: per_address,
           use_id: user
         }
       });
-      handleResponse(res, per_id, con_phone, con_email);
-      await readContactsByPersonId();  // Asegúrate de que esta llamada esté presente
+      handleResponse(res, per_name);
+      await readPerson();  // Asegúrate de que esta llamada esté presente
       return true;
     } catch (error) {
       console.log(error.response?.data || error);
@@ -45,24 +45,26 @@ export const useContactsStore = defineStore('contacts', () => {
 
 
 // Funcion para editar
-const updateContact = async (con_id, new_con_phone, new_con_email, new_per_id) => {
+const updatePerson = async (per_id, per_name, per_lastname, typ_doc_id, per_document, per_address ) => {
   try {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + authStore.token;
     const res = await axios({
-      url: `${URL_CONTACTS}/${con_id}`,
+      url: `${URL_PERSONS}/${per_id}`,
       method: 'PUT',
       headers: {
         Authorization: 'Bearer ' + authStore.token
       },
       data: {
-        con_phone: new_con_phone,
-        con_email: new_con_email,
-        per_id: new_per_id, 
+        per_name: per_name,
+        per_lastname: per_lastname,
+        typ_doc_id: typ_doc_id,
+        per_document: per_document,
+        per_address: per_address,
         use_id: user
       }
     });
-    handleResponse(res, new_con_phone, new_con_email);
-    await readContactsByPersonId(); 
+    handleResponse(res, per_name);
+    await readPerson(); 
     return true;  
   } catch (error) {
     handleError(error);
@@ -71,50 +73,38 @@ const updateContact = async (con_id, new_con_phone, new_con_email, new_per_id) =
 };
 
 
-
-const readContactsByPersonId = async () => {
-  personId.value = profileStore.personId;  // Usa el ID de la persona del ProfileStore
-
-  if (!personId.value) {
-    console.log('');
-    return;
-  }
-
+//funcion para leer y utilizar datos
+const readPerson = async () => {
   try {
     const res = await axios({
-      url: `contacts/person/${personId.value}`,  // Usa el ID de la persona
+      url:URL_PERSONS,
       method: 'GET',
       headers: {
         Authorization: 'Bearer ' + authStore.token
       }
-    });
-    contact.value = res.data.map((item) => {
-      return {
-        con_id: item.con_id,
-        per_id: item.per_id,
-        con_phone: item.con_phone,
-        con_email: item.con_email
-      };
-    });
+    })
+    person.value = res.data;
+  console.log(person.value);
+    return person.value;
+    
   } catch (error) {
-    handleError(error);
+    handleError(error)
   }
-};
-
+};  
 // Función para eliminar 
-const deleteContact = async (con_id) => {
+const deletePerson = async (per_id) => {
   try {
     const res = await axios({
-      url: `${URL_CONTACTS}/${con_id}`,
+      url: `${URL_PERSONS}/${per_id}`,
       method: 'DELETE',
       headers: {
         Authorization: 'Bearer ' + authStore.token
       }
     });
-    handleResponse(res, "contactedor eliminado");
+    handleResponse(res, "Persona eliminada");
     
    
-    await readContactsByPersonId();
+    await readPerson();
     return true;
   } catch (error) {
     handleError(error);
@@ -136,13 +126,13 @@ const deleteContact = async (con_id) => {
       showSwalAlert('Error inesperado:', error.message, 'error');
     }
   }
-readContactsByPersonId()
+readPerson()
 return {
-  registerContact,
-  readContactsByPersonId,
-  updateContact,
-  deleteContact,
-  useContactsStore,
-  contact
+  registerPerson,
+  readPerson,
+  updatePerson,
+  deletePerson,
+  usePersonStore,
+  person
 }
 })

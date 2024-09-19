@@ -9,11 +9,11 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="deleteModalLabel">{{ $t('categories.delete') }}</h5>
+            <h5 class="modal-title" id="deleteModalLabel">{{ $t('contacts.delete') }}</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body text-center">
-            <p>{{ $t('categories.messagesDelete') }}</p>
+            <p>{{ $t('contacts.messagesDelete') }}</p>
           </div>
           <div class="modal-footer justify-content-center">
             <button
@@ -26,7 +26,7 @@
             <button
               type="button"
               class="btn btn-danger btn-custom2"
-              @click="deleteCategory"
+              @click="deleteContact"
               data-bs-dismiss="modal"
             >
               {{ $t('buttons.confirmDelete') }}
@@ -38,20 +38,16 @@
   </template>
   
   <script setup>
-  import { useCategoryStore } from '../../stores/categoriesStores'
+  import { useContactsStore } from '../../stores/contactStore'
   
-  const cateStore = useCategoryStore()
+  const contactStore = useContactsStore()
   const props = defineProps({
-    cate_id: Number
+    con_id: Number
   })
   
-  const deleteCategory = async () => {
-    const success = await cateStore.deleteCategory(props.cate_id)
-    if (success) {
-      console.log('Categoría eliminada correctamente')
-    } else {
-      console.log('Error al eliminar la categoría')
-    }
+  const deleteContact = async () => {
+     await contactStore.deleteContact(props.con_id)
+    
   }
   </script>
   

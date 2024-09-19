@@ -24,8 +24,8 @@
   
   <script setup>
 
-  import TableComponent from '../components/categories/TablaCategoriesComponent.vue';
-  import createComponent from '../components/categories/ModalComponent.vue';
+  import TableComponent from '../components/asesores/TablaAsesoresComponent.vue';
+  import createComponent from '../components/asesores/ModalComponent.vue';
 
   </script>
   

@@ -23,7 +23,7 @@
                   {{ profileStore.profile.per_name }}
                   {{ profileStore.profile.per_lastname }}
                 </p>
-                <p class="mail mb-0">{{ profileStore.profile.use_mail }}</p>
+                <p class="mail mb-0">{{ profileStore.profile.use_email }}</p>
               </div>
             </div>
           </div>
@@ -59,7 +59,7 @@
 import { useAuthStore } from "../stores/authStore";
 import { RouterLink } from "vue-router";
 import { useRouter } from "vue-router";
-//import CryptoJS from "crypto-js";
+import CryptoJS from "crypto-js";
 import { useProfileStore } from "../stores/profileStore";
 import { ref, onMounted, watch } from "vue";
 
@@ -67,8 +67,14 @@ const router = useRouter();
 const userAuth = useAuthStore();
 const profileStore = useProfileStore();
 
-//const secretKey = "TuClaveSecreta";
+const secretKey = "TuClaveSecreta";
 
+const use_id = CryptoJS.AES.decrypt(localStorage.getItem("id"), secretKey)?.toString(CryptoJS.enc.Utf8);
+
+// if (!use_id) {
+//   console.error("No se pudo obtener el id del usuario.");
+//   console.log (use_id);
+// }
 onMounted(async () => {
   await profileStore.readPersonDetailsById();
   profileImage.value = profileStore.profile.use_photo;
@@ -135,7 +141,7 @@ p {
 }
 .dropdown-menu {
   width: 300px;
-  --bs-dropdown-link-active-bg: #0e1f87;
+  --bs-dropdown-link-active-bg: #885199;
 }
 
 

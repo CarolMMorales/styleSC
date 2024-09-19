@@ -80,7 +80,7 @@
               <div class="row">
                 <div class="col-md-12 d-flex justify-content-center">
                   <button
-                    :data-bs-dismiss="editing ? 'modal' : ''"
+                    data-bs-dismiss="modal"
                     type="submit"
                     class="btn btn-custom fw-semibold"
                     :disabled="!isFormValid"

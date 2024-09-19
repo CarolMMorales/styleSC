@@ -65,7 +65,7 @@
               <div class="row">
                 <div class="col-md-12 d-flex justify-content-center">
                   <button
-                    :data-bs-dismiss="editing ? 'modal' : ''"
+                    data-bs-dismiss="modal"
                     type="submit"
                     class="btn btn-custom fw-semibold"
                     :disabled="!isFormValid"
@@ -144,13 +144,16 @@ const handleSubmit = async () => {
       }
       editing.value = false;
     } else {
-      await cate.registerCategory(
+      const send = await cate.registerCategory(
         cate_name.value.toUpperCase(),
         cate_description.value.toUpperCase(),
         cate_medida.value.toUpperCase()
       );
-
+      if (send) {
+        closeModal.value = true;
+      }
     }
+    
     clearForm();
   } catch (error) {
     console.log(error);

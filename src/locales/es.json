@@ -29,7 +29,8 @@
   "cancel": "Cancelar",
   "confirmDelete": "Eliminar",
   "send":"Enviar",
-  "close": "Cerrar"
+  "close": "Cerrar",
+  "create": "Crear nuevo usuario"
 },
 
 "messages": {
@@ -42,17 +43,28 @@
   "cate_medida": "Medida",
   "edit": "Editar Categoría",
   "delete": "Eliminar Categoría",
-  "add": "Agregar Categoría" 
+  "add": "Agregar Categoría" ,
+   "messagesDelete": "¿Estás seguro de que deseas eliminar esta categoria?"
 },
+
+"persons": {
+  "name": "Nombre",
+  "user": "Usuario",
+  "document": "Documento",
+  "address": "Dirección",
+  "rol": "Rol"
+},
+
 
 "contacts": {
  "create": "Agregar contacto",
- "edit": "Editar contactos",
+ "edit": "Editar contacto",
  "delete": "Eliminar contacto",
  "add": "Agregar",
     
     "phone": "Teléfono",
-    "emailPer": "Correo electrónico"
+    "emailPer": "Correo electrónico",
+    "messagesDelete": "¿Estás seguro de que deseas eliminar este contacto?"
 },
 
 
@@ -64,7 +76,8 @@
   "produc_size": "Talla",
   "edit": "Editar Producto",
   "delete": "Eliminar Producto",
-  "add": "Agregar Producto" 
+  "add": "Agregar Producto",
+   "messagesDelete": "¿Estás seguro de que deseas eliminar este producto?"
 },
 
 "stocks":{
@@ -73,7 +86,8 @@
   "stock_cantidad": "Cantidad",
   "edit": "Editar Stock",
   "delete": "Eliminar Stock",
-  "add": "Agregar Stock" 
+  "add": "Agregar Stock" ,
+   "messagesDelete": "¿Estás seguro de que deseas eliminar este stock?"
 },
 
 "proveedores":{
@@ -84,7 +98,8 @@
   "prove_phone": "Telefono",
   "edit": "Editar Proveedor",
   "delete": "Eliminar Proveedor",
-  "add": "Agregar Proveedor" 
+  "add": "Agregar Proveedor" ,
+   "messagesDelete": "¿Estás seguro de que deseas eliminar este proveedor?"
 },
 
 "profile": {
@@ -138,7 +153,67 @@
     "UserNotExist": "El usuario no existe.",
     "session": "Detectamos que su cuenta está actualmente activa en otro dispositivo. Por favor, cierre esa sesión y vuelva a iniciar sesión aquí. Si continúa experimentando problemas, le recomendamos esperar 24 horas antes de intentarlo nuevamente. ¡Gracias por su comprensión!",
     "Login": "Ingresar"
+  },
+  "errors": {
+    "password": "Hubo un problema con tu inicio de sesión. Por favor, verifica tus credenciales e inténtalo de nuevo.",
+    "invalidFormat": "Formato inválido: Por favor, proporciona la información en el formato correcto.",
+    "passwordWrong": "Tu antigua contraseña fue ingresada incorrectamente",
+    "passwordSuccess": "Tu contraseña se ha actualizado correctamente",
+    "duplicateDocument": "El documento ya está registrado",
+    "duplicateEmail": "El correo electrónico ya está registrado",
+    "messageSuccess": "La persona se creó exitosamente",
+    "sameNewAsOld": "Su nueva contraseña no puede ser igual a la anterior",
+    "undefinedMsg": "Este campo es obligatorio",
+    "loading": " Cargando...",
+    "warning": "¡Atención!",
+    "warningLabel": "Tu sesión está a punto de expirar por inactividad.",
+    "confirmLabel": "Mantener la sesión",
+    "invalidFormatNumber": "Formato inválido: Solo se aceptan números "
+  },
+  "validation": {
+    "invalidFormat": "Formato inválido: Por favor, proporciona la información en el formato correcto. El nombre solo puede contener letras y espacios.",
+    "invalidFormatNumber": "Formato inválido: Por favor, proporciona la información en el formato correcto. Solo puede contener numeros.",
+    "noNegativeNumbers": "Solo se permiten números Positivos",
+    "telephone": {
+      "minNumber": "El número no puede tener menos de 7 dígitos",
+      "maxNumer": "El número no puede tener más de 15 dígitos",
+      "regex": "El número de teléfono solo puede contener números, espacios y ciertos caracteres especiales como: '+', '-', '(' y ')'"
+    },
+    "persons": {
+      "birthdate": "La fecha de expedición debe ser una fecha posterior o igual a la fecha de nacimiento."
+    },
+    "mails": {
+      "invalidFormat": "El formato de correo es inválido y con un máximo de 255 caracteres",
+      "institutional": "El correo debe ser institucional con sólo letras y con un máximo de 255 caracteres"
+    },
+    "password": {
+      "invalidFormat": "La contraseña debe tener al menos 8 caracteres, una mayúscula, un dígito y un carácter especial",
+      "notSame": "Las contraseñas no coinciden",
+      "same": "Las contraseñas coinciden"
+    },
+    "name": {
+      "invalidFormat": "El campo debe contener un mínimo de 3 letras y un máximo de 255, y no debe incluir caracteres especiales ni números."
+    },
+    "adress": {
+      "invalidFormat": "El campo debe contener entre uno y  255 caracteres"
+    },
+    "dates": {
+      "moreThanActual": "La fecha seleccionada no puede ser mayor a la actual",
+      "minorExpDate": "La fecha de expedición no puede ser menor a la fecha de nacimiento",
+      "minYearMessage": "La fecha minima debe ser mayor o igual a 01-01-1950"
+    },
+    "document": {
+      "warning": "Porfavor escriba su número de documento sin espacios o caracteres especiales",
+      "invalidDoc": "Su documento no puede contener espacios, caracteres especiales o comenzar en 0"
+    },
+    "login": {
+      "Noaccess": "Acceso denegado: No tienes permiso para acceder a este recurso. Por favor, contacta al administrador para obtener ayuda.",
+      "credentials": "Hubo un problema con tu inicio de sesión. Por favor, verifica tus credenciales e inténtalo de nuevo."
+    },
+    "news": {
+      "warning": "Seleccione todos los campos para realizar una busqueda",
+      "selectAll": "Porfavor seleccione todos los campos"
+    }
   }
-  
 
 }

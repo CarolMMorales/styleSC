@@ -10,7 +10,11 @@
             <div class="col-12 mt-4">
               <div class="position-relative text-center">
                 <figure class="figure">
-                  <img :src="photo" class="figure-img img-fluid object-fit-cover" :alt="$t('profile.photoAlt')" />
+                  <img
+                    :src="photo"
+                    class="figure-img img-fluid object-fit-cover"
+                    :alt="$t('profile.photoAlt')"
+                  />
                 </figure>
                 <div class="overlayPefil" data-bs-toggle="modal" data-bs-target="#updatePhoto">
                   <i class="ri-pencil-line"></i>
@@ -21,7 +25,7 @@
         </div>
         <div class="col-md-6 col-lg-8 d-flex align-items-center">
           <div class="w-100 text-center text-sm-center text-md-start">
-            <h2 class="fw-bold">
+            <h2 class="fw-bold fs-2">
               {{ $t('profile.title') }} {{ profileStore.profile.per_name }}
               {{ profileStore.profile.per_lastname }}
             </h2>
@@ -37,11 +41,15 @@
             <div class="row p-3">
               <div class="row">
                 <div class="col-6 col-md-12 col-lg-12 text-end m-2">
-                  <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#CambiarContrasena">
+                  <button
+                    class="btn btn-danger"
+                    data-bs-toggle="modal"
+                    data-bs-target="#CambiarContrasena"
+                  >
                     {{ $t('profile.button') }}
                   </button>
                 </div>
-                <div class="col-12 col-md-12 col-lg-5 overflow-auto">
+                <div class="col-12 col-md-12 col-lg-6 overflow-auto">
                   <table class="table bg-body-tertiary">
                     <tbody>
                       <tr>
@@ -56,12 +64,11 @@
                         </td>
                         <td class="bg-body-tertiary">{{ profileStore.profile.per_document }}</td>
                       </tr>
-
                     </tbody>
                   </table>
                 </div>
-                <div class="col-12 col-md-12 col-lg-7 overflow-auto">
-                  <table class="table text-truncate">
+                <div class="col-12 col-md-12 col-lg-6 overflow-auto">
+                  <table class="table bg-body-tertiary">
                     <tbody>
                       <tr>
                         <td class="bg-body-tertiary">
@@ -73,7 +80,7 @@
                         <td>
                           <strong>{{ $t('profile.rol') }}: </strong>
                         </td>
-                        <td>{{ profileStore.profile.rol_name }}</td>
+                        <td class="bg-body-tertiary">{{ profileStore.profile.rol_name }}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -81,25 +88,64 @@
               </div>
               <div class="row">
                 <div class="d-flex justify-content-end m-2">
-                  <button @click="openModal(false)" class="btn btn-danger me-2" data-bs-toggle="modal" data-bs-target="#EditarContactos">
+                  <button
+                    @click="prepareCreateForm(Item)"
+                    class="btn btn-danger me-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#Create"
+                  >
                     {{ $t('contacts.create') }}
                   </button>
-                  <button  @click="openModal(true, selectedContact)" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#CrearContactos">
-                    {{ $t('contacts.edit') }}
-                  </button>
+                  
                 </div>
                 <div class="col-12 col-md-12 col-lg-12 overflow-auto">
                   <table class="table bg-body-tertiary">
                     <thead>
                       <tr>
-                        <th>{{ $t('profile.phone') }}</th>
-                        <th>{{ $t('profile.email') }}</th>
+                        <th>
+                          <strong>{{ $t('profile.phone') }}</strong>
+                        </th>
+                        <th>
+                          <strong>{{ $t('profile.email') }}</strong>
+                        </th>
+                        <th>
+                          <strong>{{ $t('buttons.edit') }}</strong>
+                        </th>
+                        <th>
+                          <strong>{{ $t('buttons.delete') }}</strong>
+                        </th>
                       </tr>
                     </thead>
                     <tbody class="bg-body-tertiary">
                       <tr v-for="contact in contactStore.contact" :key="contact.con_id">
                         <td class="bg-body-tertiary">{{ contact.con_phone }}</td>
                         <td class="bg-body-tertiary">{{ contact.con_email }}</td>
+                        <td>
+                          
+                            <button
+                            @click="prepareEditContact(contact)"
+                              type="button"
+                              data-bs-toggle="modal"
+                              data-bs-target="#Editar"
+                              class="btn btn-outline-success"
+                            >
+                              <i class="ri-pencil-fill"></i> 
+                            </button>
+                        
+                        </td>
+                        <td>
+                         
+                            <button
+                             @click="prepareDeleteContact(contact)"
+                              type="button"
+                              data-bs-toggle="modal"
+                              data-bs-target="#deleteModal"
+                              class="btn btn-outline-danger"
+                            >
+                              <i class="bi bi-trash-fill"></i> 
+                            </button>
+                         
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -116,10 +162,11 @@
     :con_id="parseInt(con_id)"
     :con_phone="con_phone"
     :con_email="con_email"
-    :edit="isEditing"
-    @close="closeModal"
+    :edit="true"
+   
   ></contactsModal>
-
+<createContactsModal :per_id="parseInt(per_id)"></createContactsModal>
+<deleteContact :con_id="parseInt(con_id)"></deleteContact>
   <changePhoto></changePhoto>
 </template>
 
@@ -129,19 +176,41 @@ import changePhoto from '../../src/components/changePhoto.vue'
 import LoadingComponent from '../../src/components/LoadingComponent.vue'
 import changePassword from '../../src/components/changePassword.vue'
 import contactsModal from '../../src/components/contact/ModalComponent.vue'
+import deleteContact from '../../src/components/contact/DeleteComponent.vue'
+import createContactsModal from '../../src/components/contact/CreateModalComponent.vue'
 import { useProfileStore } from '../stores/profileStore'
+//import {useAuthStore } from '../stores/authStore'
 //import { formatDocument } from '../validations'
 import { useContactsStore } from '../stores/contactStore.js'
 const contactStore = useContactsStore()
 const profileStore = useProfileStore()
+//const authStore = useAuthStore()
 const loading = ref(true)
 const photo = ref(profileStore.profile.use_photo)
-const isEditing = ref(false)
-const con_id = ref(null)
+const editing = ref(false)
+const con_id = ref('')
 const con_phone = ref('')
 const con_email = ref('')
+const per_id = ref('')
 const updatephoto = (event) => {
   photo.value = event.detail.newImage
+}
+
+const prepareCreateForm = () => {
+  per_id.value = profileStore.personId
+}
+
+
+const prepareEditContact = (contact) => {
+  con_id.value = contact.con_id
+  con_phone.value = contact.con_phone
+  con_email.value = contact.con_email
+  editing.value = true
+  console.log(con_phone.value)
+}
+const prepareDeleteContact = (contact) => {
+  con_id.value = contact.con_id
+  
 }
 
 onMounted(() => {
@@ -151,24 +220,6 @@ onMounted(() => {
   window.addEventListener('update-profile-image', updatephoto)
 })
 
-const openModal = (edit, contact = null) => {
-  isEditing.value = edit
-  if (edit && contact) {
-    // Preparar datos del contacto para edición
-    con_id.value = contact.con_id
-    con_phone.value = contact.con_phone
-    con_email.value = contact.con_email
-  } else {
-    // Limpiar datos para agregar nuevo contacto
-    con_id.value = null
-    con_phone.value = ''
-    con_email.value = ''
-  }
-}
-const closeModal = () => {
-  // Opcional: Puedes resetear los valores aquí si es necesario
-  isEditing.value = false
-}
 
 // Actualizar la imagen si cambia en el store
 watchEffect(
@@ -222,7 +273,7 @@ onMounted(async () => {
 }
 
 .btn-custom {
-  background-color: var(--blue-color);
+  background-color: var(--lila-color);
   color: #ffffff;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
@@ -230,8 +281,8 @@ onMounted(async () => {
 
 .btn-custom:hover {
   background-color: var(----color-background);
-  color: var(--blue-color);
-  border: 2px solid var(--blue-color);
+  color: var(--lila-color);
+  border: 2px solid var(--lila-color);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
   transition: 0.5s ease;
 }
