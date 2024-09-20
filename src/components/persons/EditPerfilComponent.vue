@@ -68,12 +68,12 @@
   
   <script setup>
   import { ref, watchEffect, computed } from 'vue'
- import {usePersonStore} from '../../stores/personsStore'
+ import {useProfileStore} from '../../stores/profileStore'
   import {useTypDocStore} from '../../stores/typDocumentStore'
   const closeModal = ref(false)
   const loading = ref(false)
   const typDocStore = useTypDocStore()
-  const personStore = usePersonStore()
+  const profileStore = useProfileStore()
   const props = defineProps({
       per_id: Number,
       per_name: String,
@@ -100,7 +100,7 @@
   const handleSubmit = async () => {
     try {
       if (editing.value) {
-        const success = await personStore.updatePerson(
+        const success = await profileStore.updatePerson(
           props.per_id,
           per_name.value.toUpperCase(),
           per_lastname.value.toUpperCase(),

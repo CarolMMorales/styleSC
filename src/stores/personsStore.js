@@ -39,7 +39,7 @@ export const usePersonStore = defineStore('persons', () => {
         }
       });
       handleResponse(res, per_name);
-      await readPerson();  // Asegúrate de que esta llamada esté presente
+      await readPerson();  
       return true;
     } catch (error) {
       console.log(error.response?.data || error);

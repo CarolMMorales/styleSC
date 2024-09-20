@@ -18,7 +18,7 @@ export const useProfileStore = defineStore('profile', () => {
   
  
 
-  const URL_PASSWORD = `/profile/change-password`;
+  //const URL_PASSWORD = `/profile/changePassword`;
   const profile = ref([]);
   const personId = ref(null);
 
@@ -50,47 +50,60 @@ export const useProfileStore = defineStore('profile', () => {
   };
   
 
-
-
-
-
-
-  const updatePassword = async (currentPassword, newPassword, confirmPassword) => {
+  const updatePerson = async (per_id, per_name, per_lastname, typ_doc_id, per_document, per_address ) => {
     try {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + authStore.token;
       const res = await axios({
-        url: `${URL_PASSWORD}/${localStorage.getItem('id')}`,
+        url: `persons/${per_id}`,
         method: 'PUT',
         headers: {
           Authorization: 'Bearer ' + authStore.token
         },
         data: {
-          use_password: currentPassword,
-          new_password: newPassword,
-          password_confirmation: confirmPassword
+          per_name: per_name,
+          per_lastname: per_lastname,
+          typ_doc_id: typ_doc_id,
+          per_document: per_document,
+          per_address: per_address,
+          //use_id: user
         }
       });
-
-      handleResponsePassword(
-        res,
-        null,
-        t('errors.sameNewAsOld'),
-        t('errors.passwordSuccess'),
-        t('errors.passwordWrong')
-      );
-
-      return res.data.status;
+      handleResponsePassword(res, per_name);
+      await readPersonDetailsById(); 
+      return true;  
     } catch (error) {
-      handleResponsePassword(
-        { data: { status: false, message: [error.message] } },
-        error,
-        null,
-        t('errors.sameNewAsOld'),
-        t('errors.passwordSuccess'),
-        t('errors.passwordWrong')
-      );
+      handleError(error);
+      return false;  
     }
   };
 
+
+
+  const updatePassword = async (currentPassword, newPassword, confirmPassword) => {
+    const userId = localStorage.getItem('id'); // Obtiene el ID del usuario
+  
+    try {
+      const res = await axios({
+        url: `auth/profile/changePassword/${userId}`, // Envía el userId en la ruta
+        method: 'PUT',
+        headers: {
+          Authorization: 'Bearer ' + authStore.token, // Asegúrate de que este token sea correcto
+        },
+        data: {
+          use_password: currentPassword,
+          new_password: newPassword,
+          password_confirmation: confirmPassword,
+        }
+      });
+      handleResponse(res);
+      // Manejo de respuesta
+    } catch (error) {
+      // Manejo de error
+      console.error('Error al actualizar la contraseña:', error.response.data);
+      
+    }
+  };
+  
   const updatePhoto = async (newPhoto) => {
     try {
       const res = await axios.post(`/update/photo/${localStorage.getItem('id')}`, newPhoto, {
@@ -143,6 +156,7 @@ export const useProfileStore = defineStore('profile', () => {
 
   return {
     readPersonDetailsById,
+    updatePerson,
     //readUserLocal,
     updatePassword,
     updatePhoto,

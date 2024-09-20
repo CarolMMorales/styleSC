@@ -16,7 +16,11 @@
                     :alt="$t('profile.photoAlt')"
                   />
                 </figure>
-                <div class="overlayPefil" data-bs-toggle="modal" data-bs-target="#updatePhoto">
+                <div
+                  class="overlayPefil"
+                  data-bs-toggle="modal"
+                  data-bs-target="#updatePhoto"
+                >
                   <i class="ri-pencil-line"></i>
                 </div>
               </div>
@@ -26,7 +30,7 @@
         <div class="col-md-6 col-lg-8 d-flex align-items-center">
           <div class="w-100 text-center text-sm-center text-md-start">
             <h2 class="fw-bold fs-2">
-              {{ $t('profile.title') }} {{ profileStore.profile.per_name }}
+              {{ $t("profile.title") }} {{ profileStore.profile.per_name }}
               {{ profileStore.profile.per_lastname }}
             </h2>
           </div>
@@ -47,14 +51,14 @@
                     data-bs-toggle="modal"
                     data-bs-target="#EditPerfil"
                   >
-                    {{ $t('profile.editPerfil') }}
+                    {{ $t("profile.editPerfil") }}
                   </button>
                   <button
                     class="btn btn-custom me-2"
                     data-bs-toggle="modal"
                     data-bs-target="#CambiarContrasena"
                   >
-                    {{ $t('profile.button') }}
+                    {{ $t("profile.button") }}
                   </button>
                 </div>
                 <div class="col-12 col-md-12 col-lg-6 overflow-auto">
@@ -62,15 +66,19 @@
                     <tbody>
                       <tr>
                         <td class="bg-body-tertiary">
-                          <strong>{{ $t('profile.doctype') }}: </strong>
+                          <strong>{{ $t("profile.doctype") }}: </strong>
                         </td>
-                        <td class="bg-body-tertiary">{{ profileStore.profile.typ_doc_name }}</td>
+                        <td class="bg-body-tertiary">
+                          {{ profileStore.profile.typ_doc_name }}
+                        </td>
                       </tr>
                       <tr>
                         <td class="bg-body-tertiary">
-                          <strong>{{ $t('profile.document') }}: </strong>
+                          <strong>{{ $t("profile.document") }}: </strong>
                         </td>
-                        <td class="bg-body-tertiary">{{ profileStore.profile.per_document }}</td>
+                        <td class="bg-body-tertiary">
+                          {{ profileStore.profile.per_document }}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -80,15 +88,19 @@
                     <tbody>
                       <tr>
                         <td class="bg-body-tertiary">
-                          <strong>{{ $t('profile.adress') }}: </strong>
+                          <strong>{{ $t("profile.adress") }}: </strong>
                         </td>
-                        <td class="bg-body-tertiary">{{ profileStore.profile.per_address }}</td>
+                        <td class="bg-body-tertiary">
+                          {{ profileStore.profile.per_address }}
+                        </td>
                       </tr>
                       <tr>
                         <td>
-                          <strong>{{ $t('profile.rol') }}: </strong>
+                          <strong>{{ $t("profile.rol") }}: </strong>
                         </td>
-                        <td class="bg-body-tertiary">{{ profileStore.profile.rol_name }}</td>
+                        <td class="bg-body-tertiary">
+                          {{ profileStore.profile.rol_name }}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -102,25 +114,24 @@
                     data-bs-toggle="modal"
                     data-bs-target="#Create"
                   >
-                    {{ $t('contacts.create') }}
+                    {{ $t("contacts.create") }}
                   </button>
-                  
                 </div>
                 <div class="col-12 col-md-12 col-lg-12 overflow-auto">
                   <table class="table bg-body-tertiary">
                     <thead>
                       <tr>
                         <th>
-                          <strong>{{ $t('profile.phone') }}</strong>
+                          <strong>{{ $t("profile.phone") }}</strong>
                         </th>
                         <th>
-                          <strong>{{ $t('profile.email') }}</strong>
+                          <strong>{{ $t("profile.email") }}</strong>
                         </th>
                         <th>
-                          <strong>{{ $t('buttons.edit') }}</strong>
+                          <strong>{{ $t("buttons.edit") }}</strong>
                         </th>
                         <th>
-                          <strong>{{ $t('buttons.delete') }}</strong>
+                          <strong>{{ $t("buttons.delete") }}</strong>
                         </th>
                       </tr>
                     </thead>
@@ -129,30 +140,26 @@
                         <td class="bg-body-tertiary">{{ contact.con_phone }}</td>
                         <td class="bg-body-tertiary">{{ contact.con_email }}</td>
                         <td>
-                          
-                            <button
+                          <button
                             @click="prepareEditContact(contact)"
-                              type="button"
-                              data-bs-toggle="modal"
-                              data-bs-target="#Editar"
-                              class="btn btn-outline-success"
-                            >
-                              <i class="ri-pencil-fill"></i> 
-                            </button>
-                        
+                            type="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#Editar"
+                            class="btn btn-outline-success"
+                          >
+                            <i class="ri-pencil-fill"></i>
+                          </button>
                         </td>
                         <td>
-                         
-                            <button
-                             @click="prepareDeleteContact(contact)"
-                              type="button"
-                              data-bs-toggle="modal"
-                              data-bs-target="#deleteModal"
-                              class="btn btn-outline-danger"
-                            >
-                              <i class="bi bi-trash-fill"></i> 
-                            </button>
-                         
+                          <button
+                            @click="prepareDeleteContact(contact)"
+                            type="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteModal"
+                            class="btn btn-outline-danger"
+                          >
+                            <i class="bi bi-trash-fill"></i>
+                          </button>
                         </td>
                       </tr>
                     </tbody>
@@ -171,100 +178,112 @@
     :con_phone="con_phone"
     :con_email="con_email"
     :edit="true"
-   
   ></contactsModal>
-<createContactsModal :per_id="parseInt(per_id)"></createContactsModal>
-<deleteContact :con_id="parseInt(con_id)"></deleteContact>
-<editProfile :per_id="parseInt(per_id)" :per_name="per_name" :per_lastname="per_lastname" :typ_doc_id="parseInt(typ_doc_id)" :per_document="per_document" :per_address="per_address" :edit="true"></editProfile>
+  <createContactsModal :per_id="parseInt(per_id)"></createContactsModal>
+  <deleteContact :con_id="parseInt(con_id)"></deleteContact>
+  <editProfile
+    :per_id="parseInt(per_id)"
+    :per_name="per_name"
+    :per_lastname="per_lastname"
+    :typ_doc_id="parseInt(typ_doc_id)"
+    :per_document="per_document"
+    :per_address="per_address"
+    :edit="true"
+  ></editProfile>
   <changePhoto></changePhoto>
 </template>
 
 <script setup>
-import { ref, onMounted, watchEffect, watch } from 'vue'
-import changePhoto from '../../src/components/changePhoto.vue'
-import LoadingComponent from '../../src/components/LoadingComponent.vue'
-import changePassword from '../../src/components/changePassword.vue'
-import contactsModal from '../../src/components/contact/ModalComponent.vue'
-import deleteContact from '../../src/components/contact/DeleteComponent.vue'
-import createContactsModal from '../../src/components/contact/CreateModalComponent.vue'
-import editProfile from '../../src/components/persons/EditPerfilComponent.vue'
-import { useProfileStore } from '../stores/profileStore'
+import { ref, onMounted, watchEffect, watch } from "vue";
+import changePhoto from "../../src/components/changePhoto.vue";
+import LoadingComponent from "../../src/components/LoadingComponent.vue";
+import changePassword from "../../src/components/changePassword.vue";
+import contactsModal from "../../src/components/contact/ModalComponent.vue";
+import deleteContact from "../../src/components/contact/DeleteComponent.vue";
+import createContactsModal from "../../src/components/contact/CreateModalComponent.vue";
+import editProfile from "../../src/components/persons/EditPerfilComponent.vue";
+import { useProfileStore } from "../stores/profileStore";
+import { usePersonStore } from "../stores/personsStore";
 //import {useAuthStore } from '../stores/authStore'
 //import { formatDocument } from '../validations'
-import { useContactsStore } from '../stores/contactStore.js'
-const contactStore = useContactsStore()
-const profileStore = useProfileStore()
+import { useContactsStore } from "../stores/contactStore.js";
+const personStore = usePersonStore();
+const contactStore = useContactsStore();
+const profileStore = useProfileStore();
 //const authStore = useAuthStore()
-const loading = ref(true)
-const photo = ref(profileStore.profile.use_photo)
-const editing = ref(false)
-const con_id = ref('')
-const con_phone = ref('')
-const con_email = ref('')
-const per_id = ref('')
-const per_name = ref('')
-const per_lastname = ref('')
-const typ_doc_id = ref('')
-const per_document = ref('')
-const per_address = ref('')
+const loading = ref(true);
+const photo = ref(profileStore.profile.use_photo);
+const editing = ref(false);
+const con_id = ref("");
+const con_phone = ref("");
+const con_email = ref("");
+const per_id = ref("");
+const per_name = ref("");
+const per_lastname = ref("");
+const typ_doc_id = ref("");
+const per_document = ref("");
+const per_address = ref("");
 const updatephoto = (event) => {
-  photo.value = event.detail.newImage
-}
+  photo.value = event.detail.newImage;
+};
 
 const prepareCreateForm = () => {
-  per_id.value = profileStore.personId
-}
+  per_id.value = profileStore.personId;
+};
 
 const editPerfil = () => {
-  per_id.value = profileStore.personId
-  per_name.value = profileStore.profile.per_name
-  per_lastname.value = profileStore.profile.per_lastname
-  typ_doc_id.value = profileStore.profile.typ_doc_id
-  per_document.value = profileStore.profile.per_document
-  per_address.value = profileStore.profile.per_address
-}
+  per_id.value = profileStore.personId;
+  per_name.value = profileStore.profile.per_name;
+  per_lastname.value = profileStore.profile.per_lastname;
+  typ_doc_id.value = profileStore.profile.typ_doc_id;
+  per_document.value = profileStore.profile.per_document;
+  per_address.value = profileStore.profile.per_address;
+};
 
 const prepareEditContact = (contact) => {
-  con_id.value = contact.con_id
-  con_phone.value = contact.con_phone
-  con_email.value = contact.con_email
-  editing.value = true
-  console.log(con_phone.value)
-}
+  con_id.value = contact.con_id;
+  con_phone.value = contact.con_phone;
+  con_email.value = contact.con_email;
+  editing.value = true;
+  console.log(con_phone.value);
+};
 const prepareDeleteContact = (contact) => {
-  con_id.value = contact.con_id
-  
-}
+  con_id.value = contact.con_id;
+};
 
 onMounted(() => {
   // Actualizar la imagen durante la montura inicial
-  updatephoto({ detail: { newImage: profileStore.profile.use_photo } })
+  updatephoto({ detail: { newImage: profileStore.profile.use_photo } });
   // Escuchar evento para actualizar la imagen
-  window.addEventListener('update-profile-image', updatephoto)
-})
-
+  window.addEventListener("update-profile-image", updatephoto);
+});
 
 // Actualizar la imagen si cambia en el store
 watchEffect(
   () => profileStore.profile.use_photo,
   (newValue) => {
-    photo.value = newValue
+    photo.value = newValue;
   }
-)
+);
 watch(
   () => profileStore.profile.use_photo,
   (newValue) => {
-    photo.value = newValue
+    photo.value = newValue;
   }
-)
+);
+
+watch(
+  () => profileStore.profile
+);
 
 onMounted(async () => {
   // Cargar detalles del perfil y contactos durante la montura inicial
-  await profileStore.readPersonDetailsById()
-  await contactStore.readContactsByPersonId() // Asegúrate de que esta función esté en contactStore
-  photo.value = profileStore.profile.use_photo
-  loading.value = false
-})
+  await profileStore.readPersonDetailsById();
+  await personStore.readPerson();
+  await contactStore.readContactsByPersonId(); // Asegúrate de que esta función esté en contactStore
+  photo.value = profileStore.profile.use_photo;
+  loading.value = false;
+});
 </script>
 
 <style>
@@ -274,7 +293,7 @@ onMounted(async () => {
 }
 
 .back {
-  background-color: #B2B5E0;
+  background-color: #b2b5e0;
   margin: 2%;
   border-radius: 15px;
   position: relative;
@@ -304,8 +323,8 @@ onMounted(async () => {
 
 .btn-custom:hover {
   background-color: var(----color-background);
-  color: #C5ADC5;
-  border: 2px solid #C5ADC5;
+  color: #c5adc5;
+  border: 2px solid #c5adc5;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
   transition: 0.5s ease;
 }

@@ -11,9 +11,16 @@
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-primary shadow-lg">
           <div class="modal-header justify-content-center">
-            <h5 class="modal-title text-danger fw-semibold" id="exampleModalLabel">
+            <h5 class="modal-title  fw-semibold" id="exampleModalLabel">
               {{ $t('profile.titleModal') }}
             </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              @click="cancelChanges()"
+            ></button>
           </div>
           <div class="modal-body">
             <form @submit.prevent="changePassword">
@@ -93,7 +100,7 @@
                   <i class="bi"></i> {{ passwordsNotMatching.message }}
                 </span>
               <div class="row">
-                <div  class="col-md-12 d-flex justify-content-center m-2 mt-3">
+                <div  class="col-md-12 d-flex justify-content-center  mt-3">
                   <button  type="submit" class="btn btn-custom fw-semibold" 
                   v-bind:disabled="passwordError || !passwordsNotMatching.isValid">
                   <span class="btn-content" v-if="!loading">
@@ -104,9 +111,9 @@
                       <span role="status"> {{ $t('errors.loading') }}</span>
                     </span>
                   </button>
-                  <button type="button" class="btn btn-danger ml-5 fw-semibold" data-bs-dismiss="modal" @click="cancelChanges">
+                  <!-- <button type="button" class="btn btn-danger ml-5 fw-semibold" data-bs-dismiss="modal" @click="cancelChanges">
                     {{ $t('buttons.cancel') }}
-                  </button>
+                  </button> -->
                 </div>
               </div>
             </form>
@@ -194,7 +201,7 @@ const passwordsNotMatching = computed(() => {
 
 <style lang="scss" scoped>
 .btn-custom {
-  background-color: var(--blue-color);
+  background-color: #a186a8;
   color: #ffffff;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
@@ -202,8 +209,8 @@ const passwordsNotMatching = computed(() => {
 
 .btn-custom:hover {
   background-color: var(----color-background);
-  color: var(--blue-color);
-  border: 2px solid var(--blue-color);
+  color: #a186a8;
+  border: 2px solid #a186a8;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
   transition: 0.5s ease;
 }
