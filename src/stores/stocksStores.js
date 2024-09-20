@@ -17,7 +17,7 @@ export const useStockStore = defineStore('stocks', () => {
 
 
   // Funcion para registrar 
-  const registerStock = async (produc_id, stock_costo, stock_precioVenta, stock_cantidad) => {
+  const registerStock = async (stock_costo, stock_precioVenta, stock_cantidad, produc_id, prove_id) => {
     try {
       const res = await axios({
         url: URL_STOCKS,
@@ -26,10 +26,12 @@ export const useStockStore = defineStore('stocks', () => {
           Authorization: 'Bearer ' + authStore.token
         },
         data: {
-          produc_id: produc_id,
+          
           stock_costo: stock_costo,
           stock_precioVenta: stock_precioVenta,
           stock_cantidad: stock_cantidad,
+          produc_id: produc_id,
+          prove_id: prove_id,
           use_id: user
         }
       });
@@ -44,7 +46,7 @@ export const useStockStore = defineStore('stocks', () => {
 
 
 // Funcion para editar
-const updateStock = async (stock_id, new_produc_id, new_stock_costo, new_stock_precioVenta, new_stock_cantidad) => {
+const updateStock = async (stock_id, new_stock_costo, new_stock_precioVenta, new_stock_cantidad, new_produc_id, new_prove_id) => {
   try {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + authStore.token;
     const res = await axios({
@@ -54,10 +56,11 @@ const updateStock = async (stock_id, new_produc_id, new_stock_costo, new_stock_p
         Authorization: 'Bearer ' + authStore.token
       },
       data: {
-        produc_id: new_produc_id,
         stock_costo: new_stock_costo,
         stock_precioVenta: new_stock_precioVenta,
         stock_cantidad: new_stock_cantidad,
+        produc_id: new_produc_id,
+        prove_id: new_prove_id,
         use_id: user
       }
     });

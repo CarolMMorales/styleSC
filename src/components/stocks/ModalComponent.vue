@@ -25,11 +25,41 @@
           <div class="modal-body">
             <form @submit.prevent="handleSubmit">
               <div class="row p-2">
+                
                 <div class="mb-3 col-12">
-                  <label for="exampleInputName1" class="form-label">{{ $t('products.produc_name') }}</label>
-                  <select class="form-select" id="exampleInputDocumentType" aria-describedby="DocumentTypeHelp" v-model="produc_id" >
-                      <option v-for="(Item, index) in filteredProduc" :key="index" :value="Item.produc_id" >
-                          {{ Item.produc_name }}
+                  <label for="exampleInputName1"  class="form-label">{{ $t('products.produc_name') }}</label>
+                  <select class="form-select"  @change="onProductSelect" id="proveSelect" v-model="produc_id" filterable>
+  <option v-for="(Item, index) in filteredProduc" :key="index" :value="Item.produc_id">
+    {{ Item.produc_name }}
+  </option>
+</select>
+                </div>
+                <input
+  type="text"
+  v-model="produc_code"
+  class="form-control"
+  id="exampleInputName1"
+  readonly
+/>
+<input
+  type="text"
+  v-model="produc_description"
+  class="form-control"
+  id="exampleInputName1"
+  readonly
+/>
+<input
+  type="text"
+  v-model="produc_size"
+  class="form-control"
+  id="exampleInputName1"
+  readonly
+/>
+                <div class="mb-3 col-12">
+                  <label for="exampleInputName1" class="form-label">{{ $t('proveedores.prove_name') }}</label>
+                  <select class="form-select" id="exampleInputDocumentType" aria-describedby="DocumentTypeHelp" v-model="prove_id" filterable>
+                      <option v-for="(Item, index) in filteredProve" :key="index" :value="Item.prove_id" >
+                          {{ Item.prove_name }}
                       </option>
                   </select>
                 </div>
@@ -45,7 +75,6 @@
                     aria-describedby="NameHelp"
                   />
                 </div>
-                
                 <div class="mb-3 col-12">
                   <label for="exampleInputName1" class="form-label">{{
                     $t('stocks.stock_precioVenta')
@@ -69,7 +98,6 @@
                   />
                 </div>
               </div>
-
               <div class="row">
                 <div class="col-md-12 d-flex justify-content-center">
                   <button
@@ -101,14 +129,22 @@
 import { ref, computed, defineProps, watchEffect, onMounted } from 'vue'
 import { useStockStore } from '../../stores/stocksStores'
 import { useProductsStore } from '../../stores/productsStores'
+import { useProveedorStore } from '../../stores/proveedoresStores'
+
 
 const loading = ref(false)
 const stock = useStockStore()
+
 const productStore = useProductsStore()
+const proveStore = useProveedorStore()
+const produc_code= ref('')
+const produc_description= ref('')
+const produc_size= ref('')
 
 const props = defineProps({
+
   produc_id: Number,
-  //produc_name: String,
+  prove_id: Number,
   stock_id: Number,
   stock_costo: Number,
   stock_precioVenta: Number,
@@ -116,12 +152,23 @@ const props = defineProps({
   edit: Boolean
 })
 
+
 const filteredProduc = computed(() => {
   return productStore.produc.filter((item) => item.produc_name != 0)
 })
 
+const filteredProve = computed(() => {
+  return proveStore.prove.filter((item) => item.prove_name != 0)
+})
+
+const onProductSelect = (selected) => {
+  produc_code.value = selected.produc_code;
+  produc_description.value = selected.produc_description;
+  produc_size.value = selected.produc_size;
+};
+
 const produc_id = ref(props.produc_id)
-//const produc_name = ref(props.produc_name)
+const prove_id = ref(props.prove_id)
 const stock_costo = ref(props.stock_costo)
 const stock_precioVenta = ref(props.stock_precioVenta)
 const stock_cantidad = ref(props.stock_cantidad)
@@ -135,6 +182,7 @@ const closeModal = ref(false)
 const isFormValid = computed(() => {
   return (
     produc_id.value &&
+    prove_id.value &&
     stock_costo.value &&
     stock_precioVenta.value &&
     stock_cantidad.value
@@ -142,7 +190,9 @@ const isFormValid = computed(() => {
 })
 
 watchEffect(() => {
+ 
   produc_id.value = props.produc_id
+  prove_id.value = props.prove_id
   stock_costo.value = props.stock_costo
   stock_precioVenta.value = props.stock_precioVenta
   stock_cantidad.value = props.stock_cantidad
@@ -159,6 +209,7 @@ const handleSubmit = async () => {
       const success = await stock.updateStock(
         props.stock_id,
         produc_id.value,
+        prove_id.value,
         stock_costo.value,
         stock_precioVenta.value,
         stock_cantidad.value
@@ -170,6 +221,7 @@ const handleSubmit = async () => {
     } else {
       await stock.registerStock(
         produc_id.value,
+        prove_id.value,
         stock_costo.value,
         stock_precioVenta.value,
         stock_cantidad.value
@@ -200,7 +252,7 @@ const cancelChanges = () => {
 
 const clearForm = () => {
   produc_id.value = ''
-  //produc_name.value = ''
+  prove_id.value = ''
   stock_costo.value = ''
   stock_precioVenta.value = ''
   stock_cantidad.value = ''

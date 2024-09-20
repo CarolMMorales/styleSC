@@ -1,93 +1,94 @@
 <template>
-    <div>
-      <div class="row">
-  
+  <div>
+    <div class="row">
+
       <!-- buscador -->
       <div class="col-md-12 mb-3">
         <input type="text" v-model="searchTerm" :placeholder="$t('titles.search')" class="form-control" />
       </div>
     </div>
-  
-      <div class="table-responsive m-1">
-        <!-- Agregar un indicador de carga -->
-        <div v-if="loading" class="d-flex justify-content-center">
-          <LoadingComponent></LoadingComponent>
-        </div>
-        <div v-if="!loading">
-          <table class="table table-striped table-bordered" v-if="!loading">
-            <thead>
-              <tr>
-                <th class="lila-color-bg text-light text-center">
-                  {{ $t('products.produc_name') }}
-                </th>
-                <th class="lila-color-bg text-light text-center">
-                  {{ $t('stocks.stock_costo') }}
-                </th>
-                <th class="lila-color-bg text-light text-center">
-                  {{ $t('stocks.stock_precioVenta') }}
-                </th>
-                <th class="lila-color-bg text-light text-center">
-                  {{ $t('stocks.stock_cantidad') }}
-                </th>
-                <th class="lila-color-bg text-light text-center">
-                  {{ $t('buttons.edit') }}
-                </th>
-                <th class="lila-color-bg text-light text-center">
-                  {{ $t('buttons.delete') }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(Item, index) in paginated" :key="index">
-                <td>{{ Item.produc_name }} </td>
-                <td>{{ Item.stock_costo }}</td>
-                <td>{{ Item.stock_precioVenta}}</td>
-                <td>{{ Item.stock_cantidad}}</td>
-                <td>
-                  <div class="text-light text-center align-items-center justify-content-center">
-                    <button
-                      @click="prepareEditForm(Item)"
-                      type="button"
-                      data-bs-toggle="modal"
-                      data-bs-target="#editModal"
-                      class="btn btn-outline-success"
-                    >
-                      <i class="ri-pencil-fill"></i> {{ $t('buttons.edit') }}
-                    </button>
-                  </div>
-                </td>
-                <td>
-                  <div class="text-light text-center align-items-center justify-content-center">
-                    <button
-                      @click="prepareDeleteForm(Item)"
-                      type="button"
-                      data-bs-toggle="modal"
-                      data-bs-target="#deleteModal"
-                      class="btn btn-outline-danger"
-                    >
-                      <i class="bi bi-trash-fill"></i> {{ $t('buttons.delete') }}
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <PaginationComponent
-            :currentPage="currentPage"
-            :totalPages="totalPages"
-            @changePage="handlePageChanged"
-          />
-        </div>
+
+    <div class="table-responsive m-1">
+      <!-- Agregar un indicador de carga -->
+      <div v-if="loading" class="d-flex justify-content-center">
+        <LoadingComponent></LoadingComponent>
       </div>
-      
+      <div v-if="!loading">
+        <table class="table table-striped table-bordered" v-if="!loading">
+          <thead>
+            <tr>
+              <th class="lila-color-bg text-light text-center">
+                {{ $t('categories.cate_name') }}
+              </th>
+              <th class="lila-color-bg text-light text-center">
+                {{ $t('products.produc_name') }}
+              </th>
+              <th class="lila-color-bg text-light text-center">
+                {{ $t('products.produc_size') }}
+              </th>
+              <th class="lila-color-bg text-light text-center">
+                {{ $t('stocks.stock_cantidad') }}
+              </th>
+              <th class="lila-color-bg text-light text-center">
+                {{ $t('proveedores.prove_name') }}
+              </th>
+              <th class="lila-color-bg text-light text-center">
+                {{ $t('buttons.details') }}
+              </th>
+              <th class="lila-color-bg text-light text-center">
+                {{ $t('buttons.edit') }}
+              </th>
+              <th class="lila-color-bg text-light text-center">
+                {{ $t('buttons.delete') }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(Item, index) in paginated" :key="index">
+              <td>{{ Item.cate_name }} </td>
+              <td>{{ Item.produc_name }}</td>
+              <td>{{ Item.produc_size}}</td>
+              <td>{{ Item.stock_cantidad}}</td>
+              <td>{{ Item.prove_name }}</td>
+              <td>
+                <div class="text-light text-center align-items-center justify-content-center">
+                  <button  type="button" data-bs-toggle="modal"
+                    data-bs-target="#detailsModal" class="btn btn-outline-success">
+                    <i class="bi bi-info-square-fill"></i> {{ $t('buttons.details') }}
+                  </button>
+                </div>
+              </td>
+              <td>
+                <div class="text-light text-center align-items-center justify-content-center">
+                  <button @click="prepareEditForm(Item)" type="button" data-bs-toggle="modal"
+                    data-bs-target="#editModal" class="btn btn-outline-success">
+                    <i class="ri-pencil-fill"></i> {{ $t('buttons.edit') }}
+                  </button>
+                </div>
+              </td>
+              <td>
+                <div class="text-light text-center align-items-center justify-content-center">
+                  <button @click="prepareDeleteForm(Item)" type="button" data-bs-toggle="modal"
+                    data-bs-target="#deleteModal" class="btn btn-outline-danger">
+                    <i class="bi bi-trash-fill"></i> {{ $t('buttons.delete') }}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <PaginationComponent :currentPage="currentPage" :totalPages="totalPages" @changePage="handlePageChanged" />
+      </div>
     </div>
+  </div>
     
     <ModalStocks
       :stock_id="parseInt(stock_id)"
-      :produc_id="parseInt(produc_id)"
       :stock_costo="parseFloat(stock_costo)"
       :stock_precioVenta="parseFloat(stock_precioVenta)"
       :stock_cantidad="parseInt(stock_cantidad)"
+      :produc_id="parseInt(produc_id)"
+      :prove_id="parseInt(prove_id)"
       :edit="true"
     ></ModalStocks>
     <ModalDelete :stock_id="parseInt(stock_id)"></ModalDelete>
@@ -102,13 +103,12 @@
   import { ref, computed, onMounted, watch } from 'vue'
   import ModalDelete from './DeleteComponent.vue'
   const stockStore = useStockStore()
-  const produc_id = ref('')
-  const produc_name = ref('')
   const stock_id = ref('')
   const stock_costo = ref('')
   const stock_precioVenta = ref('')
   const stock_cantidad = ref('')
-
+  const produc_id = ref('')
+  const prove_id = ref('')
 
   const editing = ref(false)
 
@@ -125,12 +125,12 @@
   
 
 const prepareEditForm =  (proItem) => {
-  produc_id.value = proItem.stock_id
-  produc_name.value = proItem.produc_name
   stock_id.value = proItem.stock_id
   stock_costo.value = proItem.stock_costo
   stock_precioVenta.value = proItem.stock_precioVenta
   stock_cantidad.value = proItem.stock_cantidad
+  produc_id.value = proItem.produc_id
+  prove_id.value = proItem.prove_id
   editing.value = true
 }
 const prepareDeleteForm = (proItem)=>{
@@ -141,17 +141,21 @@ const prepareDeleteForm = (proItem)=>{
   const lowerSearchTerm = searchTerm.value.toLowerCase();
 
   return Array.isArray(stockStore.stock) ? stockStore.stock.filter((item) => {
+    const cateName = item.cate_name ? item.cate_name.toLowerCase() : '';
     const producName = item.produc_name ? item.produc_name.toLowerCase() : '';
+    const proveName = item.prove_name ? item.prove_name.toLowerCase() : '';
     const stockCosto = item.stock_costo ? item.stock_costo.toString() : '';
     const stockPrecioVenta = item.stock_precioVenta ? item.stock_precioVenta.toString() : '';
     const stockCantidad = item.stock_cantidad ? item.stock_cantidad.toString() : '';
 
-    const matchesName = producName.includes(lowerSearchTerm);
+    const matchesCateName = cateName.includes(lowerSearchTerm);
+    const matchesProducName = producName.includes(lowerSearchTerm);
+    const matchesProveName = proveName.includes(lowerSearchTerm);
     const matchesCosto = stockCosto.includes(lowerSearchTerm);
     const matchesPrecioVenta = stockPrecioVenta.includes(lowerSearchTerm);
     const matchesCantidad = stockCantidad.includes(lowerSearchTerm);
 
-    return matchesCosto || matchesName || matchesPrecioVenta || matchesCantidad;
+    return matchesCateName || matchesProducName || matchesProveName || matchesCosto || matchesPrecioVenta || matchesCantidad;
   }) : [];
 });
   

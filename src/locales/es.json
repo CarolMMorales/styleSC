@@ -24,6 +24,7 @@
 "buttons":{
   "add": "Agregar",
   "edit": "Editar",
+  "details": "Detalles",
   "delete": "Eliminar",
   "save": "Guardar",
   "cancel": "Cancelar",
@@ -87,6 +88,7 @@
   "edit": "Editar Stock",
   "delete": "Eliminar Stock",
   "add": "Agregar Stock" ,
+  "details": "Detalles Stock",
    "messagesDelete": "¿Estás seguro de que deseas eliminar este stock?"
 },
 
