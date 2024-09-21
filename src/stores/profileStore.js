@@ -106,28 +106,32 @@ export const useProfileStore = defineStore('profile', () => {
   
   const updatePhoto = async (newPhoto) => {
     try {
-      const res = await axios.post(`/update/photo/${localStorage.getItem('id')}`, newPhoto, {
+      const res = await axios.put(`auth/profile/updatePhoto/${localStorage.getItem('id')}`, newPhoto, {
         headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: 'Bearer ' + authStore.token
+          'Content-Type': 'multipart/form-data', // Para manejar archivos
+          Authorization: 'Bearer ' + authStore.token // Autenticación
         }
       });
-      readPersonDetailsById();
+  
+      // Refrescar detalles de la persona después de la actualización
+      await readPersonDetailsById();
+  
+      // Manejar la respuesta
       handleResponse(
         res,
         null,
-        t('coreSubject.messageSuccess'),
-        t('errors.duplicateAlert'),
-        t('errors.passActual')
+        t('coreSubject.messageSuccess'), // Mensaje de éxito
+        t('errors.duplicateAlert'), // Mensaje en caso de error de duplicado
+        t('errors.passActual') // Otro posible mensaje de error
       );
     } catch (error) {
       console.log(error.response.data.message);
-
+  
       if (error.request) {
         let messageToShow = error.response.data.message;
-
+  
         if (messageToShow.includes('Password does not match')) {
-          showSwalAlert(null, 'la contraseña no coincide', 'error');
+          showSwalAlert(null, 'la contraseña no coincide', 'error'); // Mostrar alerta si hay error con la contraseña
         }
         console.error('Error de solicitud:', error.response.data);
       } else {
@@ -140,6 +144,7 @@ export const useProfileStore = defineStore('profile', () => {
       }
     }
   };
+  
 
   const handleError = (error) => {
     if (error.response && error.response.status === 401) {

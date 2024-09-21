@@ -13,22 +13,90 @@ export const validateEmails = (email, errorMessage) => {
   
     return ''
   }
-
-  export const showPassword = (inputId) => {
-    const passwordInput = document.getElementById(inputId)
-    const iconSpan = document.querySelector(`#${inputId} + .btn .icon`)
+  export const handleResponse = (res, 
+    name, 
+    successMessage,
+     duplicateAlert,
+      invalidFormat,
+      validateCharacter,
+       quotasMinor,
+        studentAlrRegistered, 
+        notStudent, 
+        maxCapacity, 
+        quotasZero,
+        hourErrorMsg1,
+        InvalidCSV,
+         Iqual) => {
+    if (res.data && res.data.status === false && res.data.message) {
+      let messageToShows = res.data.message[0];
+      let messageToShow = res.data.message;
+      if (messageToShow.includes('Password does not match')) {
+        messageToShow = invalidFormat;
+        showSwalAlert(name, messageToShow, 'error');
+      }
+      if (messageToShow.includes('The old password does not match')) {
+        messageToShow = invalidFormat;
+        showSwalAlert(name, messageToShow, 'error');
+      }
+      if (messageToShow.includes('New password cannot be the same as the old password')) {
+        messageToShow = Iqual;
+        showSwalAlert(name, messageToShow, 'error');
+      }
+      if (messageToShows.includes('format is invalid')) {
+        messageToShow = invalidFormat;
+        showSwalAlert(null, messageToShow, 'error');
+    } 
+    if (messageToShow.includes('Cannot update to full quotas. There are currently')) {
+      messageToShow = quotasMinor;
+      showSwalAlert(null, messageToShow, 'error');
+    } if (messageToShows.includes('must not be greater than')) {
+      messageToShow = validateCharacter;
+      showSwalAlert(null, messageToShow, 'error');
   
-    if (passwordInput.type === 'password') {
-      passwordInput.type = 'text'
-      iconSpan.classList.remove('fa-eye-slash')
-      iconSpan.classList.add('fa-eye')
-    } else {
-      passwordInput.type = 'password'
-      iconSpan.classList.remove('fa-eye')
-      iconSpan.classList.add('fa-eye-slash')
-    }
+  }else if (messageToShows.includes('has already been taken')) {
+        messageToShows = duplicateAlert;
+        showSwalAlert(name, messageToShows, 'error');
+    } else if (messageToShow.includes('value tried to register')) {
+        messageToShow = duplicateAlert;
+        showSwalAlert(name, messageToShow, 'error');
+    } else if (messageToShow.includes('with the same characteristics already exists.')) {
+      messageToShow = duplicateAlert
+      showSwalAlert(name, messageToShow, 'error')
+    } else if (messageToShow.includes('An activity with the same name and type already exists')) {
+      messageToShow = duplicateAlert
+      showSwalAlert(name, messageToShow, 'error')
+    }else if (messageToShow.includes('student is already registered for this activity')) {
+      messageToShows = studentAlrRegistered;
+      showSwalAlert(name, messageToShows, 'error');
+    } else if (messageToShow.includes('The requested solicitude does not exist.')) {
+      messageToShow = notStudent;
+      showSwalAlert(name, messageToShow, 'error');
+  } else if (messageToShow.includes('The user who is registering is not a student')) {
+    messageToShow = notStudent;
+    showSwalAlert(name, messageToShow, 'error');
+  } 
+  else if (messageToShow.includes('The activity has reached its maximum capacity')) {
+    messageToShow = maxCapacity;
+    showSwalAlert(name, messageToShow, 'error');
   }
+   else if (messageToShows.includes('The bie act quotas must be at least 1.')) {
+    messageToShows = quotasZero;
+    showSwalAlert(null, messageToShows, 'error');
   
+  } else if (messageToShow.includes('the time and date of the activity are not allowed')) {
+    messageToShows = hourErrorMsg1;
+    showSwalAlert(null, messageToShows, 'error');
+  }else if (messageToShow.includes('El archivo tiene datos invalidos.')) {
+    messageToShows = InvalidCSV;
+    showSwalAlert(null, messageToShows, 'error');
+  } 
+    } else if (res.data && res.data.status === true) {
+      let messageToShow = successMessage;
+      showSwalAlert(name, messageToShow, 'success');
+    }
+  
+  };
+
   export const handleResponsePassword = (res, name, sameNewAsOld, successMessage, passwordWrong) => {
     if (res.data && res.data.status === false && res.data.message) {
       let messageToShow = res.data.message
@@ -51,6 +119,22 @@ export const validateEmails = (email, errorMessage) => {
       }
     }
   }
+
+  export const showPassword = (inputId) => {
+    const passwordInput = document.getElementById(inputId)
+    const iconSpan = document.querySelector(`#${inputId} + .btn .icon`)
+  
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text'
+      iconSpan.classList.remove('fa-eye-slash')
+      iconSpan.classList.add('fa-eye')
+    } else {
+      passwordInput.type = 'password'
+      iconSpan.classList.remove('fa-eye')
+      iconSpan.classList.add('fa-eye-slash')
+    }
+  }
+
 
   export const validatePassword = (password, invalidFormat) => {
     let mensaje = ''
@@ -165,89 +249,7 @@ export const validateEmails = (email, errorMessage) => {
     }
   }
 
-  export const handleResponse = (res, 
-    name, 
-    successMessage,
-     duplicateAlert,
-      invalidFormat,
-      validateCharacter,
-       quotasMinor,
-        studentAlrRegistered, 
-        notStudent, 
-        maxCapacity, 
-        quotasZero,
-        hourErrorMsg1,
-        InvalidCSV,
-         Iqual) => {
-    if (res.data && res.data.status === false && res.data.message) {
-      let messageToShows = res.data.message[0];
-      let messageToShow = res.data.message;
-      if (messageToShow.includes('Password does not match')) {
-        messageToShow = invalidFormat;
-        showSwalAlert(name, messageToShow, 'error');
-      }
-      if (messageToShow.includes('The old password does not match')) {
-        messageToShow = invalidFormat;
-        showSwalAlert(name, messageToShow, 'error');
-      }
-      if (messageToShow.includes('New password cannot be the same as the old password')) {
-        messageToShow = Iqual;
-        showSwalAlert(name, messageToShow, 'error');
-      }
-      if (messageToShows.includes('format is invalid')) {
-        messageToShow = invalidFormat;
-        showSwalAlert(null, messageToShow, 'error');
-    } 
-    if (messageToShow.includes('Cannot update to full quotas. There are currently')) {
-      messageToShow = quotasMinor;
-      showSwalAlert(null, messageToShow, 'error');
-    } if (messageToShows.includes('must not be greater than')) {
-      messageToShow = validateCharacter;
-      showSwalAlert(null, messageToShow, 'error');
-  
-  }else if (messageToShows.includes('has already been taken')) {
-        messageToShows = duplicateAlert;
-        showSwalAlert(name, messageToShows, 'error');
-    } else if (messageToShow.includes('value tried to register')) {
-        messageToShow = duplicateAlert;
-        showSwalAlert(name, messageToShow, 'error');
-    } else if (messageToShow.includes('with the same characteristics already exists.')) {
-      messageToShow = duplicateAlert
-      showSwalAlert(name, messageToShow, 'error')
-    } else if (messageToShow.includes('An activity with the same name and type already exists')) {
-      messageToShow = duplicateAlert
-      showSwalAlert(name, messageToShow, 'error')
-    }else if (messageToShow.includes('student is already registered for this activity')) {
-      messageToShows = studentAlrRegistered;
-      showSwalAlert(name, messageToShows, 'error');
-    } else if (messageToShow.includes('The requested solicitude does not exist.')) {
-      messageToShow = notStudent;
-      showSwalAlert(name, messageToShow, 'error');
-  } else if (messageToShow.includes('The user who is registering is not a student')) {
-    messageToShow = notStudent;
-    showSwalAlert(name, messageToShow, 'error');
-  } 
-  else if (messageToShow.includes('The activity has reached its maximum capacity')) {
-    messageToShow = maxCapacity;
-    showSwalAlert(name, messageToShow, 'error');
-  }
-   else if (messageToShows.includes('The bie act quotas must be at least 1.')) {
-    messageToShows = quotasZero;
-    showSwalAlert(null, messageToShows, 'error');
-  
-  } else if (messageToShow.includes('the time and date of the activity are not allowed')) {
-    messageToShows = hourErrorMsg1;
-    showSwalAlert(null, messageToShows, 'error');
-  }else if (messageToShow.includes('El archivo tiene datos invalidos.')) {
-    messageToShows = InvalidCSV;
-    showSwalAlert(null, messageToShows, 'error');
-  } 
-    } else if (res.data && res.data.status === true) {
-      let messageToShow = successMessage;
-      showSwalAlert(name, messageToShow, 'success');
-    }
-  
-  };
+
 
   export const handleResponseauth = (res, name, successMessage, duplicateAlert, invalidFormat) => {
     const array_errors = ['name has already been taken']

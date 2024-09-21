@@ -101,13 +101,13 @@
                 </span>
               <div class="row">
                 <div  class="col-md-12 d-flex justify-content-center  mt-3">
-                  <button  type="submit" class="btn btn-custom fw-semibold" 
+                  <button  type="submit" class="btn btn-custom fw-semibold" data-bs-dismiss="modal" 
                   v-bind:disabled="passwordError || !passwordsNotMatching.isValid">
                   <span class="btn-content" v-if="!loading">
                     {{ $t('buttons.save') }}
                   </span>
                   <span class="btn-content" v-else>
-                      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                      <span class="spinner-border spinner-border-sm" data-bs-dismiss="modal"  aria-hidden="true"></span>
                       <span role="status"> {{ $t('errors.loading') }}</span>
                     </span>
                   </button>
@@ -128,7 +128,7 @@
 import { useProfileStore } from '../stores/profileStore'
 import {  showPassword, validatePassword, validateSame} from '../validation'
 import { ref , computed} from 'vue'
-import CryptoJS from 'crypto-js'
+//import CryptoJS from 'crypto-js'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const profileStore = useProfileStore()
@@ -140,28 +140,18 @@ const status= ref('')
 const loading = ref(false)
 const changePassword = async () => {
   try {
-    loading.value = true
-    const hashedPassword = CryptoJS.SHA256(currentPassword.value).toString()
-    const hashedPasswordNew = CryptoJS.SHA256(newPassword.value).toString()
-    const hashedPasswordValidation = CryptoJS.SHA256(confirmPassword.value).toString()
-
-    const password = await profileStore.updatePassword(hashedPassword, hashedPasswordNew, hashedPasswordValidation)
-    status.value = password
-    if (password === true){
-      clearFormFields()
-     
-    }
-
-
-  } catch (error) {
-    // Si hay errores, muestra un mensaje de error
-    message.value = 'Hubo un error al cambiar la contraseña. Por favor, inténtalo de nuevo.'
-  } finally {
+    const password = await profileStore.updatePassword(currentPassword.value, newPassword.value, confirmPassword.value);
+    status.value = password;
     
-    loading.value = false
+    if (password === true) {
+      clearFormFields();
+    }
+    clearFormFields();
+  } catch (error) {
+    message.value = 'Hubo un error al cambiar la contraseña. Por favor, inténtalo de nuevo.';
   }
+};
 
-}
 const clearFormFields = () => {
   currentPassword.value = ''
   newPassword.value = ''

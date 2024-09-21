@@ -26,14 +26,15 @@
                 <div class="mb-3 text-start  ">
                   <label  class="form-label">{{ $t('profile.imagen') }}</label>
                   <input
-                    type="file"
-                    ref="fileInput"
-                    class="form-control"
-                    id="exampleInputImg"
-                    aria-describedby="NameHelp"
-                    accept="image/*"
-                    @change="checkFileValidity"
-                  />
+  type="file"
+  ref="fileInput"
+  class="form-control"
+  id="exampleInputImg"
+  aria-describedby="NameHelp"
+  accept="image/*"
+  @change="checkFileValidity"
+/>
+
                   <span class="text text-secondary"> <i class="bi bi-exclamation-lg"></i> {{$t('profile.note')}}</span>
                  
                 </div>
@@ -63,33 +64,41 @@
 </template>
 
 <script setup>
-// import { useProfileStore } from "../stores/profileStore";
+import { useProfileStore } from "../stores/profileStore";
 import { ref } from 'vue'
 
-// const profileStore = useProfileStore()
+const profileStore = useProfileStore()
 const isValidFile = ref(true)
 const photo = ref('')
 const fileInput = ref(null)
 const loading = ref(false)
-
 const changePhoto = async () => {
-  if (!isValidFile.value) return; 
+  if (!isValidFile.value) return; // Validación del archivo
   try {
-    const formData = new FormData()
-    formData.append('file', fileInput.value.files[0])
-    loading.value = true
+    const formData = new FormData(); // Crear FormData para la foto
+    formData.append('file', fileInput.value.files[0]); // Agregar archivo seleccionado
 
-    // await profileStore.updatePhoto(formData)
+    loading.value = true;
 
-    // await profileStore.readPersonDetailsById()
+    // Llamar al método del store para enviar el archivo al backend
+    await profileStore.updatePhoto(formData);
 
-    // photo.value = profileStore.profile.use_photo + `?${Math.random()}`
-    emitUpdateImageEvent(photo.value)
-    loading.value = false
+    // Refrescar los detalles de la persona después de subir la foto
+    await profileStore.readPersonDetailsById();
+
+    // Actualizar la foto en la vista (eliminar caché agregando un query string aleatorio)
+    photo.value = profileStore.profile.use_photo + `?${Math.random()}`;
+
+    // Emitir un evento para actualizar la imagen del perfil
+    emitUpdateImageEvent(photo.value);
+
+    loading.value = false;
   } catch (error) {
-    console.error('Error uploading photo:', error)
+    console.error('Error uploading photo:', error);
+    loading.value = false; // Asegurarse de detener el estado de carga
   }
-}
+};
+
 const emitUpdateImageEvent = (newImage) => {
   window.dispatchEvent(new CustomEvent('update-profile-image', { detail: { newImage } }))
 }
