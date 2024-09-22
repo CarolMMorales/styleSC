@@ -3,11 +3,11 @@ import CryptoJS from 'crypto-js';
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useAuthStore } from './authStore'
-import { showSwalAlert, handleResponse} from '../validation'
+import { showSwalAlert, handleResponse } from '../validation'
 //import { useI18n } from "vue-i18n";
 import { useRouter } from 'vue-router'
+
 export const useProductsStore = defineStore('products', () => {
-//   const { t } = useI18n();
   const router = useRouter()
   const authStore = useAuthStore()
   const secretKey = 'TuClaveSecreta';
@@ -15,9 +15,8 @@ export const useProductsStore = defineStore('products', () => {
   const URL_PRODUCTS = `/products`
   const produc = ref([])
 
-
   // Funcion para registrar 
-  const registerProduct = async ( produc_code, produc_name, produc_description, produc_size, cate_id) => {
+  const registerProduct = async (produc_code, produc_name, produc_description, produc_size, cate_id) => {
     try {
       const res = await axios({
         url: URL_PRODUCTS,
@@ -35,87 +34,92 @@ export const useProductsStore = defineStore('products', () => {
         }
       });
       handleResponse(res, produc_name);
-      await readProduct();  // Asegúrate de que esta llamada esté presente
+      await readProduct();  
       return true;
     } catch (error) {
       console.log(error.response?.data || error);
     }
   };
-  
 
-
-// Funcion para editar
-const updateProduct = async (produc_id, new_produc_code, new_produc_name, new_produc_description, new_produc_size, new_cate_id ) => {
+  const getProductById = async (produc_id) => {
   try {
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + authStore.token;
-    const res = await axios({
-      url: `${URL_PRODUCTS}/${produc_id}`,
-      method: 'PUT',
-      headers: {
-        Authorization: 'Bearer ' + authStore.token
-      },
-      data: {
-        produc_code: new_produc_code,
-        produc_name: new_produc_name,
-        produc_description: new_produc_description,
-        produc_size: new_produc_size,
-        cate_id: new_cate_id,
-        use_id: user
-      }
-    });
-    handleResponse(res, new_produc_name);
-    await readProduct(); 
-    return true;  
+    const res = await axios.get(`${URL_PRODUCTS}/${produc_id}`);
+    return res.data.data;  // Asegúrate de que esto devuelve los datos correctos
   } catch (error) {
-    handleError(error);
-    return false;  
+    console.error('Error fetching product:', error);
   }
-};
+  };
 
 
-//funcion para leer y utilizar datos
-const readProduct = async () => {
-  try {
-    const res = await axios({
-      url: URL_PRODUCTS,
-      method: 'GET',
-      headers: {
-        Authorization: 'Bearer ' + authStore.token
-      }
-    });
+  // Funcion para editar
+  const updateProduct = async (produc_id, new_produc_code, new_produc_name, new_produc_description, new_produc_size, new_cate_id ) => {
+    try {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + authStore.token;
+      const res = await axios({
+        url: `${URL_PRODUCTS}/${produc_id}`,
+        method: 'PUT',
+        headers: {
+          Authorization: 'Bearer ' + authStore.token
+        },
+        data: {
+          produc_code: new_produc_code,
+          produc_name: new_produc_name,
+          produc_description: new_produc_description,
+          produc_size: new_produc_size,
+          cate_id: new_cate_id,
+          use_id: user
+        }
+      });
+      handleResponse(res, new_produc_name);
+      await readProduct(); 
+      return true;  
+    } catch (error) {
+      handleError(error);
+      return false;  
+    }
+  };
 
-    // Asignar los datos extraídos a produc.value
-    produc.value = res.data.data;
-    
-    console.log(produc.value);
-    return produc.value;  
+  //funcion para leer y utilizar datos
+  const readProduct = async () => {
+    try {
+      const res = await axios({
+        url: URL_PRODUCTS,
+        method: 'GET',
+        headers: {
+          Authorization: 'Bearer ' + authStore.token
+        }
+      });
 
-  } catch (error) {
-    handleError(error);
-  }
-};
+      produc.value = res.data.data;
+      
+      console.log(produc.value);
+      return produc.value;  
 
-// Función para eliminar 
-const deleteProduct = async (produc_id) => {
-  try {
-    const res = await axios({
-      url: `${URL_PRODUCTS}/${produc_id}`,
-      method: 'DELETE',
-      headers: {
-        Authorization: 'Bearer ' + authStore.token
-      }
-    });
-    handleResponse(res, "Producto eliminado");
-    
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  // Función para eliminar 
+  const deleteProduct = async (produc_id) => {
+    try {
+      const res = await axios({
+        url: `${URL_PRODUCTS}/${produc_id}`,
+        method: 'DELETE',
+        headers: {
+          Authorization: 'Bearer ' + authStore.token
+        }
+      });
+      handleResponse(res, "Producto eliminado");
+      
    
-    await readProduct();
-    return true;
-  } catch (error) {
-    handleError(error);
-    return false;
-  }
-};
-
+      await readProduct();
+      return true;
+    } catch (error) {
+      handleError(error);
+      return false;
+    }
+  };
 
   const handleError =(error)=>{
     if (error.response && error.response.status === 401) {
@@ -129,13 +133,15 @@ const deleteProduct = async (produc_id) => {
       showSwalAlert('Error inesperado:', error.message, 'error');
     }
   }
-readProduct()
-return {
-  registerProduct,
-  readProduct,
-  updateProduct,
-  deleteProduct,
-  useProductsStore,
-  produc
-}
+
+  readProduct()
+  return {
+    registerProduct,
+    getProductById,
+    readProduct,
+    updateProduct,
+    deleteProduct,
+    useProductsStore,
+    produc
+  }
 })

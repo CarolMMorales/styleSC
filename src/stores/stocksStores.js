@@ -19,14 +19,13 @@ export const useStockStore = defineStore('stocks', () => {
   // Funcion para registrar 
   const registerStock = async (stock_costo, stock_precioVenta, stock_cantidad, produc_id, prove_id) => {
     try {
-      const res = await axios({
+      const res = await axios({ 
         url: URL_STOCKS,
         method: 'POST',
         headers: {
           Authorization: 'Bearer ' + authStore.token
         },
         data: {
-          
           stock_costo: stock_costo,
           stock_precioVenta: stock_precioVenta,
           stock_cantidad: stock_cantidad,
