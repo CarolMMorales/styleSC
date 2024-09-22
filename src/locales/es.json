@@ -124,7 +124,10 @@
   "adress": "Dirección",
   
   "rol": "Rol",
-  
+  "update":"¡El cambio de contraseña ha sido exitoso!",
+  "iqual":"La contraseña actual no puede coincidir con la nueva",
+  "duplicateAlert":"Ya se encuentra registrada",
+  "passActual": "La contraseña actual no coincide con la digitada",
   
   "change": "Cambiar contraseña",
   "resetPassword": "Recuperar Contraseña",

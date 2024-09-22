@@ -68,7 +68,7 @@ export const useProfileStore = defineStore('profile', () => {
           //use_id: user
         }
       });
-      handleResponsePassword(res, per_name);
+      handleResponse(res, per_name);
       await readPersonDetailsById(); 
       return true;  
     } catch (error) {
@@ -95,7 +95,7 @@ export const useProfileStore = defineStore('profile', () => {
           password_confirmation: confirmPassword,
         }
       });
-      handleResponse(res);
+      handleResponsePassword(res);
       // Manejo de respuesta
     } catch (error) {
       // Manejo de error
@@ -106,7 +106,7 @@ export const useProfileStore = defineStore('profile', () => {
   
   const updatePhoto = async (newPhoto) => {
     try {
-      const res = await axios.post(`/update/photo/${localStorage.getItem('id')}`, newPhoto, {
+      const res = await axios.post(`auth/profile/updatePhoto/${localStorage.getItem('id')}`, newPhoto, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: 'Bearer ' + authStore.token

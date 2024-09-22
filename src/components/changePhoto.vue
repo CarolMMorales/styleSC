@@ -11,7 +11,7 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-primary shadow-lg">
           <div class="modal-header">
-            <h5 class="modal-title text-danger" id="exampleModalLabel">{{ $t('profile.photo') }}</h5>
+            <h5 class="modal-title " id="exampleModalLabel">{{ $t('profile.photo') }}</h5>
             <button
               type="button"
               class="btn-close"
@@ -44,13 +44,7 @@
                   <button type="submit" class="btn btn-custom fw-semibold" :disabled="!isValidFile || loading">
                     {{ $t('buttons.send') }}
                   </button>
-                  <button
-                    type="button"
-                    class="btn btn-danger ml-5 fw-semibold"
-                    data-bs-dismiss="modal"
-                  >
-                    {{ $t('buttons.close') }}
-                  </button>
+                  
                 </div>
               </div>
             </form>
@@ -63,10 +57,10 @@
 </template>
 
 <script setup>
-// import { useProfileStore } from "../stores/profileStore";
+import { useProfileStore } from "../stores/profileStore";
 import { ref } from 'vue'
 
-// const profileStore = useProfileStore()
+const profileStore = useProfileStore()
 const isValidFile = ref(true)
 const photo = ref('')
 const fileInput = ref(null)
@@ -79,11 +73,11 @@ const changePhoto = async () => {
     formData.append('file', fileInput.value.files[0])
     loading.value = true
 
-    // await profileStore.updatePhoto(formData)
+    await profileStore.updatePhoto(formData)
 
     // await profileStore.readPersonDetailsById()
 
-    // photo.value = profileStore.profile.use_photo + `?${Math.random()}`
+    photo.value = profileStore.profile.use_photo + `?${Math.random()}`
     emitUpdateImageEvent(photo.value)
     loading.value = false
   } catch (error) {

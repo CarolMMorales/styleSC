@@ -44,12 +44,13 @@
           <div class="bg-body-tertiary">
             <div class="row p-3">
               <div class="row">
-                <div class="col-6 col-md-12 col-lg-12 text-end m-2">
+                <div class="col-12 col-md-12 col-lg-12 text-end m-2">
                   <button
                     @click="editPerfil()"
                     class="btn btn-custom me-2"
                     data-bs-toggle="modal"
                     data-bs-target="#EditPerfil"
+                    
                   >
                     {{ $t("profile.editPerfil") }}
                   </button>
@@ -203,11 +204,11 @@ import deleteContact from "../../src/components/contact/DeleteComponent.vue";
 import createContactsModal from "../../src/components/contact/CreateModalComponent.vue";
 import editProfile from "../../src/components/persons/EditPerfilComponent.vue";
 import { useProfileStore } from "../stores/profileStore";
-import { usePersonStore } from "../stores/personsStore";
+//import { usePersonStore } from "../stores/personsStore";
 //import {useAuthStore } from '../stores/authStore'
 //import { formatDocument } from '../validations'
 import { useContactsStore } from "../stores/contactStore.js";
-const personStore = usePersonStore();
+//const personStore = usePersonStore();
 const contactStore = useContactsStore();
 const profileStore = useProfileStore();
 //const authStore = useAuthStore()
@@ -279,7 +280,7 @@ watch(
 onMounted(async () => {
   // Cargar detalles del perfil y contactos durante la montura inicial
   await profileStore.readPersonDetailsById();
-  await personStore.readPerson();
+  //await personStore.readPerson();
   await contactStore.readContactsByPersonId(); // Asegúrate de que esta función esté en contactStore
   photo.value = profileStore.profile.use_photo;
   loading.value = false;
