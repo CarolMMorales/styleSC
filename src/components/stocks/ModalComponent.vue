@@ -24,9 +24,19 @@
                     </option>
                   </select>
                 </div>
-                <input type="text" v-model="produc_code" class="form-control" id="exampleInputName1" readonly />
-                <input type="text" v-model="produc_description" class="form-control" id="exampleInputName1" readonly />
-                <input type="text" v-model="produc_size" class="form-control" id="exampleInputName1" readonly />
+                <div class="mb-3 col-12">
+                  <label for="produc_code" class="form-label">{{ $t('products.produc_code') }}</label>
+                  <input type="text" v-model="produc_code" class="form-control" id="produc_code" readonly />
+                </div>
+                <div class="mb-3 col-12">
+                  <label for="produc_description" class="form-label">{{ $t('products.produc_description') }}</label>
+                  <input type="text" v-model="produc_description" class="form-control" id="produc_description"
+                    readonly />
+                </div>
+                <div class="mb-3 col-12">
+                  <label for="produc_size" class="form-label">{{ $t('products.produc_size') }}</label>
+                  <input type="text" v-model="produc_size" class="form-control" id="produc_size" readonly />
+                </div>
                 <div class="mb-3 col-12">
                   <label for="exampleInputName1" class="form-label">{{ $t('proveedores.prove_name') }}</label>
                   <select class="form-select" id="exampleInputDocumentType" aria-describedby="DocumentTypeHelp"
@@ -39,14 +49,14 @@
                 <div class="mb-3 col-12">
                   <label for="exampleInputName1" class="form-label">{{
                     $t('stocks.stock_costo')
-                  }}</label>
+                    }}</label>
                   <input type="text" v-model="stock_costo" class="form-control" id="exampleInputName1"
                     aria-describedby="NameHelp" />
                 </div>
                 <div class="mb-3 col-12">
                   <label for="exampleInputName1" class="form-label">{{
                     $t('stocks.stock_precioVenta')
-                  }}</label>
+                    }}</label>
                   <input type="text" v-model="stock_precioVenta" class="form-control" id="exampleInputName1"
                     aria-describedby="NameHelp" />
                 </div>

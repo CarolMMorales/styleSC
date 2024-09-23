@@ -22,10 +22,18 @@
                                         </option>
                                     </select>
                                 </div>
-                                <input type="text" v-model="produc_code" class="form-control" readonly />
-                                <input type="text" v-model="produc_description" class="form-control" readonly />
-                                <input type="text" v-model="produc_size" class="form-control" readonly />
-
+                                <div class="mb-3 col-12">
+                                    <label for="produc_code" class="form-label">{{ $t('products.produc_code') }}</label>
+                                    <input type="text" v-model="produc_code" class="form-control" id="produc_code" readonly />
+                                </div>
+                                <div class="mb-3 col-12">
+                                    <label for="produc_description" class="form-label">{{$t('products.produc_description') }}</label>
+                                    <input type="text" v-model="produc_description" class="form-control" id="produc_description" readonly />
+                                </div>
+                                <div class="mb-3 col-12">
+                                    <label for="produc_size" class="form-label">{{ $t('products.produc_size') }}</label>
+                                    <input type="text" v-model="produc_size" class="form-control" id="produc_size" readonly />
+                                </div>
                                 <div class="mb-3 col-12">
                                     <label for="proveSelect" class="form-label">{{ $t('proveedores.prove_name')
                                         }}</label>
