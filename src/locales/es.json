@@ -150,6 +150,10 @@
 "context":"Pagina web de Style C&S para la gestión de inventario"
   },
 
+  "users":{
+    "createUser": "Crear Usuario"
+  },
+
   "login": {
     "title": "Iniciar Sesión",
     "email": "Ingrese su correo institucional",

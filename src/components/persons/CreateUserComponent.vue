@@ -3,7 +3,7 @@
       class="modal fade border-primary"
       tabindex="-1"
       aria-labelledby="exampleModalLabel"
-      :id="modalId"
+      v-if="modalUserVisible" 
       aria-hidden="true"
     >
       <div class="modal-dialog modal-dialog-centered">
@@ -110,7 +110,7 @@
   const props = defineProps({
     per_id: Number,
   });
-  
+  const modalUserVisible = ref(true);
   const use_email = ref("");
   const use_password = ref("");
   const rol_id = ref("");
@@ -120,23 +120,25 @@
   });
   
   const handleSubmit = async () => {
-    submitting.value = true;
-    loading.value = true;
-    try {
-      await authStore.registerUser(
-        props.per_id,
-        use_email.value,
-        use_password.value,
-        rol_id.value
-      );
-      clearForm();
-    } catch {
-      console.log("error");
-    } finally {
-      submitting.value = false;
-      loading.value = false;
-    }
-  };
+  submitting.value = true;
+  loading.value = true;
+  try {
+    await authStore.registerUser(
+      props.per_id,
+      use_email.value,
+      use_password.value,
+      rol_id.value
+    );
+    clearForm();
+    // Emit an event to close the modal
+    
+  } catch {
+    console.log("error");
+  } finally {
+    submitting.value = false;
+    loading.value = false;
+  }
+};
   
   const cancelChanges = () => {
     clearForm();
@@ -169,17 +171,3 @@
   </style>
   
   
-<style lang="scss" scoped>
-.btn-custom {
-  background-color: var(--purple-color);
-  color: #ffffff;
-  padding: 0.8rem 3rem;
-  font-size: 1.25rem;
-}
-
-.btn-custom:hover {
-  background-color: var(----color-background);
-  color: var(--purple-color);
-  border: 2px solid var(--purple-color);
-}
-</style>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Modal para registrar persona -->
-    <div class="modal fade border-primary" tabindex="-1" aria-labelledby="exampleModalLabel" id="createModal" aria-hidden="true">
+    <div class="modal fade border-primary" v-if="showPersonModal" tabindex="-1" aria-labelledby="exampleModalLabel" id="createModal" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-primary shadow-lg">
           <div class="modal-header">
@@ -54,7 +54,8 @@
       </div>
     </div>
     <!-- Modal para crear usuario -->
-    <modalUser :per_id="newPersonId" v-if="newPersonId"></modalUser>
+    <modalUser v-show="modalUserVisible" :per_id="newPersonId" @close="modalUserVisible = false"></modalUser>
+
   </div>
 </template>
 
@@ -74,6 +75,9 @@ const per_document = ref("");
 const per_address = ref("");
 const loading = ref(false);
 const newPersonId = ref(null);
+const showPersonModal = ref(true); // Estado para el modal de persona
+const modalUserVisible = ref(false);
+      
 
 const filteredTypDoc = computed(() => {
   return typDocStore.typDoc.filter((item) => item.typ_doc_name !== 0);
@@ -94,13 +98,34 @@ const handleSubmit = async () => {
       per_address.value.toUpperCase()
     );
     if (per_id) {
-      newPersonId.value = per_id; // Asigna el ID de la persona recién creada
+      newPersonId.value = per_id;
+      
+       // Cerrar modal de crear persona
+       showPersonModal.value = false;
+showUserModal();
+// Abrir modal de crear usuario
+modalUserVisible.value = true;
+      console.log("New Person ID:", newPersonId.value);
+console.log("Modal User Visible:", modalUserVisible.value);
     }
   } catch (error) {
-    console.error(error);
+    // Log detailed error information
+    console.error("Registration Error:", error.response?.data);
+    if (error.response?.data.errors) {
+      error.response.data.errors.forEach(err => {
+        console.error(err);
+      });
+    }
   } finally {
     loading.value = false;
   }
+};
+
+
+const showUserModal = () => {
+  modalUserVisible.value = true; // Asegúrate de que esto se ejecute
+  console.log("New Person ID:", newPersonId.value);
+console.log("Modal User Visible:", modalUserVisible.value);
 };
 
 const cancelChanges = () => {

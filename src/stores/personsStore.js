@@ -46,12 +46,12 @@ export const usePersonStore = defineStore('persons', () => {
       await readPerson();
       return res.data.per_id;   
       
-    } catch (error) {
-      console.log(error.response?.data || error);
-      console.log({
-        per_name, per_lastname, typ_doc_id, per_document, per_address, user // Para registerPerson
-      });
-      
+    }  catch (error) {
+      if (error.response && error.response.data.errors) {
+        console.error("Validation Errors:", error.response.data.errors);
+      } else {
+        console.error("Unexpected Error:", error);
+      }
     }
   };
   
