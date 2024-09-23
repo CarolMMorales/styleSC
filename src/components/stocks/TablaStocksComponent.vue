@@ -52,7 +52,7 @@
               <td>{{ Item.prove_name }}</td>
               <td>
                 <div class="text-light text-center align-items-center justify-content-center">
-                  <button  type="button" data-bs-toggle="modal"
+                  <button @click="prepareDetailsForm(Item)" type="button" data-bs-toggle="modal"
                     data-bs-target="#detailsModal" class="btn btn-outline-success">
                     <i class="bi bi-info-square-fill"></i> {{ $t('buttons.details') }}
                   </button>
@@ -81,34 +81,40 @@
       </div>
     </div>
   </div>
-    
-    <ModalStocks
-      :stock_id="parseInt(stock_id)"
-      :stock_costo="parseFloat(stock_costo)"
-      :stock_precioVenta="parseFloat(stock_precioVenta)"
-      :stock_cantidad="parseInt(stock_cantidad)"
-      :produc_id="parseInt(produc_id)"
-      :prove_id="parseInt(prove_id)"
-      :edit="true"
-    ></ModalStocks>
-    <ModalDelete :stock_id="parseInt(stock_id)"></ModalDelete>
-   
-  </template>
+
+  <ModalStocks :stock_id="parseInt(stock_id)" :stock_costo="parseFloat(stock_costo)"
+    :stock_precioVenta="parseFloat(stock_precioVenta)" :stock_cantidad="parseInt(stock_cantidad)"
+    :produc_id="parseInt(produc_id)" :prove_id="parseInt(prove_id)" :edit="true"></ModalStocks>
+
+  <ModalDetails :stock_id="parseInt(stock_id)" :stock_costo="parseFloat(stock_costo)"
+    :stock_precioVenta="parseFloat(stock_precioVenta)" :stock_cantidad="parseInt(stock_cantidad)"
+    :produc_id="parseInt(produc_id)" :produc_code="produc_code" :produc_description="produc_description"
+    :produc_size="produc_size" :prove_id="parseInt(prove_id)"></ModalDetails>
+
+  <ModalDelete :stock_id="parseInt(stock_id)"></ModalDelete>
+
+</template>
   
-  <script setup>
+<script setup>
   import { useStockStore } from '../../stores/stocksStores'
   import PaginationComponent from '../PaginationComponent.vue'
   import LoadingComponent from '../LoadingComponent.vue'
   import ModalStocks from './ModalComponent.vue'
+  import ModalDetails from './ModalDetails.vue'
   import { ref, computed, onMounted, watch } from 'vue'
   import ModalDelete from './DeleteComponent.vue'
+
   const stockStore = useStockStore()
+
+  const produc_id = ref('')
+  const produc_code = ref('')
+  const produc_description = ref('')
+  const produc_size = ref('') 
+  const prove_id = ref('')
   const stock_id = ref('')
   const stock_costo = ref('')
   const stock_precioVenta = ref('')
   const stock_cantidad = ref('')
-  const produc_id = ref('')
-  const prove_id = ref('')
 
   const editing = ref(false)
 
@@ -123,6 +129,17 @@
     loading.value = false
   })
   
+const prepareDetailsForm = (proItem) => {
+  stock_id.value = proItem.stock_id
+  stock_costo.value = proItem.stock_costo
+  stock_precioVenta.value = proItem.stock_precioVenta
+  stock_cantidad.value = proItem.stock_cantidad
+  produc_id.value = proItem.produc_id
+  prove_id.value = proItem.prove_id
+  produc_code.value = proItem.produc_code 
+  produc_description.value = proItem.produc_description 
+  produc_size.value = proItem.produc_size 
+}
 
 const prepareEditForm =  (proItem) => {
   stock_id.value = proItem.stock_id
@@ -178,8 +195,6 @@ const prepareDeleteForm = (proItem)=>{
     // Reinicia currentPage a 1 cuando cambia el término de búsqueda
     currentPage.value = 1
   })
-  
-
   
   </script>
   

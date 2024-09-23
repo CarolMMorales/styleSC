@@ -42,6 +42,14 @@ export const useStockStore = defineStore('stocks', () => {
     }
   };
   
+  const getStockById = async (stock_id) => {
+  try {
+    const res = await axios.get(`${URL_STOCKS}/${stock_id}`);
+    return res.data.data; 
+  } catch (error) {
+    console.error('Error fetching product:', error);
+  }
+};
 
 
 // Funcion para editar
@@ -132,6 +140,7 @@ const deleteStock = async (stock_id) => {
 readStock()
 return {
   registerStock,
+  getStockById,
   readStock,
   updateStock,
   deleteStock,
