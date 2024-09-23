@@ -85,7 +85,7 @@
     })
  
   const per_name = ref(props.per_name)
-  const per_lastname = ref(props.per_name)
+  const per_lastname = ref(props.per_lastname)
   const typ_doc_id = ref(props.typ_doc_id)
   const per_document = ref(props.per_document)
   const per_address = ref(props.per_address)

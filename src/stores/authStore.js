@@ -83,7 +83,7 @@ export const useAuthStore = defineStore('user', () => {
     }
   };
 
-  const registerUser = async (use_email, use_password, rol_id) => {
+  const registerUser = async (per_id, use_email, use_password, rol_id) => {
     try {
       const res = await axios({
         url: `auth/register`,
@@ -92,6 +92,35 @@ export const useAuthStore = defineStore('user', () => {
           Authorization: `Bearer ${localStorage.getItem('Accept')}`
         },
         data: {
+          per_id: per_id,
+          use_email: use_email,
+          use_password: use_password,
+          rol_id: rol_id
+        }
+      });
+      handleResponse(res);
+      console.log({
+        per_id, use_email, use_password, rol_id // Para registerUser
+      });
+      return true;
+    } catch (error) {
+      console.log(error.response?.data || error);
+      console.log({
+        per_id, use_email, use_password, rol_id // Para registerUser
+      });
+    }
+  };
+
+  const updateUser = async (use_id,per_id, use_email, use_password, rol_id) => {
+    try {
+      const res = await axios({
+        url: `auth/update/${use_id}`,
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('Accept')}`
+        },
+        data: {
+          per_id: per_id,
           use_email: use_email,
           use_password: use_password,
           rol_id: rol_id
@@ -175,6 +204,7 @@ export const useAuthStore = defineStore('user', () => {
     isAuthenticated,
     access,
     registerUser,
+    updateUser,
     logout,
     reset,
     mail,

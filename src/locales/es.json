@@ -53,7 +53,8 @@
   "user": "Usuario",
   "document": "Documento",
   "address": "Dirección",
-  "rol": "Rol"
+  "rol": "Rol",
+  "datosPerson": "Datos de la persona"
 },
 
 
@@ -128,7 +129,9 @@
   "iqual":"La contraseña actual no puede coincidir con la nueva",
   "duplicateAlert":"Ya se encuentra registrada",
   "passActual": "La contraseña actual no coincide con la digitada",
-  
+  "addPerson": "Crear nuevo usuario",
+  "addUser": "Crear Usuario",
+"editUser":"Editar Usuario",
   "change": "Cambiar contraseña",
   "resetPassword": "Recuperar Contraseña",
   "code": "Codigo de verificación",

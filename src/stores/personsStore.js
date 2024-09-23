@@ -35,14 +35,23 @@ export const usePersonStore = defineStore('persons', () => {
           typ_doc_id: typ_doc_id,
           per_document: per_document,
           per_address: per_address,
-          use_id: user
+          
         }
       });
       handleResponse(res, per_name);
-      await readPerson();  
-      return true;
+      console.log({
+        per_name, per_lastname, typ_doc_id, per_document, per_address, user // Para registerPerson
+      });
+      
+      await readPerson();
+      return res.data.per_id;   
+      
     } catch (error) {
       console.log(error.response?.data || error);
+      console.log({
+        per_name, per_lastname, typ_doc_id, per_document, per_address, user // Para registerPerson
+      });
+      
     }
   };
   

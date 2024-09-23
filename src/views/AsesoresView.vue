@@ -6,7 +6,7 @@
         <div class="row p-3">
           <div class="col-12 col-md-12 col-lg-12 text-end">
              
-              <button class="btn btn-custom " type="button" data-bs-toggle="modal" data-bs-target="#createModal"><i class="bi bi-plus-square"></i> {{ $t('buttons.add') }}</button></div>
+              <button class="btn btn-custom " type="button" data-bs-toggle="modal" data-bs-target="#createModal"><i class="bi bi-plus-square"></i> {{ $t('profile.addPerson') }}</button></div>
               <div class="col-12 col-md-12 col-lg-12 text-start">
             </div>   
              
@@ -16,7 +16,7 @@
           
           
           <TableComponent></TableComponent>
-          <createComponent :edit="false"></createComponent>
+          <createComponent ></createComponent>
         </div>
       </div>
     </div>

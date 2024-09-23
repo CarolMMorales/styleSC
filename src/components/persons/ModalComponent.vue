@@ -1,82 +1,49 @@
 <template>
-  <div class="container p-5">
-    <!-- Modal -->
-    <div
-      class="modal fade border-primary"
-      :id="modalId"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
+  <div>
+    <!-- Modal para registrar persona -->
+    <div class="modal fade border-primary" tabindex="-1" aria-labelledby="exampleModalLabel" id="createModal" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-primary shadow-lg">
           <div class="modal-header">
-            <h5 class="modal-title blue-color-text" id="exampleModalLabel1">
-              {{ editing ? $t('categories.edit') : $t('categories.add') }}
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-              @click="cancelChanges()"
-            ></button>
+            <h5 class="modal-title" id="exampleModalLabel">{{ $t("persons.datosPerson") }}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="cancelChanges()"></button>
           </div>
           <div class="modal-body">
             <form @submit.prevent="handleSubmit">
+              <!-- Formulario para crear persona -->
               <div class="row p-2">
                 <div class="mb-3 col-12">
-                  <label for="exampleInputName1" class="form-label">{{ $t('categories.cate_name') }}</label>
-                  <input
-                    type="text"
-                    v-model="cate_name"
-                    class="form-control"
-                    id="exampleInputName1"
-                    aria-describedby="NameHelp"
-                  />
+                  <label for="name" class="form-label">{{ $t("profile.name") }}</label>
+                  <input type="text" v-model="per_name" class="form-control" id="name" required/>
                 </div>
                 <div class="mb-3 col-12">
-                  <label for="exampleInputName1" class="form-label">{{
-                    $t('categories.cate_description')
-                  }}</label>
-                  <input
-                    type="text"
-                    v-model="cate_description"
-                    class="form-control"
-                    id="exampleInputName1"
-                    aria-describedby="NameHelp"
-                  />
+                  <label for="lastname" class="form-label">{{ $t("profile.lastname") }}</label>
+                  <input type="text" v-model="per_lastname" class="form-control" id="lastname" required/>
                 </div>
-                
                 <div class="mb-3 col-12">
-                  <label for="exampleInputName1" class="form-label">{{
-                    $t('categories.cate_medida')
-                  }}</label>
-                  <input
-                    type="text"
-                    v-model="cate_medida"
-                    class="form-control"
-                    id="exampleInputName1"
-                    aria-describedby="NameHelp"
-                  />
+                  <label for="doctyp" class="form-label">{{ $t("profile.doctype") }}</label>
+                  <select v-model="typ_doc_id" class="form-select" id="doctyp" required>
+                    <option v-for="(Item, index) in filteredTypDoc" :key="index" :value="Item.typ_doc_id">
+                      {{ Item.typ_doc_name }}
+                    </option>
+                  </select>
+                </div>
+                <div class="mb-3 col-12">
+                  <label for="document" class="form-label">{{ $t("profile.document") }}</label>
+                  <input type="text" v-model="per_document" class="form-control" id="document" required/>
+                </div>
+                <div class="mb-3 col-12">
+                  <label for="address" class="form-label">{{ $t("persons.address") }}</label>
+                  <input type="text" v-model="per_address" class="form-control" id="address" required/>
                 </div>
               </div>
-
               <div class="row">
                 <div class="col-md-12 d-flex justify-content-center">
-                  <button
-                    data-bs-dismiss="modal"
-                    type="submit"
-                    
-                    class="btn btn-custom fw-semibold"
-                    :disabled="!isFormValid"
-                  >
-                    <span class="btn-content" v-if="!loading">
-                      {{ $t('buttons.save') }}
-                    </span>
-                    <span class="btn-content" v-else>
+                  <button type="submit" class="btn btn-custom fw-semibold" :disabled="!isFormValid">
+                    <span v-if="!loading">{{ $t("buttons.save") }}</span>
+                    <span v-else>
                       <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                      <span role="status"> {{ $t('errors.loading') }}</span>
+                      <span role="status">{{ $t("errors.loading") }}</span>
                     </span>
                   </button>
                 </div>
@@ -86,102 +53,66 @@
         </div>
       </div>
     </div>
+    <!-- Modal para crear usuario -->
+    <modalUser :per_id="newPersonId" v-if="newPersonId"></modalUser>
   </div>
 </template>
 
-
 <script setup>
-import { ref, computed, defineProps, watchEffect } from 'vue'
-import { useCategoryStore } from '../../stores/categoriesStores'
+import { ref, computed } from "vue";
+import { usePersonStore } from "../../stores/personsStore";
+import { useTypDocStore } from "../../stores/typDocumentStore";
+import modalUser from "./CreateUserComponent.vue";
 
-const loading = ref(false)
-const cate = useCategoryStore()
+const personStore = usePersonStore();
+const typDocStore = useTypDocStore();
 
-const props = defineProps({
-  cate_id: Number,
-  cate_name: String,
-  cate_description: String,
-  cate_medida: String,
-  edit: Boolean
-})
+const per_name = ref("");
+const per_lastname = ref("");
+const typ_doc_id = ref(null);
+const per_document = ref("");
+const per_address = ref("");
+const loading = ref(false);
+const newPersonId = ref(null);
 
-const cate_name = ref(props.cate_name)
-const cate_description = ref(props.cate_description)
-const cate_medida = ref(props.cate_medida)
+const filteredTypDoc = computed(() => {
+  return typDocStore.typDoc.filter((item) => item.typ_doc_name !== 0);
+});
 
-
-const editing = ref(props.edit)
-const submitting = ref(false)
-const modalId = ref(editing.value ? 'editModal' : 'createModal')
-const closeModal = ref(false)
-
-// Computed para verificar si todos los campos tienen valor
 const isFormValid = computed(() => {
-  return cate_name.value && cate_description.value && cate_medida.value
-})
-
-watchEffect(() => {
-  cate_name.value = props.cate_name
-  cate_description.value = props.cate_description
-  cate_medida.value = props.cate_medida
-  editing.value = props.edit
-  modalId.value = editing.value ? 'editModal' : 'createModal'
-})
+  return per_name.value && per_lastname.value && typ_doc_id.value && per_document.value && per_address.value;
+});
 
 const handleSubmit = async () => {
-  if (submitting.value) return;
-  submitting.value = true;
   loading.value = true;
   try {
-    if (editing.value) {
-      const success = await cate.updateCategory(
-        props.cate_id,
-        cate_name.value.toUpperCase(),
-        cate_description.value.toUpperCase(),
-        cate_medida.value.toUpperCase()
-      );
-      if (success) {
-        closeModal.value = true;
-      }
-      editing.value = false;
-    } else {
-      await cate.registerCategory(
-        cate_name.value.toUpperCase(),
-        cate_description.value.toUpperCase(),
-        cate_medida.value.toUpperCase()
-      );
-
+    const per_id = await personStore.registerPerson(
+      per_name.value.toUpperCase(),
+      per_lastname.value.toUpperCase(),
+      typ_doc_id.value,
+      per_document.value,
+      per_address.value.toUpperCase()
+    );
+    if (per_id) {
+      newPersonId.value = per_id; // Asigna el ID de la persona recién creada
     }
-    clearForm();
   } catch (error) {
-    console.log(error);
+    console.error(error);
   } finally {
-    submitting.value = false;
     loading.value = false;
-    closeModal.value = true;
   }
 };
 
-
 const cancelChanges = () => {
-  if (!editing.value) {
-    clearForm()
-    closeModal.value = true;
-
-  }
-}
-
-const clearForm = () => {
-  cate_name.value = ''
-  cate_description.value = ''
-  cate_medida.value = ''
-}
+  per_name.value = "";
+  per_lastname.value = "";
+  typ_doc_id.value = "";
+  per_document.value = "";
+  per_address.value = "";
+};
 </script>
 
-
-
-
-<style lang="scss" scoped>
+<style scoped>
 .btn-custom {
   background-color: var(--purple-color);
   color: #ffffff;
@@ -190,8 +121,9 @@ const clearForm = () => {
 }
 
 .btn-custom:hover {
-  background-color: var(----color-background);
+  background-color: var(--color-background);
   color: var(--purple-color);
   border: 2px solid var(--purple-color);
 }
 </style>
+

@@ -92,7 +92,7 @@
       :per_id="parseInt(per_id)"
       :per_name="per_name"
       :per_lastname="per_lastname"
-      :typ_doc_id="typ_doc_id"
+      :typ_doc_id="parseInt( typ_doc_id)"
       :per_document="per_document"
       :per_address="per_address"
       :edit="true"
