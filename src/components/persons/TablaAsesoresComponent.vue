@@ -46,7 +46,7 @@
                 {{ $t("buttons.editUser") }}
               </th>
               <th class="lila-color-bg text-light text-center">
-                {{ $t("buttons.delete") }}
+                {{ $t("buttons.deleteUser") }}
               </th>
             </tr>
           </thead>
@@ -138,7 +138,7 @@
     :per_address="per_address"
     :edit="true"
   ></ModalPersons>
-  <ModalDelete :per_id="parseInt(per_id)"></ModalDelete>
+  <ModalDelete :per_id="parseInt(per_id)" :use_id="parseInt(use_id)"></ModalDelete>
   <ModalDetails
     :per_id="parseInt(per_id)"
     :per_name="per_name"
@@ -210,8 +210,8 @@ const prepareDetail = (Item) => {
   rol_id.value = Item.rol_id;
 };
 
-const prepareDeleteForm = (proItem) => {
-  per_id.value = proItem.cate_id;
+const prepareDeleteForm = (Item) => {
+  use_id.value = Item.use_id;
 };
 
 const filter = computed(() => {
@@ -219,9 +219,12 @@ const filter = computed(() => {
 
   return personStore.person.filter((Item) => {
     const matchesName = Item.per_name.toLowerCase().includes(lowerSearchTerm);
-    const matchesDescription = Item.per_lastname.toLowerCase().includes(lowerSearchTerm);
-    const matchesMedida = Item.per_address.toLowerCase().includes(lowerSearchTerm);
-    return matchesName || matchesDescription || matchesMedida;
+    const matchesLastname = Item.per_lastname.toLowerCase().includes(lowerSearchTerm);
+    const matchesAddress = Item.per_address.toLowerCase().includes(lowerSearchTerm);
+    const matchesDocument = Item.per_document.toString().includes(lowerSearchTerm);
+    const fullName = `${Item.per_name} ${Item.per_lastname}`
+    const matchesFullName = fullName.includes(lowerSearchTerm)
+    return matchesName || matchesLastname || matchesAddress || matchesDocument || matchesFullName;
   });
 });
 

@@ -15,9 +15,9 @@ export const useAuthStore = defineStore('user', () => {
   // Recuperar token y ID del usuario desde localStorage al cargar la aplicación
   const token = ref(localStorage.getItem('Accept') || null);
   const use_id = ref(localStorage.getItem('id') || null);
-  
+  const rol_id = ref(localStorage.getItem('rol_id') || null);
   const authUser = ref(null);
-
+const persons = ref([])
   // Variable que verifica si el usuario está autenticado
   const isAuthenticated = ref(!!token.value);
 
@@ -34,16 +34,18 @@ export const useAuthStore = defineStore('user', () => {
         use_password,
       });
 
+      console.log('Respuesta del login:', res.data); // Imprime la respuesta completa
+      console.log('Rol ID del servidor:', res.data.rol_id); // Imprime el rol_id específico
+  
       token.value = res.data.token;
       use_id.value = res.data.use_id;
-
+      rol_id.value = res.data.rol_id; 
       // Guardar el token y el ID del usuario en localStorage
       localStorage.setItem('Accept', token.value);
       localStorage.setItem('id', use_id.value);
-      
+      localStorage.setItem('rol_id', rol_id.value);
       // Marcar al usuario como autenticado
       isAuthenticated.value = true;
-
       // Redirigir al perfil del usuario
       router.push('/userProfile');
     } catch (error) {
@@ -133,14 +135,50 @@ export const useAuthStore = defineStore('user', () => {
     }
   };
 
+  const readPersons = async () => {
+    try {
+      const res = await axios({
+        url:`personsUser`,
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('Accept')}`
+        }
+      })
+      persons.value = res.data;
+      console.log(persons.value);
+      return persons.value;
+      
+    } catch (error) {
+      console.log('error')
+    }
+  };  
+
+  const deleteUser = async (use_id) => {
+    try {
+      const res = await axios({
+        url: `auth/delete/${use_id}`,
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('Accept')}`
+        },
+        
+      });
+      handleResponse(res, "usuario eliminado");
+      return true;
+    } catch (error) {
+      console.log(error.response?.data || error);
+    }
+  };
+
   // Función para restablecer el estado del store
   const resetStore = () => {
     token.value = null;
     authUser.value = null;
     use_id.value = null;
+    rol_id.value = null;
     localStorage.removeItem('Accept');
     localStorage.removeItem('id');
-    
+    localStorage.removeItem('rol_id');
 
     isAuthenticated.value = false;
     router.push('/login');
@@ -200,9 +238,13 @@ export const useAuthStore = defineStore('user', () => {
   return {
     token,
     use_id,
+    rol_id,
     authUser,
     isAuthenticated,
+    persons,
     access,
+    readPersons,
+    deleteUser,
     registerUser,
     updateUser,
     logout,

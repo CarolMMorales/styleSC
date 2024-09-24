@@ -34,7 +34,8 @@
   "create": "Crear nuevo usuario",
   "detalle": "Detalle persona",
   "editPerson": "Editar Persona",
-  "editUser": "Editar Usuario"
+  "editUser": "Editar Usuario",
+  "deleteUser": "Eliminar Usuario"
 },
 
 "messages": {
@@ -155,7 +156,10 @@
 
   "users":{
     "createUser": "Crear Usuario",
-    "editUser": "Editar Usuario"
+    "editUser": "Editar Usuario",
+    "deleteUser": "Eliminar Usuario",
+    "deletePerson": "Esta seguro que desea eliminar este usuario ",
+    "person": "Seleccione la persona para crear el usuario"
   },
 
   "login": {

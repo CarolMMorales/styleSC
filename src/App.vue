@@ -36,8 +36,8 @@ const resetInactivityTimer = () => {
   clearTimeout(countdownTimer);
 
   if (localStorage.getItem('id')) {
-    inactivityTimer = setTimeout(logoutDueToInactivity, 180000000); // 5 minutos en milisegundos
-    countdownTimer = setTimeout(showInactivityAlert, 12000000);
+    inactivityTimer = setTimeout(logoutDueToInactivity, 1800000); // 5 minutos en milisegundos
+    countdownTimer = setTimeout(showInactivityAlert, 1600000);
   }
 };
 

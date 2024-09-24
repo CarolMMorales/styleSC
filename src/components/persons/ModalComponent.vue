@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Modal para registrar persona -->
-    <div class="modal fade border-primary" v-if="showPersonModal" tabindex="-1" aria-labelledby="exampleModalLabel" id="createModal" aria-hidden="true">
+    <div class="modal fade border-primary"  tabindex="-1" aria-labelledby="exampleModalLabel" id="createModal" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-primary shadow-lg">
           <div class="modal-header">
@@ -39,7 +39,11 @@
               </div>
               <div class="row">
                 <div class="col-md-12 d-flex justify-content-center">
-                  <button type="submit" class="btn btn-custom fw-semibold" :disabled="!isFormValid">
+                  <button type="submit" class="btn btn-custom fw-semibold" 
+                  data-bs-toggle="modal"
+                  data-bs-dismiss="modal"
+                data-bs-target="#createUser"
+               :disabled="!isFormValid">
                     <span v-if="!loading">{{ $t("buttons.save") }}</span>
                     <span v-else>
                       <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
@@ -54,7 +58,7 @@
       </div>
     </div>
     <!-- Modal para crear usuario -->
-    <modalUser v-show="modalUserVisible" :per_id="newPersonId" @close="modalUserVisible = false"></modalUser>
+    <modalUser></modalUser>
 
   </div>
 </template>
@@ -74,9 +78,7 @@ const typ_doc_id = ref(null);
 const per_document = ref("");
 const per_address = ref("");
 const loading = ref(false);
-const newPersonId = ref(null);
-const showPersonModal = ref(true); // Estado para el modal de persona
-const modalUserVisible = ref(false);
+const closeModal = ref(false)
       
 
 const filteredTypDoc = computed(() => {
@@ -90,24 +92,20 @@ const isFormValid = computed(() => {
 const handleSubmit = async () => {
   loading.value = true;
   try {
-    const per_id = await personStore.registerPerson(
+
+     const success = await personStore.registerPerson(
       per_name.value.toUpperCase(),
       per_lastname.value.toUpperCase(),
       typ_doc_id.value,
       per_document.value,
-      per_address.value.toUpperCase()
+      per_address.value
     );
-    if (per_id) {
-      newPersonId.value = per_id;
-      
-       // Cerrar modal de crear persona
-       showPersonModal.value = false;
-showUserModal();
-// Abrir modal de crear usuario
-modalUserVisible.value = true;
-      console.log("New Person ID:", newPersonId.value);
-console.log("Modal User Visible:", modalUserVisible.value);
-    }
+    if (success) {
+        closeModal.value = true;
+      }
+   clearForm()
+
+    
   } catch (error) {
     // Log detailed error information
     console.error("Registration Error:", error.response?.data);
@@ -118,23 +116,25 @@ console.log("Modal User Visible:", modalUserVisible.value);
     }
   } finally {
     loading.value = false;
+    closeModal.value = true
   }
 };
 
-
-const showUserModal = () => {
-  modalUserVisible.value = true; // Asegúrate de que esto se ejecute
-  console.log("New Person ID:", newPersonId.value);
-console.log("Modal User Visible:", modalUserVisible.value);
-};
-
 const cancelChanges = () => {
+ 
+    clearForm()
+    closeModal.value = true
+}
+
+const clearForm = () => {
   per_name.value = "";
   per_lastname.value = "";
   typ_doc_id.value = "";
   per_document.value = "";
   per_address.value = "";
-};
+}
+
+
 </script>
 
 <style scoped>

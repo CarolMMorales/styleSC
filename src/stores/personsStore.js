@@ -10,16 +10,13 @@ export const usePersonStore = defineStore('persons', () => {
 //   const { t } = useI18n();
   const router = useRouter()
   const authStore = useAuthStore()
-  /* const secretKey = 'TuClaveSecreta';
-  const user = CryptoJS.AES.decrypt(localStorage.getItem('id'), secretKey).toString(CryptoJS.enc.Utf8);
-  const storedId = localStorage.getItem('id');
-  console.log('Stored ID:', storedId); */
+ 
   const user = localStorage.getItem('id');
   console.log('use_id: ', user);
   const URL_PERSONS = `/persons`
   const person = ref([]) // CONSTANTE CATE QUE CONTIENE EL ARREGLO PRINCIPAL
 
-  const contact = ref([])
+  
   // Funcion para registrar 
   const registerPerson = async (per_name, per_lastname, typ_doc_id, per_document, per_address) => {
     try {
@@ -55,28 +52,7 @@ export const usePersonStore = defineStore('persons', () => {
     }
   };
   
-  const readContactsPersons = async (per_id) => {
 
-    try {
-      const res = await axios({
-        url: `contacts/person/${per_id}`,  // Usa el ID de la persona
-        method: 'GET',
-        headers: {
-          Authorization: 'Bearer ' + authStore.token
-        }
-      });
-      contact.value = res.data.map((item) => {
-        return {
-          con_id: item.con_id,
-          per_id: item.per_id,
-          con_phone: item.con_phone,
-          con_email: item.con_email
-        };
-      });
-    } catch (error) {
-      handleError(error);
-    }
-  };
 
 // Funcion para editar
 const updatePerson = async (per_id, per_name, per_lastname, typ_doc_id, per_document, per_address ) => {
@@ -166,7 +142,7 @@ return {
   readPerson,
   updatePerson,
   deletePerson,
-  readContactsPersons,
+
   usePersonStore,
   person
 }

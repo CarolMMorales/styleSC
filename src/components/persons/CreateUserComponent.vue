@@ -3,7 +3,7 @@
       class="modal fade border-primary"
       tabindex="-1"
       aria-labelledby="exampleModalLabel"
-      v-if="modalUserVisible" 
+      id="createUser"
       aria-hidden="true"
     >
       <div class="modal-dialog modal-dialog-centered">
@@ -22,13 +22,27 @@
           </div>
           <div class="modal-body">
             <form @submit.prevent="handleSubmit">
+              <div class="mb-3 col-12">
+                  <label for="person" class="form-label">{{ $t("users.person") }}</label>
+                  <select
+                    v-model="per_id"
+                    class="form-select"
+                    id="person"
+                    filterable>
+                    
+                    <option
+                      v-for="(Item, index) in filteredPersons"
+                      :key="index"
+                      :value="Item.per_id"
+                    >
+                      {{ Item.per_name }}
+                    </option>
+                  </select>
+                </div>
               <div class="row p-2">
                 <div class="mb-3">
                   <label for="username" class="form-label">{{ $t("login.email") }}</label>
-                  <div class="input-group flex-nowrap">
-                    <span class="input-group-text">
-                      <i class="bi bi-envelope-at-fill"></i>
-                    </span>
+                  
                     <input
                       type="text"
                       id="username"
@@ -37,7 +51,7 @@
                       :placeholder="$t('login.email')"
                       required
                     />
-                  </div>
+                  
                 </div>
   
                 <label for="use_password">{{ $t('profile.changePassword') }} </label>
@@ -80,7 +94,8 @@
               </div>
               <div class="row">
                 <div class="col-md-12 d-flex justify-content-center">
-                  <button type="submit" class="btn btn-custom fw-semibold" :disabled="submitting">
+                  <button type="submit" class="btn btn-custom fw-semibold" 
+                  data-bs-dismiss="modal" :disabled="!isFormValid">
                     <span v-if="!loading">{{ $t("buttons.save") }}</span>
                     <span v-else>
                       <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
@@ -101,16 +116,15 @@
   import { showPassword } from '../../validation';
   import { useAuthStore } from "../../stores/authStore";
   import { useRolStore } from "../../stores/rolStore";
-  
+  //import { usePersonStore } from "../../stores/personsStore";
+
+  //const personStore = usePersonStore();
   const loading = ref(false);
   const submitting = ref(false);
   const rolStore = useRolStore();
   const authStore = useAuthStore();
-  
-  const props = defineProps({
-    per_id: Number,
-  });
-  const modalUserVisible = ref(true);
+ 
+ const per_id = ref('');
   const use_email = ref("");
   const use_password = ref("");
   const rol_id = ref("");
@@ -119,12 +133,26 @@
     return rolStore.rol.filter((item) => item.rol_name != 0);
   });
   
+  const filteredPersons = computed(() => {
+  return authStore.persons.filter((item) => item.use_id === null || item.use_id === undefined || item.use_id === '');
+});
+
+  const isFormValid = computed(() => {
+  return (
+    per_id.value &&
+    use_email.value &&
+    use_password.value &&
+    rol_id.value 
+    
+  )
+})
+
   const handleSubmit = async () => {
   submitting.value = true;
   loading.value = true;
   try {
-    await authStore.registerUser(
-      props.per_id,
+     await authStore.registerUser(
+      per_id.value,
       use_email.value,
       use_password.value,
       rol_id.value
@@ -145,13 +173,15 @@
   };
   
   const clearForm = () => {
+    per_id.value = "";
     use_email.value = "";
     use_password.value = "";
     rol_id.value = "";
   };
   
   onMounted(async () => {
-    await rolStore.readRol();  // Asegúrate de tener una función que cargue los roles.
+    await rolStore.readRol();  
+    await authStore.readPersons();
   });
   </script>
   
