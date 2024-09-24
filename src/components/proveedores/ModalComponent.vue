@@ -171,7 +171,7 @@ const handleSubmit = async () => {
         prove_lastname.value.toUpperCase(),
         prove_address.value.toUpperCase(),
         prove_phone.value,
-        prove_email.value.toUpperCase()
+        prove_email.value
       );
 
     }

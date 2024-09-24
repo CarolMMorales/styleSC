@@ -111,19 +111,19 @@ export const useAuthStore = defineStore('user', () => {
     }
   };
 
-  const updateUser = async (use_id,per_id, use_email, use_password, rol_id) => {
+  const updateUser = async (use_id,  use_email, use_password,  rol_id) => {
     try {
       const res = await axios({
         url: `auth/update/${use_id}`,
-        method: 'POST',
+        method: 'PUT',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('Accept')}`
         },
         data: {
-          per_id: per_id,
           use_email: use_email,
           use_password: use_password,
           rol_id: rol_id
+        
         }
       });
       handleResponse(res);

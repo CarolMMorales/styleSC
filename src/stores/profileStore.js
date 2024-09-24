@@ -95,7 +95,13 @@ export const useProfileStore = defineStore('profile', () => {
           password_confirmation: confirmPassword,
         }
       });
-      handleResponsePassword(res);
+      handleResponsePassword(
+        res,
+        null,
+        t("profile.iqual"),
+        t("profile.update"),
+        t("profile.passActual"),
+      )
       // Manejo de respuesta
     } catch (error) {
       // Manejo de error

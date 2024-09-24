@@ -24,12 +24,12 @@
           <form @submit.prevent="handleSubmit">
             <div class="row p-2">
               <div class="mb-3 col-12">
-                <label for="phone" class="form-label">{{ $t('contacts.phone') }}</label>
-                <input type="text" v-model="con_phone" class="form-control" id="phone" />
+                <label for="" class="form-label">{{ $t('contacts.phone') }}</label>
+                <input type="text" v-model="con_phone" class="form-control" id="" />
               </div>
               <div class="mb-3 col-12">
-                <label for="email" class="form-label">{{ $t('contacts.emailPer') }}</label>
-                <input type="email" v-model="con_email" class="form-control" id="email" />
+                <label for="" class="form-label">{{ $t('contacts.emailPer') }}</label>
+                <input type="email" v-model="con_email" class="form-control" id="" />
               </div>
             </div>
             <div class="row">

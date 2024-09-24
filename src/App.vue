@@ -5,6 +5,7 @@ import { RouterView, useRouter } from "vue-router";
 import { useAuthStore } from './stores/authStore';
 import { onMounted, onUnmounted } from 'vue';
 import Swal from 'sweetalert2';
+
 import { useI18n } from 'vue-i18n';
 import CryptoJS from 'crypto-js';
 

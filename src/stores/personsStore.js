@@ -19,7 +19,7 @@ export const usePersonStore = defineStore('persons', () => {
   const URL_PERSONS = `/persons`
   const person = ref([]) // CONSTANTE CATE QUE CONTIENE EL ARREGLO PRINCIPAL
 
-
+  const contact = ref([])
   // Funcion para registrar 
   const registerPerson = async (per_name, per_lastname, typ_doc_id, per_document, per_address) => {
     try {
@@ -55,7 +55,28 @@ export const usePersonStore = defineStore('persons', () => {
     }
   };
   
+  const readContactsPersons = async (per_id) => {
 
+    try {
+      const res = await axios({
+        url: `contacts/person/${per_id}`,  // Usa el ID de la persona
+        method: 'GET',
+        headers: {
+          Authorization: 'Bearer ' + authStore.token
+        }
+      });
+      contact.value = res.data.map((item) => {
+        return {
+          con_id: item.con_id,
+          per_id: item.per_id,
+          con_phone: item.con_phone,
+          con_email: item.con_email
+        };
+      });
+    } catch (error) {
+      handleError(error);
+    }
+  };
 
 // Funcion para editar
 const updatePerson = async (per_id, per_name, per_lastname, typ_doc_id, per_document, per_address ) => {
@@ -73,7 +94,7 @@ const updatePerson = async (per_id, per_name, per_lastname, typ_doc_id, per_docu
         typ_doc_id: typ_doc_id,
         per_document: per_document,
         per_address: per_address,
-        use_id: user
+        
       }
     });
     handleResponse(res, per_name);
@@ -145,6 +166,7 @@ return {
   readPerson,
   updatePerson,
   deletePerson,
+  readContactsPersons,
   usePersonStore,
   person
 }

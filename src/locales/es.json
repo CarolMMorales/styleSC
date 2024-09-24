@@ -31,7 +31,10 @@
   "confirmDelete": "Eliminar",
   "send":"Enviar",
   "close": "Cerrar",
-  "create": "Crear nuevo usuario"
+  "create": "Crear nuevo usuario",
+  "detalle": "Detalle persona",
+  "editPerson": "Editar Persona",
+  "editUser": "Editar Usuario"
 },
 
 "messages": {
@@ -151,12 +154,13 @@
   },
 
   "users":{
-    "createUser": "Crear Usuario"
+    "createUser": "Crear Usuario",
+    "editUser": "Editar Usuario"
   },
 
   "login": {
     "title": "Iniciar Sesión",
-    "email": "Ingrese su correo institucional",
+    "email": "Ingrese su correo",
     "password": "Ingrese su Contraseña",
     "Terms": "Aceptar términos y condiciones",
     "Forget": "Recuperar contraseña",
@@ -181,8 +185,24 @@
     "warning": "¡Atención!",
     "warningLabel": "Tu sesión está a punto de expirar por inactividad.",
     "confirmLabel": "Mantener la sesión",
-    "invalidFormatNumber": "Formato inválido: Solo se aceptan números "
+    "invalidFormatNumber": "Formato inválido: Solo se aceptan números ",
+    "errorMail": "Error al enviar el correo intenta de nuevo",
+  "userMail": "Usuario no encontrado, verifique su correo",
+  "resetCode": "El código no coincide con el que se le envio al correo"
   },
+
+
+
+  "alerts":{
+  "messageSuccess": "Se creó exitosamente",
+  "photo": "Su foto de perfil fue actualizada correctamente",
+  "duplicateAlert": "Ya está registrado.",
+  "invalidFormat": "Formato Inválido: por favor proporcione la información correcta.",
+  "message": "Se editó exitosamente",
+  "report": "Descargando reporte con éxito",
+  "character": "Superó la cantidad de carácteres permitidos(255)",
+  "reports": "No hay datos en este reporte"
+},
   "validation": {
     "invalidFormat": "Formato inválido: Por favor, proporciona la información en el formato correcto. El nombre solo puede contener letras y espacios.",
     "invalidFormatNumber": "Formato inválido: Por favor, proporciona la información en el formato correcto. Solo puede contener numeros.",
@@ -192,12 +212,9 @@
       "maxNumer": "El número no puede tener más de 15 dígitos",
       "regex": "El número de teléfono solo puede contener números, espacios y ciertos caracteres especiales como: '+', '-', '(' y ')'"
     },
-    "persons": {
-      "birthdate": "La fecha de expedición debe ser una fecha posterior o igual a la fecha de nacimiento."
-    },
+    
     "mails": {
-      "invalidFormat": "El formato de correo es inválido y con un máximo de 255 caracteres",
-      "institutional": "El correo debe ser institucional con sólo letras y con un máximo de 255 caracteres"
+      "invalidFormat": "El formato de correo es inválido y con un máximo de 255 caracteres"
     },
     "password": {
       "invalidFormat": "La contraseña debe tener al menos 8 caracteres, una mayúscula, un dígito y un carácter especial",
@@ -210,11 +227,7 @@
     "adress": {
       "invalidFormat": "El campo debe contener entre uno y  255 caracteres"
     },
-    "dates": {
-      "moreThanActual": "La fecha seleccionada no puede ser mayor a la actual",
-      "minorExpDate": "La fecha de expedición no puede ser menor a la fecha de nacimiento",
-      "minYearMessage": "La fecha minima debe ser mayor o igual a 01-01-1950"
-    },
+    
     "document": {
       "warning": "Porfavor escriba su número de documento sin espacios o caracteres especiales",
       "invalidDoc": "Su documento no puede contener espacios, caracteres especiales o comenzar en 0"

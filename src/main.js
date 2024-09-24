@@ -7,11 +7,11 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
- import 'bootstrap/dist/css/bootstrap.min.css';
- import 'bootstrap/dist/css/bootstrap.min.css';
+
  import 'bootstrap/dist/js/bootstrap.bundle.min.js';
  import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 import 'bootstrap/dist/js/bootstrap.bundle.js';
 
@@ -21,14 +21,7 @@ import { i18n } from './i18n/index.js'
 
 
 const app = createApp(App)
-//const baseUrl = import.meta.env.VITE_BASE_URL;
-// window.axios = axios;
-// window.axios.defaults.baseURL = baseUrl;
-// window.axios.defaults.headers.common['Accept'] = 'application/json';
-// window.axios.defaults.headers.common['Content-Type'] = 'application/json';
-// window.axios.defaults.headers.common['X-Requested-with'] = 'XMLHttpRequest';
-// window.axios.defaults.withCredentials = true;
-// window.axios.defaults.silent = true;
+
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 axios.defaults.headers.common['Accept'] = 'application/json';
 axios.defaults.headers.common['Content-Type'] = 'application/json';

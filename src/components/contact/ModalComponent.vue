@@ -108,3 +108,17 @@ const clearForm = () => {
   con_email.value = ''
 }
 </script>
+<style lang="scss" scoped>
+.btn-custom {
+  background-color: var(--purple-color);
+  color: #ffffff;
+  padding: 0.8rem 3rem;
+  font-size: 1.25rem;
+}
+
+.btn-custom:hover {
+  background-color: var(----color-background);
+  color: var(--purple-color);
+  border: 2px solid var(--purple-color);
+}
+</style>

@@ -63,9 +63,10 @@ const updateContact = async (con_id, new_con_phone, new_con_email, new_per_id) =
     });
     handleResponse(res, new_con_phone, new_con_email);
     await readContactsByPersonId(); 
+    await readContactsPersons();
     return true;  
   } catch (error) {
-    handleError(error);
+    console.log('error mrk')
     return false;  
   }
 };
@@ -101,6 +102,29 @@ const readContactsByPersonId = async () => {
   }
 };
 
+const readContactsPersons = async (per_id) => {
+
+  try {
+    const res = await axios({
+      url: `contacts/person/${per_id}`,  // Usa el ID de la persona
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + authStore.token
+      }
+    });
+    contact.value = res.data.map((item) => {
+      return {
+        con_id: item.con_id,
+        per_id: item.per_id,
+        con_phone: item.con_phone,
+        con_email: item.con_email
+      };
+    });
+  } catch (error) {
+    console.log('error mrk')
+  }
+};
+
 // Función para eliminar 
 const deleteContact = async (con_id) => {
   try {
@@ -115,6 +139,7 @@ const deleteContact = async (con_id) => {
     
    
     await readContactsByPersonId();
+    await readContactsPersons();
     return true;
   } catch (error) {
     handleError(error);
@@ -136,12 +161,14 @@ const deleteContact = async (con_id) => {
       showSwalAlert('Error inesperado:', error.message, 'error');
     }
   }
+readContactsPersons();
 readContactsByPersonId()
 return {
   registerContact,
   readContactsByPersonId,
   updateContact,
   deleteContact,
+  readContactsPersons,
   useContactsStore,
   contact
 }
