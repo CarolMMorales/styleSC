@@ -2,6 +2,7 @@ import axios from 'axios'
 import CryptoJS from 'crypto-js';
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import Swal from 'sweetalert2';
 import { useAuthStore } from './authStore'
 import { showSwalAlert, handleResponse} from '../validation'
 //import { useI18n } from "vue-i18n";
@@ -33,10 +34,23 @@ export const useCategoryStore = defineStore('categories', () => {
         }
       });
       handleResponse(res, cate_name);
+      // Mostrar alerta con SweetAlert2
+      Swal.fire({
+      icon: 'success',
+      title: '¡Éxito!',
+      text: 'Categoría creada correctamente',
+      confirmButtonText: 'Aceptar'
+    });
       await readCategory();  // Asegúrate de que esta llamada esté presente
       return true;
     } catch (error) {
-      console.log(error.response?.data || error);
+      
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ocurrió un error al crear la categoría',
+        confirmButtonText: 'Aceptar'
+      });
     }
   };
   

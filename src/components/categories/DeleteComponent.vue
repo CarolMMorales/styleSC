@@ -1,5 +1,5 @@
 <template> 
-<!-- funcion para eliminar categoria -->
+<!-- modal para eliminar categoria -->
     <div
       class="modal fade"
       id="deleteModal"

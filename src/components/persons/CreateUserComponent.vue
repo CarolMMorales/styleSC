@@ -35,7 +35,7 @@
                       :key="index"
                       :value="Item.per_id"
                     >
-                      {{ Item.per_name }}
+                      {{ Item.per_name }} {{ Item.per_lastname }}
                     </option>
                   </select>
                 </div>
