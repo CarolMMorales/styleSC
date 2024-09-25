@@ -125,9 +125,10 @@
   import { useRolStore } from "../../stores/rolStore";
   import { useContactsStore } from '../../stores/contactStore'
   import contactsModal from '../../../src/components/contact/ModalComponent.vue'
-
+import { usePersonStore} from '../../stores/personsStore';
 import createContactsModal from '../../../src/components/contact/CreateModalComponent.vue'
   const contactStore = useContactsStore()
+  const personStore = usePersonStore()
   const closeModal = ref(false)
   
   const rolStore = useRolStore();
@@ -182,6 +183,7 @@ onMounted(() => {
   if (props.per_id) {
     contactStore.readContactsPersons(props.per_id);
   }
+   personStore.readPerson()
 });
 
 watch(() => props.per_id, (newPerId) => {

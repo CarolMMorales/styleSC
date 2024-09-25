@@ -73,11 +73,11 @@
           </button>
         </div>
 
-        <!-- <div class="text-center">
+        <div class="text-center">
           <router-link class="btn btn-link fs-6 text-center" to="/forgotPassword">
             {{ $t('login.Forget') }}
           </router-link>
-        </div> -->
+        </div>
       </form>
     </div>
   </div>
