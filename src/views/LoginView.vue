@@ -1,7 +1,9 @@
+<!-- vista del login -->
 <template>
   <div class="container d-flex justify-content-center align-items-center mt-5">
     <div class="card p-4 shadow-lg p-3 mb-5 bg-body-tertiary rounded" style="width: 300px;">
       <h2 class="text-center mb-4">{{ $t('login.title') }}</h2>
+      <!-- formulario para iniciar sesion -->
       <form @submit.prevent="handleSubmit">
         <div class="mb-3">
           <label for="username" class="form-label">{{ $t('login.email') }}</label>
@@ -84,20 +86,19 @@
 </template>
 
 <script setup>
+//importa validaciones y funciones
 import { validateEmails, showPassword } from '../validation';
 import { useAuthStore } from '@/stores/authStore';
-//import { useRouter } from 'vue-router';
-
 import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const { t } = useI18n(); //useI18n se utiliza para llamar las variables locales 
 const use_email = ref('');
 const use_password = ref('');
 const termsAccepted = ref(false);
 const authStore = useAuthStore();
-//const router = useRouter();
 
+//valida el email
 const validateMailWrapper = () => {
   return validateEmails(use_email.value, t('correo no valido'));
 };
@@ -105,7 +106,7 @@ const validateMailWrapper = () => {
 const mailError = computed(() => {
   return validateMailWrapper();
 });
-
+//accede al aplicativo
 const handleSubmit = async () => {
   await authStore.access(use_email.value, use_password.value);
   // router.push('/userProfile');
@@ -113,6 +114,7 @@ const handleSubmit = async () => {
 </script>
 
 <style>
+/* estilos */
 h2 {
   color: var(--purple-color);
 }

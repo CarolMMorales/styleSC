@@ -3,12 +3,11 @@ import CryptoJS from 'crypto-js';
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useAuthStore } from './authStore'
-import { showSwalAlert, handleResponse} from '../validation'
+import { showSwalAlert, handleResponse } from '../validation'
 import { useProfileStore } from './profileStore';
-//import { useI18n } from "vue-i18n";
+import Swal from 'sweetalert2';
 import { useRouter } from 'vue-router'
 export const useContactsStore = defineStore('contacts', () => {
-//   const { t } = useI18n();
   const router = useRouter()
   const authStore = useAuthStore()
   const profileStore = useProfileStore();
@@ -34,122 +33,150 @@ export const useContactsStore = defineStore('contacts', () => {
           use_id: user
         }
       });
-      handleResponse(res, per_id, con_phone, con_email);
+      handleResponse(res, per_id);
+      Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: 'Contacto creado correctamente',
+        confirmButtonText: 'Aceptar'
+      });
       await readContactsByPersonId();  // Asegúrate de que esta llamada esté presente
       return true;
     } catch (error) {
-      console.log(error.response?.data || error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ocurrió un error al crear el contacto',
+        confirmButtonText: 'Aceptar'
+      });
     }
   };
-  
-
-
-// Funcion para editar
-const updateContact = async (con_id, new_con_phone, new_con_email, new_per_id) => {
-  try {
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + authStore.token;
-    const res = await axios({
-      url: `${URL_CONTACTS}/${con_id}`,
-      method: 'PUT',
-      headers: {
-        Authorization: 'Bearer ' + authStore.token
-      },
-      data: {
-        con_phone: new_con_phone,
-        con_email: new_con_email,
-        per_id: new_per_id, 
-        use_id: user
-      }
-    });
-    handleResponse(res, new_con_phone, new_con_email);
-    await readContactsByPersonId(); 
-    await readContactsPersons();
-    return true;  
-  } catch (error) {
-    console.log('error mrk')
-    return false;  
-  }
-};
 
 
 
-const readContactsByPersonId = async () => {
-  personId.value = profileStore.personId;  // Usa el ID de la persona del ProfileStore
-
-  if (!personId.value) {
-    console.log('');
-    return;
-  }
-
-  try {
-    const res = await axios({
-      url: `contacts/person/${personId.value}`,  // Usa el ID de la persona
-      method: 'GET',
-      headers: {
-        Authorization: 'Bearer ' + authStore.token
-      }
-    });
-    contact.value = res.data.map((item) => {
-      return {
-        con_id: item.con_id,
-        per_id: item.per_id,
-        con_phone: item.con_phone,
-        con_email: item.con_email
-      };
-    });
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-const readContactsPersons = async (per_id) => {
-
-  try {
-    const res = await axios({
-      url: `contacts/person/${per_id}`,  // Usa el ID de la persona
-      method: 'GET',
-      headers: {
-        Authorization: 'Bearer ' + authStore.token
-      }
-    });
-    contact.value = res.data.map((item) => {
-      return {
-        con_id: item.con_id,
-        per_id: item.per_id,
-        con_phone: item.con_phone,
-        con_email: item.con_email
-      };
-    });
-  } catch (error) {
-    console.log('error mrk')
-  }
-};
-
-// Función para eliminar 
-const deleteContact = async (con_id) => {
-  try {
-    const res = await axios({
-      url: `${URL_CONTACTS}/${con_id}`,
-      method: 'DELETE',
-      headers: {
-        Authorization: 'Bearer ' + authStore.token
-      }
-    });
-    handleResponse(res, "contactedor eliminado");
-    
-   
-    await readContactsByPersonId();
-    await readContactsPersons();
-    return true;
-  } catch (error) {
-    handleError(error);
-    return false;
-  }
-};
+  // Funcion para editar
+  const updateContact = async (con_id, new_con_phone, new_con_email, new_per_id) => {
+    try {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + authStore.token;
+      const res = await axios({
+        url: `${URL_CONTACTS}/${con_id}`,
+        method: 'PUT',
+        headers: {
+          Authorization: 'Bearer ' + authStore.token
+        },
+        data: {
+          con_phone: new_con_phone,
+          con_email: new_con_email,
+          per_id: new_per_id,
+          use_id: user
+        }
+      });
+      handleResponse(res, new_con_phone, new_con_email);
+      Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: 'Contacto actualizado correctamente',
+        confirmButtonText: 'Aceptar'
+      });
+      await readContactsByPersonId();
+      await readContactsPersons();
+      return true;
+    } catch (error) {
+      console.log('')
+      return false;
+    }
+  };
 
 
 
-  const handleError =(error)=>{
+  const readContactsByPersonId = async () => {
+    personId.value = profileStore.personId;  // Usa el ID de la persona del ProfileStore
+
+    if (!personId.value) {
+      console.log('');
+      return;
+    }
+
+    try {
+      const res = await axios({
+        url: `contacts/person/${personId.value}`,  // Usa el ID de la persona
+        method: 'GET',
+        headers: {
+          Authorization: 'Bearer ' + authStore.token
+        }
+      });
+      contact.value = res.data.map((item) => {
+        return {
+          con_id: item.con_id,
+          per_id: item.per_id,
+          con_phone: item.con_phone,
+          con_email: item.con_email
+        };
+      });
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  const readContactsPersons = async (per_id) => {
+
+    try {
+      const res = await axios({
+        url: `contacts/person/${per_id}`,  // Usa el ID de la persona
+        method: 'GET',
+        headers: {
+          Authorization: 'Bearer ' + authStore.token
+        }
+      });
+      contact.value = res.data.map((item) => {
+        return {
+          con_id: item.con_id,
+          per_id: item.per_id,
+          con_phone: item.con_phone,
+          con_email: item.con_email
+        };
+      });
+    } catch (error) {
+      console.log('')
+    }
+  };
+
+  // Función para eliminar 
+  const deleteContact = async (con_id) => {
+    try {
+      const res = await axios({
+        url: `${URL_CONTACTS}/${con_id}`,
+        method: 'DELETE',
+        headers: {
+          Authorization: 'Bearer ' + authStore.token
+        }
+      });
+      handleResponse(res, "contacto eliminado");
+
+      Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: 'Contacto eliminado correctamente',
+        confirmButtonText: 'Aceptar'
+      });
+      await readContactsByPersonId();
+      await readContactsPersons();
+      return true;
+    } catch (error) {
+      handleError(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ocurrió un error al eliminar el contacto',
+        confirmButtonText: 'Aceptar'
+      });
+      return false;
+    }
+  };
+
+
+//Funcion para errores
+  const handleError = (error) => {
     if (error.response && error.response.status === 401) {
       router.push({ name: 'login', query: { redirect: router.currentRoute.fullPath } });
       authStore.logout()
@@ -161,15 +188,16 @@ const deleteContact = async (con_id) => {
       showSwalAlert('Error inesperado:', error.message, 'error');
     }
   }
-readContactsPersons();
-readContactsByPersonId()
-return {
-  registerContact,
-  readContactsByPersonId,
-  updateContact,
-  deleteContact,
-  readContactsPersons,
-  useContactsStore,
-  contact
-}
+  readContactsPersons();
+  readContactsByPersonId()
+   //retorna las funciones utilizadas para que se puedan exportar
+  return {
+    registerContact,
+    readContactsByPersonId,
+    updateContact,
+    deleteContact,
+    readContactsPersons,
+    useContactsStore,
+    contact
+  }
 })

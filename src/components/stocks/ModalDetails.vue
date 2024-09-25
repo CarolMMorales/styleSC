@@ -1,3 +1,4 @@
+<!-- modal para visualizar los detalles del stock -->
 <template>
     <div class="container p-5">
         <!-- Modal -->
@@ -69,13 +70,14 @@
 </template>
 
 <script setup>
+// importa las funciones necesarias
 import { ref, computed, defineProps, watchEffect, onMounted } from 'vue'
 import { useProductsStore } from '../../stores/productsStores'
 import { useProveedorStore } from '../../stores/proveedoresStores'
 
 const productStore = useProductsStore()
 const proveStore = useProveedorStore()
-
+//trae los datos desde el props para mostrarlos en el modal 
 const props = defineProps({
     stock_id: Number,
     stock_costo: Number,
@@ -87,7 +89,7 @@ const props = defineProps({
     produc_size: String,
     prove_id: Number
 })
-
+//declata variable y le pone los valores que trajo de la tabla 
 const stock_costo = ref(props.stock_costo)
 const stock_precioVenta = ref(props.stock_precioVenta)
 const stock_cantidad = ref(props.stock_cantidad)
@@ -100,11 +102,11 @@ const prove_id = ref(props.prove_id)
 const filteredProduc = computed(() => {
     return productStore.produc.filter(item => item.produc_name !== '')
 })
-
+//filtro de busquda 
 const filteredProve = computed(() => {
     return proveStore.prove.filter(item => item.prove_name !== '')
 })
-
+//para mostrar los datos en el modal
 watchEffect(() => {
     stock_costo.value = props.stock_costo
     stock_precioVenta.value = props.stock_precioVenta
@@ -115,7 +117,7 @@ watchEffect(() => {
     produc_size.value = props.produc_size
     prove_id.value = props.prove_id
 })
-
+//carga los datos 
 onMounted(async () => {
     await productStore.readProduct()
     await proveStore.readProveedor()
@@ -124,6 +126,7 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
+// estilos
 .btn-custom {
     background-color: var(--purple-color);
     color: #ffffff;

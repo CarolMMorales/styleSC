@@ -13,6 +13,7 @@
               @click="cancelChanges()"></button>
           </div>
           <div class="modal-body">
+            <!-- formulario para editar o agregar stock -->
             <form @submit.prevent="handleSubmit">
               <div class="row p-2">
                 <div class="mb-3 col-12">
@@ -89,11 +90,12 @@
 </template>
 
 <script setup>
+// importa funciones necesarias 
 import { ref, computed, defineProps, watchEffect, onMounted } from 'vue'
 import { useStockStore } from '../../stores/stocksStores'
 import { useProductsStore } from '../../stores/productsStores'
 import { useProveedorStore } from '../../stores/proveedoresStores'
-
+//instacia variable
 const loading = ref(false)
 const stock = useStockStore()
 const productStore = useProductsStore()
@@ -102,7 +104,7 @@ const proveStore = useProveedorStore()
 const produc_code = ref('')
 const produc_description = ref('')
 const produc_size = ref('')
-
+//trae los datos que fueron mandados de la tabla 
 const props = defineProps({
   stock_id: Number,
   stock_costo: Number,
@@ -112,7 +114,7 @@ const props = defineProps({
   prove_id: Number,
   edit: Boolean
 })
-
+//filtros del modal 
 const filteredProduc = computed(() => {
   return productStore.produc.filter((item) => item.produc_name != 0)
 })
@@ -120,7 +122,7 @@ const filteredProduc = computed(() => {
 const filteredProve = computed(() => {
   return proveStore.prove.filter((item) => item.prove_name != 0)
 })
-
+//rellena campos al encontrar un producto automaticamente
 const onProductSelect = async () => {
   const selectedProduct = await productStore.getProductById(produc_id.value)
   if (selectedProduct) {
@@ -129,7 +131,7 @@ const onProductSelect = async () => {
     produc_size.value = selectedProduct.produc_size
   }
 }
-
+//igual valores a los de los props
 const stock_costo = ref(props.stock_costo)
 const stock_precioVenta = ref(props.stock_precioVenta)
 const stock_cantidad = ref(props.stock_cantidad)
@@ -140,7 +142,7 @@ const editing = ref(props.edit)
 const submitting = ref(false)
 const modalId = ref(editing.value ? 'editModal' : 'createModal')
 const closeModal = ref(false)
-
+//funcion para desabilitar el boton de guardar hasta que todos los datos esten completos
 const isFormValid = computed(() => {
   return (
     stock_costo.value &&
@@ -150,7 +152,7 @@ const isFormValid = computed(() => {
     prove_id.value 
   )
 })
-
+//muestra los datos en el modal
 watchEffect(() => {
   stock_costo.value = props.stock_costo
   stock_precioVenta.value = props.stock_precioVenta
@@ -160,7 +162,7 @@ watchEffect(() => {
   editing.value = props.edit
   modalId.value = editing.value ? 'editModal' : 'createModal'
 })
-
+//funcion para editar o agregar un stock con un condicional depende el caso
 const handleSubmit = async () => {
   if (submitting.value) return
   submitting.value = true
@@ -197,11 +199,11 @@ const handleSubmit = async () => {
     closeModal.value = true
   }
 }
-
+//carga los datos
 onMounted(async () => {
   await productStore.readProduct()
 })
-
+//cancela los cambios y limpia los capos de ser necesario 
 const cancelChanges = () => {
   if (!editing.value) {
     clearForm()
@@ -222,6 +224,7 @@ const clearForm = () => {
 </script>
 
 <style lang="scss" scoped>
+// estilos
 .btn-custom {
   background-color: var(--purple-color);
   color: #ffffff;

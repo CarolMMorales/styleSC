@@ -2,6 +2,7 @@ import axios from 'axios'
 import CryptoJS from 'crypto-js'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import Swal from 'sweetalert2';
 import { useAuthStore } from './authStore'
 import { showSwalAlert, handleResponse } from '../validation'
 import { useI18n } from 'vue-i18n'
@@ -48,7 +49,14 @@ export const useProveedorStore = defineStore('proveedores', () => {
         t('alerts.duplicateAlert'),
         t('alerts.invalidFormat'),
         t('alerts.character')
+
       )
+      Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: 'Proveedor creado correctamente',
+        confirmButtonText: 'Aceptar'
+      });
       await readProveedor() // Asegúrate de que esta llamada esté presente
       return true
     } catch (error) {
@@ -60,6 +68,12 @@ export const useProveedorStore = defineStore('proveedores', () => {
         t('alerts.invalidFormat'),
         t('alerts.character')
       )
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ocurrió un error al crear el proveedor',
+        confirmButtonText: 'Aceptar'
+      });
     }
   }
 
@@ -90,10 +104,22 @@ export const useProveedorStore = defineStore('proveedores', () => {
         }
       })
       handleResponse(res, new_prove_name)
+      Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: 'Proveedor actualizado correctamente',
+        confirmButtonText: 'Aceptar'
+      });
       await readProveedor()
       return true
     } catch (error) {
       handleError(error)
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ocurrió un error al actualizar el proveedor',
+        confirmButtonText: 'Aceptar'
+      });
       return false
     }
   }
@@ -118,7 +144,7 @@ export const useProveedorStore = defineStore('proveedores', () => {
           prove_email: item.prove_email
         }
       })
-      console.log(prove.value)
+
       return prove.value
     } catch (error) {
       handleError(error)
@@ -135,15 +161,26 @@ export const useProveedorStore = defineStore('proveedores', () => {
         }
       })
       handleResponse(res, 'Proveedor eliminado')
-
+      Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: 'Proveedor eliminado correctamente',
+        confirmButtonText: 'Aceptar'
+      });
       await readProveedor()
       return true
     } catch (error) {
       handleError(error)
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ocurrio un error al eliminar el proveedor',
+        confirmButtonText: 'Aceptar'
+      });
       return false
     }
   }
-
+  //Funcion para errores
   const handleError = (error) => {
     if (error.response && error.response.status === 401) {
       router.push({ name: 'login', query: { redirect: router.currentRoute.fullPath } })
@@ -157,6 +194,7 @@ export const useProveedorStore = defineStore('proveedores', () => {
     }
   }
   readProveedor()
+  //retorna las funciones utilizadas para que se puedan exportar
   return {
     registerProveedor,
     readProveedor,

@@ -1,4 +1,5 @@
 <template>
+  <!-- componente para ir al perfil y cerrar sesión -->
   <div class="dropdown">
     <img
       class="img img-thumbnail dropdown-toggle"
@@ -13,8 +14,10 @@
           <div class="row">
             <div class="col-2 pr-2">
               <div class="position-relative">
-                <img class="img-perfil dropdown-toggle" :src="profileImage" role="button" data-bs-toggle="dropdown" aria-expanded="false"/>
-                <div class="overlay " data-bs-toggle="modal" data-bs-target="#updatePhoto"><i class="ri-pencil-line "></i></div>
+                <img class="img-perfil" :src="localImage" />
+                <div class="overlay">
+                  <i class="ri-pencil-line"></i>
+                </div>
               </div>
             </div>
             <div class="col-10">
@@ -32,8 +35,8 @@
       <li><hr class="dropdown-divider"></li>
       <li>
         <div class="container">
-          <RouterLink to="/userProfile" class="text-decoration-none"  >
-            <div class="link ">
+          <RouterLink to="/userProfile" class="text-decoration-none">
+            <div class="link">
               <div class="dropdown-item">{{ $t("titles.profile") }}</div>
             </div>
           </RouterLink>
@@ -41,77 +44,45 @@
       </li>
       <li>
         <div class="container">
-          <div class="link ">
+          <div class="link">
             <a @click="logoutUser" class="dropdown-item">{{ $t("titles.exit") }}</a>
           </div>
         </div>
       </li>
       <li><hr class="dropdown-divider"></li>
-
     </ul>
   </div>
-  <!-- <changePhoto></changePhoto> -->
 </template>
 
 <script setup>
-
-//import changePhoto from "./changePhoto.vue";
 import { useAuthStore } from "../stores/authStore";
 import { RouterLink } from "vue-router";
 import { useRouter } from "vue-router";
-import CryptoJS from "crypto-js";
 import { useProfileStore } from "../stores/profileStore";
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted } from "vue";
+
+// Importa la imagen local desde assets
+const localImage = new URL('../assets/perfil.jpg', import.meta.url).href;
+
+const profileStore = useProfileStore();
+const profileImage = ref(localImage);
 
 const router = useRouter();
 const userAuth = useAuthStore();
-const profileStore = useProfileStore();
 
-const secretKey = "TuClaveSecreta";
-
-const use_id = CryptoJS.AES.decrypt(localStorage.getItem("id"), secretKey)?.toString(CryptoJS.enc.Utf8);
-
-// if (!use_id) {
-//   console.error("No se pudo obtener el id del usuario.");
-//   console.log (use_id);
-// }
 onMounted(async () => {
   await profileStore.readPersonDetailsById();
-  profileImage.value = profileStore.profile.use_photo;
 });
-
-
-const profileImage = ref(profileStore.profile?.use_photo || 'perfil.jpg');
-
-
-const updateProfileImage = (event) => {
-  profileImage.value = event.detail.newImage;
-};
-
-onMounted(async() => {
-  await profileStore.readPersonDetailsById();
-  profileImage.value = profileStore.profile.use_photo;
-  // Actualizar la imagen durante la montura inicial
-  updateProfileImage({ detail: { newImage: profileStore.profile.use_photo } });
-  // Escuchar evento para actualizar la imagen
-  window.addEventListener("update-profile-image", updateProfileImage);
-});
-
-// Actualizar la imagen si cambia en el store
-watch(
-  () => profileStore.profile.use_photo,
-  (newValue) => {
-    profileImage.value = newValue;
-  }
- );
 
 const logoutUser = async () => {
-  await userAuth.logout(use_id);
+  await userAuth.logout();
   router.push("/");
 };
 </script>
 
+
 <style lang="scss" scoped>
+// estilos para que la imagen y el menu funcionen correctamente 
 .img {
   width: 65px; /* Ancho automático para mantener la proporción */
   height: 65px; /* Establece una altura fija según tus necesidades */

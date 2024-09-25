@@ -207,11 +207,7 @@ export const validateEmails = (email, errorMessage) => {
       let password = res.data.message
       //let messageToShows = res.data.message;
   
-      /*if (messageToShow.includes('name has already been taken')) {
-        messageToShow = duplicateAlert;
-        showSwalAlert(name, messageToShow, 'error');
-      }
-      else*/ if (messageToShow.includes('format invalidate')) {
+      if (messageToShow.includes('format invalidate')) {
         messageToShow = invalidFormat
         showSwalAlert(null, messageToShow, 'error')
       } else if (password.includes('No reservation made')) {

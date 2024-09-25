@@ -3,9 +3,8 @@ import { useI18n } from 'vue-i18n';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-
-import { handleErrorLog, showSwalAlert, handleResponseauth, handleResponse } from '../validation.js';
-
+import Swal from 'sweetalert2';
+import { showSwalAlert, handleResponse } from '../validation.js';
 export const useAuthStore = defineStore('user', () => {
   const { t } = useI18n();
   const router = useRouter();
@@ -17,7 +16,7 @@ export const useAuthStore = defineStore('user', () => {
   const use_id = ref(localStorage.getItem('id') || null);
   const rol_id = ref(localStorage.getItem('rol_id') || null);
   const authUser = ref(null);
-const persons = ref([])
+  const persons = ref([])
   // Variable que verifica si el usuario está autenticado
   const isAuthenticated = ref(!!token.value);
 
@@ -34,12 +33,11 @@ const persons = ref([])
         use_password,
       });
 
-      console.log('Respuesta del login:', res.data); // Imprime la respuesta completa
-      console.log('Rol ID del servidor:', res.data.rol_id); // Imprime el rol_id específico
-  
+ 
+
       token.value = res.data.token;
       use_id.value = res.data.use_id;
-      rol_id.value = res.data.rol_id; 
+      rol_id.value = res.data.rol_id;
       // Guardar el token y el ID del usuario en localStorage
       localStorage.setItem('Accept', token.value);
       localStorage.setItem('id', use_id.value);
@@ -84,7 +82,7 @@ const persons = ref([])
       resetStore();
     }
   };
-
+  //función para registrar un nuevo usuario
   const registerUser = async (per_id, use_email, use_password, rol_id) => {
     try {
       const res = await axios({
@@ -101,19 +99,24 @@ const persons = ref([])
         }
       });
       handleResponse(res);
-      console.log({
-        per_id, use_email, use_password, rol_id // Para registerUser
+      Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: 'Usuario creado correctamente',
+        confirmButtonText: 'Aceptar'
       });
       return true;
     } catch (error) {
-      console.log(error.response?.data || error);
-      console.log({
-        per_id, use_email, use_password, rol_id // Para registerUser
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ocurrió un error al crear el usuario',
+        confirmButtonText: 'Aceptar'
       });
     }
   };
-
-  const updateUser = async (use_id,  use_email, use_password,  rol_id) => {
+  //Función para editar usuario 
+  const updateUser = async (use_id, use_email, use_password, rol_id) => {
     try {
       const res = await axios({
         url: `auth/update/${use_id}`,
@@ -125,34 +128,45 @@ const persons = ref([])
           use_email: use_email,
           use_password: use_password,
           rol_id: rol_id
-        
+
         }
       });
       handleResponse(res);
+      Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: 'Usuario actualizado correctamente',
+        confirmButtonText: 'Aceptar'
+      });
       return true;
     } catch (error) {
-      console.log(error.response?.data || error);
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ocurrió un error al actualizar el usuario',
+        confirmButtonText: 'Aceptar'
+      });
     }
   };
-
+  //funcion para leer todas las personas 
   const readPersons = async () => {
     try {
       const res = await axios({
-        url:`personsUser`,
+        url: `personsUser`,
         method: 'GET',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('Accept')}`
         }
       })
       persons.value = res.data;
-      console.log(persons.value);
       return persons.value;
-      
-    } catch (error) {
-      console.log('error')
-    }
-  };  
 
+    } catch (error) {
+      console.log('')
+    }
+  };
+  //funció para eliminar el usuario
   const deleteUser = async (use_id) => {
     try {
       const res = await axios({
@@ -161,12 +175,23 @@ const persons = ref([])
         headers: {
           Authorization: `Bearer ${localStorage.getItem('Accept')}`
         },
-        
+
       });
       handleResponse(res, "usuario eliminado");
+      Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: 'Usuario eliminado correctamente',
+        confirmButtonText: 'Aceptar'
+      });
       return true;
     } catch (error) {
-      console.log(error.response?.data || error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ocurrió un error al eliminar el usuario',
+        confirmButtonText: 'Aceptar'
+      });
     }
   };
 
@@ -184,57 +209,8 @@ const persons = ref([])
     router.push('/login');
   };
 
-  // Función para restablecer la contraseña
-  const reset = async (newPassword, confirmPassword, code) => {
-    try {
-      const res = await axios.post(`/reset/password`, {
-        new_password: newPassword,
-        password_confirmation: confirmPassword,
-        res_pas_code: code,
-      });
-
-      if (res.data.status === false) {
-        showSwalAlert(res.data.message, 'error');
-      } else if (res.data.status === true) {
-        showSwalAlert(res.data.message, 'success');
-      }
-    } catch (error) {
-      handleErrorLog(error);
-    }
-  };
-
-  // Función para enviar correo de recuperación de contraseña
-  const mail = async (email) => {
-    try {
-      const res = await axios.post(`/send/email`, {
-        use_mail: email,
-      });
-
-      handleResponseauth(
-        res,
-        email,
-        'Se envió a tu correo un código de verificación y el enlace de recuperación de contraseña',
-        'errors.duplicateAlert',
-        'Error al enviar el correo, intenta de nuevo'
-      );
-    } catch (error) {
-      if (error.response) {
-        let messageToShow = error.response.data.message;
-        if (messageToShow.includes('Attempt to read property "use_id"')) {
-          showSwalAlert(null, 'Usuario no encontrado, verifica tu correo', 'error');
-        }
-        console.error('Error de solicitud:', error.response.data);
-      } else {
-        showSwalAlert({
-          icon: 'error',
-          title: 'Error',
-          text: 'Error: Se produjo un error inesperado',
-        });
-        console.error('Error inesperado:', error.message);
-      }
-    }
-  };
-
+  readPersons()
+  //retornan las funciones y los arreglos utilizados para que se puedan expotar y utilizar en otra tiendas
   return {
     token,
     use_id,
@@ -248,7 +224,5 @@ const persons = ref([])
     registerUser,
     updateUser,
     logout,
-    reset,
-    mail,
   };
 });
