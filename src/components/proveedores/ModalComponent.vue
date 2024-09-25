@@ -1,90 +1,55 @@
 <template>
   <div class="container p-5">
-    <!-- Modal -->
-    <div
-      class="modal fade border-primary"
-      :id="modalId"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
+    <!-- Modal para crear y editar proveedores -->
+    <div class="modal fade border-primary" :id="modalId" tabindex="-1" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-primary shadow-lg">
           <div class="modal-header">
             <h5 class="modal-title blue-color-text" id="exampleModalLabel1">
               {{ editing ? $t('proveedores.edit') : $t('proveedores.add') }}
             </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-              @click="cancelChanges()"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+              @click="cancelChanges()"></button>
           </div>
           <div class="modal-body">
             <form @submit.prevent="handleSubmit">
               <div class="row p-2">
                 <div class="mb-3 col-12">
                   <label for="exampleInputName1" class="form-label">{{ $t('proveedores.prove_name') }}</label>
-                  <input
-                    type="text"
-                    v-model="prove_name"
-                    class="form-control"
-                    id="exampleInputName1"
-                    aria-describedby="NameHelp"
-                  />
+                  <input type="text" v-model="prove_name" class="form-control" id="exampleInputName1"
+                    aria-describedby="NameHelp" />
                 </div>
                 <div class="mb-3 col-12">
                   <label for="exampleInputName1" class="form-label">{{
                     $t('proveedores.prove_lastname')
                   }}</label>
-                  <input
-                    type="text"
-                    v-model="prove_lastname"
-                    class="form-control"
-                    id="exampleInputName1"
-                    aria-describedby="NameHelp"
-                  />
+                  <input type="text" v-model="prove_lastname" class="form-control" id="exampleInputName1"
+                    aria-describedby="NameHelp" />
                 </div>
-                
+
                 <div class="mb-3 col-12">
                   <label for="exampleInputName1" class="form-label">{{
                     $t('proveedores.prove_address')
                   }}</label>
-                  <input
-                    type="text"
-                    v-model="prove_address"
-                    class="form-control"
-                    id="exampleInputName1"
-                    aria-describedby="NameHelp"
-                  />
+                  <input type="text" v-model="prove_address" class="form-control" id="exampleInputName1"
+                    aria-describedby="NameHelp" />
                 </div>
                 <div class="mb-3 col-12">
                   <label for="exampleInputName1" class="form-label">{{ $t('proveedores.prove_email') }}</label>
-                  <input
-                    type="text"
-                    v-model="prove_email"
-                    class="form-control"
-                    id="exampleInputName1"
-                    aria-describedby="NameHelp"
-                  />
+                  <input type="text" v-model="prove_email" class="form-control" id="exampleInputName1"
+                    aria-describedby="NameHelp" />
                 </div>
                 <div class="mb-3 col-12">
-                    <label for="exampleInputName1" class="form-label">{{ $t('proveedores.prove_phone') }}</label>
-                    <input type="number" v-model="prove_phone" class="form-control" id="exampleInputName1" aria-describedby="NameHelp" />
-                   
-                  </div> 
+                  <label for="exampleInputName1" class="form-label">{{ $t('proveedores.prove_phone') }}</label>
+                  <input type="number" v-model="prove_phone" class="form-control" id="exampleInputName1"
+                    aria-describedby="NameHelp" />
+                </div>
               </div>
-
               <div class="row">
                 <div class="col-md-12 d-flex justify-content-center">
-                  <button
-                    data-bs-dismiss="modal"
-                    type="submit"
-                    class="btn btn-custom fw-semibold"
-                    :disabled="!isFormValid"
-                  >
+                  <button data-bs-dismiss="modal" type="submit" class="btn btn-custom fw-semibold"
+                    :disabled="!isFormValid">
                     <span class="btn-content" v-if="!loading">
                       {{ $t('buttons.save') }}
                     </span>
@@ -105,12 +70,14 @@
 
 
 <script setup>
+// Importar dependencias y stores necesarias
 import { ref, computed, defineProps, watchEffect } from 'vue'
 import { useProveedorStore } from '../../stores/proveedoresStores'
 
 const loading = ref(false)
 const prove = useProveedorStore()
 
+// Definir las propiedades que recibirá el componente para editar el proveedor correspondiente
 const props = defineProps({
   prove_id: Number,
   prove_name: String,
@@ -121,6 +88,7 @@ const props = defineProps({
   edit: Boolean
 })
 
+// Mostrar los valores que ya tienen en el modal cuando se editan 
 const prove_name = ref(props.prove_name)
 const prove_lastname = ref(props.prove_lastname)
 const prove_address = ref(props.prove_address)
@@ -137,6 +105,7 @@ const isFormValid = computed(() => {
   return prove_name.value && prove_lastname.value && prove_address.value && prove_phone.value && prove_email.value
 })
 
+// Función 'watchEffect' para mostrar los campos en el modal cuando se está editando
 watchEffect(() => {
   prove_name.value = props.prove_name
   prove_lastname.value = props.prove_lastname
@@ -147,6 +116,7 @@ watchEffect(() => {
   modalId.value = editing.value ? 'editModal' : 'createModal'
 })
 
+// Enviar los datos a la función creada en el store
 const handleSubmit = async () => {
   if (submitting.value) return;
   submitting.value = true;
@@ -173,11 +143,10 @@ const handleSubmit = async () => {
         prove_phone.value,
         prove_email.value
       );
-
     }
     clearForm();
   } catch (error) {
-    console.log(error);
+    console.log('');
   } finally {
     submitting.value = false;
     loading.value = false;
@@ -185,7 +154,7 @@ const handleSubmit = async () => {
   }
 };
 
-
+// Función para cancelar los cambios
 const cancelChanges = () => {
   if (!editing.value) {
     clearForm()
@@ -194,6 +163,7 @@ const cancelChanges = () => {
   }
 }
 
+// Función para limpiar campos
 const clearForm = () => {
   prove_name.value = ''
   prove_lastname.value = ''
@@ -202,9 +172,6 @@ const clearForm = () => {
   prove_email.value = ''
 }
 </script>
-
-
-
 
 <style lang="scss" scoped>
 .btn-custom {

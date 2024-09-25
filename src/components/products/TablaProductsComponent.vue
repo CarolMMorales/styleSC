@@ -1,23 +1,17 @@
 <template>
   <div>
     <div class="row">
-      <!-- buscador -->
+      <!-- Barra de búsqueda -->
       <div class="col-md-12 mb-3">
-        <input
-          type="text"
-          v-model="searchTerm"
-          :placeholder="$t('titles.search')"
-          class="form-control"
-        />
+        <input type="text" v-model="searchTerm" :placeholder="$t('titles.search')" class="form-control" />
       </div>
     </div>
-
     <div class="table-responsive m-1">
-      <!-- Agregar un indicador de carga -->
+      <!-- Indicador de carga -->
       <div v-if="loading" class="d-flex justify-content-center">
         <LoadingComponent></LoadingComponent>
       </div>
-      
+      <!-- Tabla de Productos -->
       <div v-if="!loading">
         <table class="table table-striped table-bordered" v-if="!loading">
           <thead>
@@ -54,26 +48,16 @@
               <td>{{ Item.categoria }}</td>
               <td>
                 <div class="text-light text-center align-items-center justify-content-center">
-                  <button
-                    @click="prepareEditForm(Item)"
-                    type="button"
-                    data-bs-toggle="modal"
-                    data-bs-target="#editModal"
-                    class="btn btn-outline-success"
-                  >
+                  <button @click="prepareEditForm(Item)" type="button" data-bs-toggle="modal"
+                    data-bs-target="#editModal" class="btn btn-outline-success">
                     <i class="ri-pencil-fill"></i> {{ $t('buttons.edit') }}
                   </button>
                 </div>
               </td>
               <td>
                 <div class="text-light text-center align-items-center justify-content-center">
-                  <button
-                    @click="prepareDeleteForm(Item)"
-                    type="button"
-                    data-bs-toggle="modal"
-                    data-bs-target="#deleteModal"
-                    class="btn btn-outline-danger"
-                  >
+                  <button @click="prepareDeleteForm(Item)" type="button" data-bs-toggle="modal"
+                    data-bs-target="#deleteModal" class="btn btn-outline-danger">
                     <i class="bi bi-trash-fill"></i> {{ $t('buttons.delete') }}
                   </button>
                 </div>
@@ -81,34 +65,27 @@
             </tr>
           </tbody>
         </table>
-        <PaginationComponent
-          :currentPage="currentPage"
-          :totalPages="totalPages"
-          @changePage="handlePageChanged"
-        />
+        <PaginationComponent :currentPage="currentPage" :totalPages="totalPages" @changePage="handlePageChanged" />
       </div>
     </div>
   </div>
-
-  <ModalProducts
-    :produc_id="parseInt(produc_id)"
-    :produc_code="produc_code"
-    :produc_name="produc_name"
-    :produc_description="produc_description"
-    :produc_size="parseInt(produc_size)"
-    :cate_id="parseInt(cate_id)"
-    :edit="true"
-  ></ModalProducts>
+  <!-- Modal para crear y editar productos -->
+  <ModalProducts :produc_id="parseInt(produc_id)" :produc_code="produc_code" :produc_name="produc_name"
+    :produc_description="produc_description" :produc_size="parseInt(produc_size)" :cate_id="parseInt(cate_id)"
+    :edit="true"></ModalProducts>
+  <!-- Modal para eliminar productos -->
   <ModalDelete :produc_id="parseInt(produc_id)"></ModalDelete>
 </template>
 
 <script setup>
+// Importar dependencias y stores necesarias
 import { useProductsStore } from '../../stores/productsStores'
 import PaginationComponent from '../PaginationComponent.vue'
 import LoadingComponent from '../LoadingComponent.vue'
 import ModalProducts from './ModalComponent.vue'
 import { ref, computed, onMounted, watch } from 'vue'
 import ModalDelete from './DeleteComponent.vue'
+
 const producStore = useProductsStore()
 const produc_id = ref('')
 const produc_code = ref('')
@@ -116,21 +93,20 @@ const produc_name = ref('')
 const produc_description = ref('')
 const produc_size = ref('')
 const cate_id = ref('')
-
-
 const editing = ref(false)
-
 let loading = ref(false)
 const searchTerm = ref('')
 const currentPage = ref(1)
 const itemsPerPage = 10
 
+// Función para cargar los datos en la tabla
 onMounted(async () => {
   loading.value = true
   await producStore.readProduct()
   loading.value = false
 })
 
+// Función para mandar los datos al modal de editar productos
 const prepareEditForm = (proItem) => {
   produc_id.value = proItem.produc_id
   produc_code.value = proItem.produc_code
@@ -138,16 +114,17 @@ const prepareEditForm = (proItem) => {
   produc_description.value = proItem.produc_description
   produc_size.value = proItem.produc_size
   cate_id.value = proItem.cate_id
- 
   editing.value = true
 }
+
+// Función para mandar el id del producto que se desea eliminar al modal correspondiente
 const prepareDeleteForm = (proItem) => {
   produc_id.value = proItem.produc_id
 }
 
+// Filtro de búsqueda de datos en la tabla 
 const filter = computed(() => {
   const lowerSearchTerm = searchTerm.value.toLowerCase();
-
   return Array.isArray(producStore.produc) ? producStore.produc.filter((item) => {
     const producCode = item.produc_code ? item.produc_code.toString() : '';
     const producName = item.produc_name ? item.produc_name.toLowerCase() : '';
@@ -163,29 +140,31 @@ const filter = computed(() => {
   }) : [];
 });
 
-
+// Función para calcular la paginación de los elementos filtrados
 const paginated = computed(() => {
   const startIndex = (currentPage.value - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
-
   return filter.value.slice(startIndex, endIndex)
 })
 
+// Total de elementos y páginas después de aplicar el filtro
 const totalItems = computed(() => filter.value.length)
 const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage))
 
+// Manejar el cambio de página
 const handlePageChanged = (pageNumber) => {
   currentPage.value = pageNumber
 }
 
+// Función para reiniciar la página actual a 1 cuando cambia el término de búsqueda
 watch(searchTerm, () => {
-  // Reinicia currentPage a 1 cuando cambia el término de búsqueda
   currentPage.value = 1
 })
 </script>
 
 <style lang="scss" scoped>
 @import 'datatables.net-bs5';
+/** Estilos de la tabla */
 .lila-color-bg {
   background-color: var(--lila-color);
 }
@@ -202,14 +181,9 @@ watch(searchTerm, () => {
   color: var(--purple-color);
   border: 2px solid var(--purple-color);
 }
+
 .btn-custom2 {
   background-color: var(--purple-color);
   color: #ffffff;
 }
-
-// .btn-custom2:hover {
-//   background-color: var(----color-background);
-//   color: var(--purple-color);
-//   border: 2px solid var(--purple-color);
-// }
 </style>

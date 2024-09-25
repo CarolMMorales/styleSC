@@ -1,75 +1,44 @@
 <template>
   <div class="container p-5">
-    <!-- Modal para crear y editar categorias-->
-    <div
-      class="modal fade border-primary"
-      :id="modalId"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
+    <!-- Modal para crear y editar categorías -->
+    <div class="modal fade border-primary" :id="modalId" tabindex="-1" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-primary shadow-lg">
           <div class="modal-header">
             <h5 class="modal-title blue-color-text" id="exampleModalLabel1">
               {{ editing ? $t('categories.edit') : $t('categories.add') }}
             </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-              @click="cancelChanges()"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+              @click="cancelChanges()"></button>
           </div>
           <div class="modal-body">
             <form @submit.prevent="handleSubmit">
               <div class="row p-2">
                 <div class="mb-3 col-12">
                   <label for="exampleInputName1" class="form-label">{{ $t('categories.cate_name') }}</label>
-                  <input
-                    type="text"
-                    v-model="cate_name"
-                    class="form-control"
-                    id="exampleInputName1"
-                    aria-describedby="NameHelp"
-                  />
+                  <input type="text" v-model="cate_name" class="form-control" id="exampleInputName1"
+                    aria-describedby="NameHelp" />
                 </div>
                 <div class="mb-3 col-12">
                   <label for="exampleInputName1" class="form-label">{{
                     $t('categories.cate_description')
                   }}</label>
-                  <input
-                    type="text"
-                    v-model="cate_description"
-                    class="form-control"
-                    id="exampleInputName1"
-                    aria-describedby="NameHelp"
-                  />
+                  <input type="text" v-model="cate_description" class="form-control" id="exampleInputName1"
+                    aria-describedby="NameHelp" />
                 </div>
-                
                 <div class="mb-3 col-12">
                   <label for="exampleInputName1" class="form-label">{{
                     $t('categories.cate_medida')
                   }}</label>
-                  <input
-                    type="text"
-                    v-model="cate_medida"
-                    class="form-control"
-                    id="exampleInputName1"
-                    aria-describedby="NameHelp"
-                  />
+                  <input type="text" v-model="cate_medida" class="form-control" id="exampleInputName1"
+                    aria-describedby="NameHelp" />
                 </div>
               </div>
-
               <div class="row">
                 <div class="col-md-12 d-flex justify-content-center">
-                  <button
-                    data-bs-dismiss="modal"
-                    type="submit"
-                    class="btn btn-custom fw-semibold"
-                    :disabled="!isFormValid"
-                  >
+                  <button data-bs-dismiss="modal" type="submit" class="btn btn-custom fw-semibold"
+                    :disabled="!isFormValid">
                     <span class="btn-content" v-if="!loading">
                       {{ $t('buttons.save') }}
                     </span>
@@ -90,11 +59,15 @@
 
 
 <script setup>
+// Importar los métodos de Vue necesarios
 import { ref, computed, defineProps, watchEffect } from 'vue'
+// Importar la store de Categorías
 import { useCategoryStore } from '../../stores/categoriesStores'
 const loading = ref(false)
+// Inicializar el store
 const cate = useCategoryStore()
-//los props traen los datos de la tabla para editar la categoria correspondiente
+
+// Definir las propiedades que recibirá el componente para editar la categoria correspondiente
 const props = defineProps({
   cate_id: Number,
   cate_name: String,
@@ -102,7 +75,8 @@ const props = defineProps({
   cate_medida: String,
   edit: Boolean
 })
-//se llaman asi para que muestren los valores que ya tienen en el modal cuando se editan 
+
+// Mostrar los valores que ya tienen en el modal cuando se editan 
 const cate_name = ref(props.cate_name)
 const cate_description = ref(props.cate_description)
 const cate_medida = ref(props.cate_medida)
@@ -110,11 +84,13 @@ const editing = ref(props.edit)
 const submitting = ref(false)
 const modalId = ref(editing.value ? 'editModal' : 'createModal')
 const closeModal = ref(false)
-// Computed para verificar si todos los campos tienen valor 
+
+// Función para verificar si todos los campos tienen valor 
 const isFormValid = computed(() => {
   return cate_name.value && cate_description.value && cate_medida.value
 })
-//se utiliza para mostrar los campos en el modal cuando se esta editando
+
+// Función 'watchEffect' para mostrar los campos en el modal cuando se está editando
 watchEffect(() => {
   cate_name.value = props.cate_name
   cate_description.value = props.cate_description
@@ -122,7 +98,8 @@ watchEffect(() => {
   editing.value = props.edit
   modalId.value = editing.value ? 'editModal' : 'createModal'
 })
-//funcion para enviar los datos a la funcion creada en el store donde posteriormente la mandara al backent
+
+// Enviar los datos a la función creada en el store
 const handleSubmit = async () => {
   if (submitting.value) return;
   submitting.value = true;
@@ -149,10 +126,9 @@ const handleSubmit = async () => {
         closeModal.value = true;
       }
     }
-    
     clearForm();
   } catch (error) {
-    console.log(error);
+    console.log('');
   } finally {
     submitting.value = false;
     loading.value = false;
@@ -160,7 +136,7 @@ const handleSubmit = async () => {
   }
 };
 
-//cancelar los cambios y limpiar los campos de ser necesario
+// Función para cancelar los cambios
 const cancelChanges = () => {
   if (!editing.value) {
     clearForm()
@@ -169,6 +145,7 @@ const cancelChanges = () => {
   }
 }
 
+// Función para limpiar campos
 const clearForm = () => {
   cate_name.value = ''
   cate_description.value = ''
@@ -176,10 +153,8 @@ const clearForm = () => {
 }
 </script>
 
-
-
-
 <style lang="scss" scoped>
+/** Estilos del modal */
 .btn-custom {
   background-color: var(--purple-color);
   color: #ffffff;
