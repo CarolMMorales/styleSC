@@ -1,4 +1,5 @@
-<template>
+<template> 
+<!-- funcion para eliminar categoria -->
     <div
       class="modal fade"
       id="deleteModal"
@@ -44,7 +45,7 @@
   const props = defineProps({
     cate_id: Number
   })
-  
+  //manda los datos a la funcion deleteCategory para eliminar la categoria
   const deleteCategory = async () => {
     const success = await cateStore.deleteCategory(props.cate_id)
     if (success) {

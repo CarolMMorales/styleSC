@@ -1,6 +1,6 @@
 <template>
   <div class="container p-5">
-    <!-- Modal -->
+    <!-- Modal para crear y editar categorias-->
     <div
       class="modal fade border-primary"
       :id="modalId"
@@ -92,10 +92,9 @@
 <script setup>
 import { ref, computed, defineProps, watchEffect } from 'vue'
 import { useCategoryStore } from '../../stores/categoriesStores'
-
 const loading = ref(false)
 const cate = useCategoryStore()
-
+//los props traen los datos de la tabla para editar la categoria correspondiente
 const props = defineProps({
   cate_id: Number,
   cate_name: String,
@@ -103,22 +102,19 @@ const props = defineProps({
   cate_medida: String,
   edit: Boolean
 })
-
+//se llaman asi para que muestren los valores que ya tienen en el modal cuando se editan 
 const cate_name = ref(props.cate_name)
 const cate_description = ref(props.cate_description)
 const cate_medida = ref(props.cate_medida)
-
-
 const editing = ref(props.edit)
 const submitting = ref(false)
 const modalId = ref(editing.value ? 'editModal' : 'createModal')
 const closeModal = ref(false)
-
-// Computed para verificar si todos los campos tienen valor
+// Computed para verificar si todos los campos tienen valor 
 const isFormValid = computed(() => {
   return cate_name.value && cate_description.value && cate_medida.value
 })
-
+//se utiliza para mostrar los campos en el modal cuando se esta editando
 watchEffect(() => {
   cate_name.value = props.cate_name
   cate_description.value = props.cate_description
@@ -126,7 +122,7 @@ watchEffect(() => {
   editing.value = props.edit
   modalId.value = editing.value ? 'editModal' : 'createModal'
 })
-
+//funcion para enviar los datos a la funcion creada en el store donde posteriormente la mandara al backent
 const handleSubmit = async () => {
   if (submitting.value) return;
   submitting.value = true;
@@ -164,7 +160,7 @@ const handleSubmit = async () => {
   }
 };
 
-
+//cancelar los cambios y limpiar los campos de ser necesario
 const cancelChanges = () => {
   if (!editing.value) {
     clearForm()

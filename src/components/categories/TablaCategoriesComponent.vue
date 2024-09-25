@@ -13,7 +13,8 @@
         <div v-if="loading" class="d-flex justify-content-center">
           <LoadingComponent></LoadingComponent>
         </div>
-        <div v-if="!loading">
+        <div v-if="!loading"> 
+          <!-- tabla -->
           <table class="table table-striped table-bordered" v-if="!loading">
             <thead>
               <tr>
@@ -34,6 +35,7 @@
                 </th>
               </tr>
             </thead>
+            <!-- cuerpo de la tabla donde se mostraran los datos -->
             <tbody>
               <tr v-for="(Item, index) in paginated" :key="index">
                 <td>{{ Item.cate_name}}</td>
@@ -77,7 +79,7 @@
       </div>
       
     </div>
-    
+    <!-- llamar a los modales correspondiente y mandar los datos necesarios -->
     <ModalCategories
       :cate_id="parseInt(cate_id)"
       :cate_name="cate_name"
@@ -108,14 +110,13 @@
   const searchTerm = ref('')
   const currentPage = ref(1)
   const itemsPerPage = 10
-  
+  //carga los datos en la tabla para que se reflejen automaticamente despues de cualquier cambio
   onMounted(async () => {
     loading.value = true
     await cateStore.readCategory()
     loading.value = false
   })
-  
-
+  //con esta funcion se mandan los datos al modal de editar
 const prepareEditForm =  (proItem) => {
   cate_id.value = proItem.cate_id
   cate_name.value = proItem.cate_name
@@ -124,10 +125,11 @@ const prepareEditForm =  (proItem) => {
   editing.value = true
 
 }
+//con esta funcion se manda el id al modal correspondiente para eliminar la categoria
 const prepareDeleteForm = (proItem)=>{
   cate_id.value = proItem.cate_id
 }
-  
+  //filtro de busqueta de datos en la tabla 
   const filter = computed(() => {
     const lowerSearchTerm = searchTerm.value.toLowerCase()
   
