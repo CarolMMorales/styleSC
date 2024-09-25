@@ -1,12 +1,12 @@
+<!-- componente del footer -->
 <template>
-    
-<footer class=" text-lg-start w-100 footer mt-3">
+  <footer class=" text-lg-start w-100 footer mt-3">
     <div class="text center m-2">
-        <h2>{{ $t('titles.stylecs') }}</h2>
-        <p>{{ $t('footer.context') }}</p>
-        <p>{{ $t('footer.createby') }}</p>
+      <h2>{{ $t('titles.stylecs') }}</h2>
+      <p>{{ $t('footer.context') }}</p>
+      <p>{{ $t('footer.createby') }}</p>
     </div>
-</footer>
+  </footer>
 
 </template>
 
@@ -23,8 +23,7 @@
   font-size: smaller;
 }
 
-h2{
+h2 {
   font-size: 20px;
 }
-
 </style>

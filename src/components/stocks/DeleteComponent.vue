@@ -1,4 +1,5 @@
 <template>
+  <!-- modal para eliminar stocks -->
     <div
       class="modal fade"
       id="deleteModal"
@@ -38,13 +39,15 @@
   </template>
   
   <script setup>
+  //importa las funciones necesarias
   import { useStockStore } from '../../stores/stocksStores'
-  
+  //define variables
   const stockStore = useStockStore()
+  //trae el dato mandado desde la tabla
   const props = defineProps({
     stock_id: Number
   })
-  
+  //funcion de eliminar
   const deleteStock = async () => {
     const success = await stockStore.deleteStock(props.stock_id)
     if (success) {
@@ -56,6 +59,7 @@
   </script>
   
   <style lang="scss" scoped>
+  // estilo
   .modal-dialog-centered {
     display: flex;
     align-items: center;

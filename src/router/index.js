@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../stores/authStore.js'
-//import CryptoJS from 'crypto-js'
-
+//archivo de rutas
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_URL),
+  //ruta para login 
   routes: [
     {
       path: '/',
@@ -16,6 +16,7 @@ const router = createRouter({
         }
       ]
     },
+    //rutas protegidas, es decir, se necesita autentificacion
     {
       path: '/protected',
       component: () => import('../components/layout/ProtectedDefaultLayout.vue'),
@@ -76,7 +77,7 @@ const router = createRouter({
   ] 
 })
 
-
+//funcion para la autentificación y que cambie de rutas
 router.beforeEach(async (to, from, next) => {
   const requiredAuth = to.meta.auth;
   const UserStore = useAuthStore();

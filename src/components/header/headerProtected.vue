@@ -1,4 +1,5 @@
-<template>
+<!-- header cuanto ya se inicio sesion  -->
+<template> 
   <header class="fondo">
     <!-- Div para el título y el ProfileComponent -->
     <div class="header-top">
@@ -65,15 +66,16 @@
 </template>
 
 <script setup>
+//importar componente y funciones necesarias
 import { ref, computed } from 'vue'
 import ProfileComponent from '../../components/ProfileComponent.vue'
 import { useAuthStore } from '../../stores/authStore';
 const authStore = useAuthStore(); 
 const isMenuOpen = ref(false)
-console.log('Role ID:', authStore.rol_id); 
-const isRoleAdmin = computed(() => authStore.rol_id === '1');
-console.log('Is Admin:', isRoleAdmin.value);
 
+const isRoleAdmin = computed(() => authStore.rol_id === '1');
+
+//funciones para ocultar y desocultar el menu
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 }

@@ -44,13 +44,15 @@
             </tr>
           </thead>
           <tbody>
+            <!-- cuerpo de la tabla donde se mostraran los datos y botones para que cumplan sus respectivas funciones -->
             <tr v-for="(Item, index) in paginated" :key="index">
               <td>{{ Item.cate_name }} </td>
               <td>{{ Item.produc_name }}</td>
-              <td>{{ Item.produc_size}}</td>
-              <td>{{ Item.stock_cantidad}}</td>
+              <td>{{ Item.produc_size }}</td>
+              <td>{{ Item.stock_cantidad }}</td>
               <td>{{ Item.prove_name }}</td>
               <td>
+                <!-- boton pára ver los detalles del stock -->
                 <div class="text-light text-center align-items-center justify-content-center">
                   <button @click="prepareDetailsForm(Item)" type="button" data-bs-toggle="modal"
                     data-bs-target="#detailsModal" class="btn btn-outline-success">
@@ -59,6 +61,7 @@
                 </div>
               </td>
               <td>
+                <!-- boton para editar stocks -->
                 <div class="text-light text-center align-items-center justify-content-center">
                   <button @click="prepareEditForm(Item)" type="button" data-bs-toggle="modal"
                     data-bs-target="#editModal" class="btn btn-outline-success">
@@ -67,6 +70,7 @@
                 </div>
               </td>
               <td>
+                <!-- boton para eliminar stocks -->
                 <div class="text-light text-center align-items-center justify-content-center">
                   <button @click="prepareDeleteForm(Item)" type="button" data-bs-toggle="modal"
                     data-bs-target="#deleteModal" class="btn btn-outline-danger">
@@ -77,58 +81,60 @@
             </tr>
           </tbody>
         </table>
+        <!-- componente de paginación -->
         <PaginationComponent :currentPage="currentPage" :totalPages="totalPages" @changePage="handlePageChanged" />
       </div>
     </div>
   </div>
-
+  <!-- llama al modal de editar stocks y le pasa los datos necesarios para cumplir esa funcion -->
   <ModalStocks :stock_id="parseInt(stock_id)" :stock_costo="parseFloat(stock_costo)"
     :stock_precioVenta="parseFloat(stock_precioVenta)" :stock_cantidad="parseInt(stock_cantidad)"
     :produc_id="parseInt(produc_id)" :prove_id="parseInt(prove_id)" :edit="true"></ModalStocks>
-
+  <!-- llama al modal de detalles del stock donde se mostraran todos los detallles de este y solo es vista -->
   <ModalDetails :stock_id="parseInt(stock_id)" :stock_costo="parseFloat(stock_costo)"
     :stock_precioVenta="parseFloat(stock_precioVenta)" :stock_cantidad="parseInt(stock_cantidad)"
     :produc_id="parseInt(produc_id)" :produc_code="produc_code" :produc_description="produc_description"
     :produc_size="produc_size" :prove_id="parseInt(prove_id)"></ModalDetails>
-
+  <!-- llama al modal de eliminar stock -->
   <ModalDelete :stock_id="parseInt(stock_id)"></ModalDelete>
 
 </template>
-  
+
 <script setup>
-  import { useStockStore } from '../../stores/stocksStores'
-  import PaginationComponent from '../PaginationComponent.vue'
-  import LoadingComponent from '../LoadingComponent.vue'
-  import ModalStocks from './ModalComponent.vue'
-  import ModalDetails from './ModalDetails.vue'
-  import { ref, computed, onMounted, watch } from 'vue'
-  import ModalDelete from './DeleteComponent.vue'
+// llama funciones y componente necesarios 
+import { useStockStore } from '../../stores/stocksStores'
+import PaginationComponent from '../PaginationComponent.vue'
+import LoadingComponent from '../LoadingComponent.vue'
+import ModalStocks from './ModalComponent.vue'
+import ModalDetails from './ModalDetails.vue'
+import { ref, computed, onMounted, watch } from 'vue'
+import ModalDelete from './DeleteComponent.vue'
 
-  const stockStore = useStockStore()
+const stockStore = useStockStore()
+//declaración de variables 
+const produc_id = ref('')
+const produc_code = ref('')
+const produc_description = ref('')
+const produc_size = ref('')
+const prove_id = ref('')
+const stock_id = ref('')
+const stock_costo = ref('')
+const stock_precioVenta = ref('')
+const stock_cantidad = ref('')
 
-  const produc_id = ref('')
-  const produc_code = ref('')
-  const produc_description = ref('')
-  const produc_size = ref('') 
-  const prove_id = ref('')
-  const stock_id = ref('')
-  const stock_costo = ref('')
-  const stock_precioVenta = ref('')
-  const stock_cantidad = ref('')
+const editing = ref(false)
 
-  const editing = ref(false)
-
-  let loading = ref(false)
-  const searchTerm = ref('')
-  const currentPage = ref(1)
-  const itemsPerPage = 10
-  
-  onMounted(async () => {
-    loading.value = true
-    await stockStore.readStock()
-    loading.value = false
-  })
-  
+let loading = ref(false)
+const searchTerm = ref('')
+const currentPage = ref(1)
+const itemsPerPage = 10
+//carga de datos
+onMounted(async () => {
+  loading.value = true
+  await stockStore.readStock()
+  loading.value = false
+})
+//funcion para mandar datos al modal de detalles
 const prepareDetailsForm = (proItem) => {
   stock_id.value = proItem.stock_id
   stock_costo.value = proItem.stock_costo
@@ -136,12 +142,12 @@ const prepareDetailsForm = (proItem) => {
   stock_cantidad.value = proItem.stock_cantidad
   produc_id.value = proItem.produc_id
   prove_id.value = proItem.prove_id
-  produc_code.value = proItem.produc_code 
-  produc_description.value = proItem.produc_description 
-  produc_size.value = proItem.produc_size 
+  produc_code.value = proItem.produc_code
+  produc_description.value = proItem.produc_description
+  produc_size.value = proItem.produc_size
 }
-
-const prepareEditForm =  (proItem) => {
+//funcion para mandar los datos al modal de editar
+const prepareEditForm = (proItem) => {
   stock_id.value = proItem.stock_id
   stock_costo.value = proItem.stock_costo
   stock_precioVenta.value = proItem.stock_precioVenta
@@ -150,11 +156,12 @@ const prepareEditForm =  (proItem) => {
   prove_id.value = proItem.prove_id
   editing.value = true
 }
-const prepareDeleteForm = (proItem)=>{
+//funcion para mandar los datos al modal de eliminar 
+const prepareDeleteForm = (proItem) => {
   stock_id.value = proItem.stock_id
 }
-
-  const filter = computed(() => {
+//filtro de busqueda en tabla 
+const filter = computed(() => {
   const lowerSearchTerm = searchTerm.value.toLowerCase();
 
   return Array.isArray(stockStore.stock) ? stockStore.stock.filter((item) => {
@@ -175,55 +182,53 @@ const prepareDeleteForm = (proItem)=>{
     return matchesCateName || matchesProducName || matchesProveName || matchesCosto || matchesPrecioVenta || matchesCantidad;
   }) : [];
 });
-  
-  const paginated = computed(() => {
-    const startIndex = (currentPage.value - 1) * itemsPerPage
-    const endIndex = startIndex + itemsPerPage
-  
-    return filter.value.slice(startIndex, endIndex)
-  })
-  
-  const totalItems = computed(() => filter.value.length)
-  const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage))
-  
-  const handlePageChanged = (pageNumber) => {
-    currentPage.value = pageNumber
-  }
+//funcion de paginacion
+const paginated = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
 
-  
-  watch(searchTerm, () => {
-    // Reinicia currentPage a 1 cuando cambia el término de búsqueda
-    currentPage.value = 1
-  })
-  
-  </script>
-  
-  <style lang="scss" scoped>
-  @import 'datatables.net-bs5';
-  .lila-color-bg {
-    background-color: var(--lila-color);
-  }
-  
-  .btn-custom {
-    background-color: var(--purple-color);
-    color: #ffffff;
-    padding: 1rem 4rem;
-    font-size: 1.25rem;
-  }
-  
-  .btn-custom:hover {
-    background-color: var(----color-background);
-    color: var(--purple-color);
-    border: 2px solid var(--purple-color);
-  }
-  .btn-custom2 {
-    background-color: var(--purple-color);
-    color: #ffffff;
-  }
-  
-  // .btn-custom2:hover {
-  //   background-color: var(----color-background);
-  //   color: var(--purple-color);
-  //   border: 2px solid var(--purple-color);
-  // }
-  </style>
+  return filter.value.slice(startIndex, endIndex)
+})
+
+const totalItems = computed(() => filter.value.length)
+const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage))
+
+const handlePageChanged = (pageNumber) => {
+  currentPage.value = pageNumber
+}
+
+
+watch(searchTerm, () => {
+  // Reinicia currentPage a 1 cuando cambia el término de búsqueda
+  currentPage.value = 1
+})
+
+</script>
+
+<style lang="scss" scoped>
+// estilos
+@import 'datatables.net-bs5';
+
+.lila-color-bg {
+  background-color: var(--lila-color);
+}
+
+.btn-custom {
+  background-color: var(--purple-color);
+  color: #ffffff;
+  padding: 1rem 4rem;
+  font-size: 1.25rem;
+}
+
+.btn-custom:hover {
+  background-color: var(----color-background);
+  color: var(--purple-color);
+  border: 2px solid var(--purple-color);
+}
+
+.btn-custom2 {
+  background-color: var(--purple-color);
+  color: #ffffff;
+}
+
+</style>

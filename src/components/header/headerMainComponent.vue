@@ -1,27 +1,24 @@
+<!-- Titulo del header antes de autentificarse/iniciar sesion  -->
 <template>
-    <header class="fondo">
-           <h1 class="text-center mt-2">{{ $t('titles.stylecs') }}</h1>
-        
-     </header>
-     
-    </template>
-    <script setup>
+  <header class="fondo">
+    <h1 class="text-center mt-2">{{ $t('titles.stylecs') }}</h1>
 
-    
-    </script>
-    <style>
-       
-     
-      .fondo{
-        background-color: var(--lila-color);
-        color: #ffffff;
-        height: 12vh;
-        align-items: center;
-        font-weight: bold;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  </header>
 
-      }
-    
-      
-      </style>
-    
+</template>
+<script setup>
+
+
+</script>
+<style>
+/* estilo */
+.fondo {
+  background-color: var(--lila-color);
+  color: #ffffff;
+  height: 12vh;
+  align-items: center;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+
+}
+</style>

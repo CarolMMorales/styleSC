@@ -4,9 +4,8 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useAuthStore } from './authStore'
 import { showSwalAlert, handleResponse } from '../validation'
-//import { useI18n } from "vue-i18n";
+import Swal from 'sweetalert2';
 import { useRouter } from 'vue-router'
-
 export const useProductsStore = defineStore('products', () => {
   const router = useRouter()
   const authStore = useAuthStore()
@@ -34,25 +33,37 @@ export const useProductsStore = defineStore('products', () => {
         }
       });
       handleResponse(res, produc_name);
-      await readProduct();  
+      Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: 'Producto creado correctamente',
+        confirmButtonText: 'Aceptar'
+      });
+      await readProduct();
       return true;
     } catch (error) {
-      console.log(error.response?.data || error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ocurrió un error al crear el producto',
+        confirmButtonText: 'Aceptar'
+      });
+
     }
   };
 
   const getProductById = async (produc_id) => {
-  try {
-    const res = await axios.get(`${URL_PRODUCTS}/${produc_id}`);
-    return res.data.data;  // Asegúrate de que esto devuelve los datos correctos
-  } catch (error) {
-    console.error('Error fetching product:', error);
-  }
+    try {
+      const res = await axios.get(`${URL_PRODUCTS}/${produc_id}`);
+      return res.data.data;  // Asegúrate de que esto devuelve los datos correctos
+    } catch (error) {
+      console.error('Error fetching product:', error);
+    }
   };
 
 
   // Funcion para editar
-  const updateProduct = async (produc_id, new_produc_code, new_produc_name, new_produc_description, new_produc_size, new_cate_id ) => {
+  const updateProduct = async (produc_id, new_produc_code, new_produc_name, new_produc_description, new_produc_size, new_cate_id) => {
     try {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + authStore.token;
       const res = await axios({
@@ -71,11 +82,23 @@ export const useProductsStore = defineStore('products', () => {
         }
       });
       handleResponse(res, new_produc_name);
-      await readProduct(); 
-      return true;  
+      Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: 'Producto actualizado correctamente',
+        confirmButtonText: 'Aceptar'
+      });
+      await readProduct();
+      return true;
     } catch (error) {
       handleError(error);
-      return false;  
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ocurrio un error al actualizar el producto',
+        confirmButtonText: 'Aceptar'
+      });
+      return false;
     }
   };
 
@@ -91,9 +114,7 @@ export const useProductsStore = defineStore('products', () => {
       });
 
       produc.value = res.data.data;
-      
-      console.log(produc.value);
-      return produc.value;  
+      return produc.value;
 
     } catch (error) {
       handleError(error);
@@ -111,17 +132,27 @@ export const useProductsStore = defineStore('products', () => {
         }
       });
       handleResponse(res, "Producto eliminado");
-      
-   
+      Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: 'Persona eliminada correctamente',
+        confirmButtonText: 'Aceptar'
+      });
       await readProduct();
       return true;
     } catch (error) {
       handleError(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ocurrió un error al eliminar la categoria',
+        confirmButtonText: 'Aceptar'
+      });
       return false;
     }
   };
-
-  const handleError =(error)=>{
+  //Funcion para errores
+  const handleError = (error) => {
     if (error.response && error.response.status === 401) {
       router.push({ name: 'login', query: { redirect: router.currentRoute.fullPath } });
       authStore.logout()
@@ -135,6 +166,7 @@ export const useProductsStore = defineStore('products', () => {
   }
 
   readProduct()
+  //retorna las funciones utilizadas para que se puedan exportar
   return {
     registerProduct,
     getProductById,

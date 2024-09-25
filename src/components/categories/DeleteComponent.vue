@@ -1,26 +1,44 @@
-<template>
-  <!-- Modal para eliminar categorías -->
-  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="deleteModalLabel">{{ $t('categories.delete') }}</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body text-center">
-          <p>{{ $t('categories.messagesDelete') }}</p>
-        </div>
-        <div class="modal-footer justify-content-center">
-          <button type="button" class="btn btn-secondary btn-custom" data-bs-dismiss="modal">
-            {{ $t('buttons.cancel') }}
-          </button>
-          <button type="button" class="btn btn-danger btn-custom2" @click="deleteCategory" data-bs-dismiss="modal">
-            {{ $t('buttons.confirmDelete') }}
-          </button>
+
+<template> 
+<!-- modal para eliminar categoria -->
+    <div
+      class="modal fade"
+      id="deleteModal"
+      tabindex="-1"
+      aria-labelledby="deleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">{{ $t('categories.delete') }}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center">
+            <p>{{ $t('categories.messagesDelete') }}</p>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button
+              type="button"
+              class="btn btn-secondary btn-custom"
+              data-bs-dismiss="modal"
+            >
+              {{ $t('buttons.cancel') }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger btn-custom2"
+              @click="deleteCategory"
+              data-bs-dismiss="modal"
+            >
+              {{ $t('buttons.confirmDelete') }}
+            </button>
+          </div>
+
         </div>
       </div>
     </div>
-  </div>
+
 </template>
 
 <script setup>

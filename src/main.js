@@ -1,5 +1,5 @@
+//importa dependencias para el aplicativo
 import './assets/main.css'
-
 import { createApp, markRaw } from 'vue'
 import { createPinia } from 'pinia'
 import { createPersistedState } from 'pinia-plugin-persistedstate'
@@ -21,13 +21,13 @@ import { i18n } from './i18n/index.js'
 
 
 const app = createApp(App)
-
+//conexion con axios para consumir el backend
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 axios.defaults.headers.common['Accept'] = 'application/json';
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.defaults.withCredentials = true;
 
-
+//instancia pinia para manejar los datos y usar las tiendas
 const pinia = createPinia()
 pinia.use(({store}) =>{
 store.router = markRaw(router)

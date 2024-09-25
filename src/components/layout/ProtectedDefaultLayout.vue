@@ -1,3 +1,4 @@
+<!-- Estuctura que se mostrara y se adaptara despues de iniciar sesio, es decir los componente iran dentro de esta estructura -->
 <template>
     <HeaderProtected></HeaderProtected>
    <section class="container-fluid">

@@ -1,3 +1,4 @@
+<!-- componente de paginacion que va debao de las tablas y ayuda a desplazarse  -->
 <template>
   <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
@@ -7,7 +8,8 @@
       <li class="page-item" :class="{ disabled: currentPage === 1 }">
         <a class="page-link" href="#" @click.prevent="changePage(currentPage - 1)">{{ $t('pagination.previous') }}</a>
       </li>
-      <li class="page-item" v-for="pageNumber in totalPages" :key="pageNumber" :class="{ active: currentPage === pageNumber }">
+      <li class="page-item" v-for="pageNumber in totalPages" :key="pageNumber"
+        :class="{ active: currentPage === pageNumber }">
         <a class="page-link" href="#" @click.prevent="changePage(pageNumber)">{{ pageNumber }}</a>
       </li>
       <li class="page-item" :class="{ disabled: currentPage === totalPages }">
@@ -22,6 +24,7 @@
 
 
 <script setup>
+//funciones
 import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps(['currentPage', 'totalPages']);
@@ -35,20 +38,25 @@ function changePage(pageNumber) {
 </script>
 
 <style>
+/* estilo */
 .page-link {
-  color: var(--lila-color);;
-}
-.page-link.active, .active > .page-link {
-    z-index: 3;
-    color: var(--bs-pagination-active-color);
-    background-color: var(--lila-color);
-    border-color: var(--lila-color);;
-}
-.page-item.active .page-link {
-    z-index: 1;
-    color: #fff;
-    background-color: var(--lila-color);
-    border-color:  var(--lila-color);
+  color: var(--lila-color);
+  ;
 }
 
+.page-link.active,
+.active>.page-link {
+  z-index: 3;
+  color: var(--bs-pagination-active-color);
+  background-color: var(--lila-color);
+  border-color: var(--lila-color);
+  ;
+}
+
+.page-item.active .page-link {
+  z-index: 1;
+  color: #fff;
+  background-color: var(--lila-color);
+  border-color: var(--lila-color);
+}
 </style>

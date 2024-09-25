@@ -1,30 +1,15 @@
+<!-- //componente del perfil -->
 <template>
   <div class="card mt-5">
+    <!-- componente de carga  -->
     <div v-if="loading" class="d-flex justify-content-center">
       <LoadingComponent></LoadingComponent>
     </div>
     <div class="back" v-if="!loading">
-      <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-4">
-          <div class="row p-3">
-            <div class="col-12 mt-4">
-              <div class="position-relative text-center">
-                <figure class="figure">
-                  <img
-                    :src="photo"
-                    class="figure-img img-fluid object-fit-cover"
-                    :alt="$t('profile.photoAlt')"
-                  />
-                </figure>
-                <div class="overlayPefil" data-bs-toggle="modal" data-bs-target="#updatePhoto">
-                  <i class="ri-pencil-line"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-8 d-flex align-items-center">
-          <div class="w-100 text-center text-sm-center text-md-start">
+      <div class="row justify-content-center m-3">
+        <!-- encabezado del perfil -->
+        <div class="col-md-6 col-lg-8 d-flex align-items-start">
+          <div class="w-100 text-start text-sm-center text-md-start">
             <h2 class="fw-bold fs-2">
               {{ $t('profile.title') }} {{ profileStore.profile.per_name }}
               {{ profileStore.profile.per_lastname }}
@@ -33,7 +18,7 @@
         </div>
       </div>
     </div>
-
+<!-- cuerpo del perfil donde muestra los datos de la persona -->
     <div class="card-body" v-if="!loading">
       <div>
         <div class="card shadow bg-body-tertiary rounded">
@@ -41,6 +26,7 @@
             <div class="row p-3">
               <div class="row">
                 <div class="col-12 col-md-12 col-lg-12 text-end m-2">
+                  <!-- boton para editar los datos personales -->
                   <button
                     @click="editPerfil()"
                     class="btn btn-custom me-2"
@@ -49,6 +35,7 @@
                   >
                     {{ $t('profile.editPerfil') }}
                   </button>
+                  <!-- boton para cambiar la contraseñ -->
                   <button
                     class="btn btn-custom me-2"
                     data-bs-toggle="modal"
@@ -102,8 +89,10 @@
                   </table>
                 </div>
               </div>
+              <!-- parte de los contactos de la persona  -->
               <div class="row">
                 <div class="d-flex justify-content-end m-2">
+                  <!-- boton para añadir un nuevo contacto -->
                   <button
                     @click="prepareCreateForm(Item)"
                     class="btn btn-custom me-2"
@@ -131,11 +120,13 @@
                         </th>
                       </tr>
                     </thead>
+                    <!-- aqui se mostraran todos los contactos relacionados a la persona  -->
                     <tbody class="bg-body-tertiary">
                       <tr v-for="contact in contactStore.contact" :key="contact.con_id">
                         <td class="bg-body-tertiary">{{ contact.con_phone }}</td>
                         <td class="bg-body-tertiary">{{ contact.con_email }}</td>
                         <td>
+                          <!-- boton para editar contactos  -->
                           <button
                             @click="prepareEditContact(contact)"
                             type="button"
@@ -147,6 +138,7 @@
                           </button>
                         </td>
                         <td>
+                          <!-- boton para eliminar contacts -->
                           <button
                             @click="prepareDeleteContact(contact)"
                             type="button"
@@ -168,15 +160,21 @@
       </div>
     </div>
   </div>
+  <!-- llamar a los componente o modales necesarios -->
+   <!-- modal de cambiar contraseñla -->
   <changePassword></changePassword>
+  <!-- modal de editar contactos -->
   <contactsModal
     :con_id="parseInt(con_id)"
     :con_phone="con_phone"
     :con_email="con_email"
     :edit="true"
   ></contactsModal>
+  <!-- modal de crear contactos, donde se manda el per_id para asociarlo a la persona -->
   <createContactsModal :per_id="parseInt(per_id)"></createContactsModal>
+  <!-- modal para eliminar contactos -->
   <deleteContact :con_id="parseInt(con_id)"></deleteContact>
+  <!-- modal para editar perfil -->
   <editProfile
     :per_id="parseInt(per_id)"
     :per_name="per_name"
@@ -186,12 +184,12 @@
     :per_address="per_address"
     :edit="true"
   ></editProfile>
-  <changePhoto></changePhoto>
+
 </template>
 
 <script setup>
-import { ref, onMounted, watchEffect, watch } from 'vue'
-import changePhoto from '../../src/components/changePhoto.vue'
+// imorta los componentes y funciones necesarias
+import { ref, onMounted, watch } from 'vue'
 import LoadingComponent from '../../src/components/LoadingComponent.vue'
 import changePassword from '../../src/components/changePassword.vue'
 import contactsModal from '../../src/components/contact/ModalComponent.vue'
@@ -199,17 +197,12 @@ import deleteContact from '../../src/components/contact/DeleteComponent.vue'
 import createContactsModal from '../../src/components/contact/CreateModalComponent.vue'
 import editProfile from '../../src/components/persons/EditPerfilComponent.vue'
 import { useProfileStore } from '../stores/profileStore'
-//import { usePersonStore } from "../stores/personsStore";
-//import {useAuthStore } from '../stores/authStore'
-//import { formatDocument } from '../validations'
 import { useContactsStore } from '../stores/contactStore.js'
-//const personStore = usePersonStore();
 const contactStore = useContactsStore()
 const profileStore = useProfileStore()
-//const authStore = useAuthStore()
 const loading = ref(true)
-const photo = ref(profileStore.profile.use_photo)
 const editing = ref(false)
+  // instancia las variables que se utilizaran
 const con_id = ref('')
 const con_phone = ref('')
 const con_email = ref('')
@@ -219,14 +212,12 @@ const per_lastname = ref('')
 const typ_doc_id = ref('')
 const per_document = ref('')
 const per_address = ref('')
-const updatephoto = (event) => {
-  photo.value = event.detail.newImage
-}
 
+// funcion para mandar los datos al modal de crear contacto
 const prepareCreateForm = () => {
   per_id.value = profileStore.personId
 }
-
+// funcion para mandar los datos al modal de editar perfil
 const editPerfil = () => {
   per_id.value = profileStore.personId
   per_name.value = profileStore.profile.per_name
@@ -235,52 +226,33 @@ const editPerfil = () => {
   per_document.value = profileStore.profile.per_document
   per_address.value = profileStore.profile.per_address
 }
-
+// funcion para mandar los datos al modal de editar contacto
 const prepareEditContact = (contact) => {
   con_id.value = contact.con_id
   con_phone.value = contact.con_phone
   con_email.value = contact.con_email
   editing.value = true
-  console.log(con_phone.value)
 }
+// funcion para mandar los datos al modal de eliminar contacto
 const prepareDeleteContact = (contact) => {
   con_id.value = contact.con_id
 }
 
-onMounted(() => {
-  // Actualizar la imagen durante la montura inicial
-  updatephoto({ detail: { newImage: profileStore.profile.use_photo } })
-  // Escuchar evento para actualizar la imagen
-  window.addEventListener('update-profile-image', updatephoto)
-})
-
-// Actualizar la imagen si cambia en el store
-watchEffect(
-  () => profileStore.profile.use_photo,
-  (newValue) => {
-    photo.value = newValue
-  }
-)
-watch(
-  () => profileStore.profile.use_photo,
-  (newValue) => {
-    photo.value = newValue
-  }
-)
-
+//carga los datos y los muestra automaticamente
 watch(() => profileStore.profile)
-
+//espera a cargar los datos para luego mostrarlos en la vista 
 onMounted(async () => {
   // Cargar detalles del perfil y contactos durante la montura inicial
   await profileStore.readPersonDetailsById()
   //await personStore.readPerson();
   await contactStore.readContactsByPersonId() // Asegúrate de que esta función esté en contactStore
-  photo.value = profileStore.profile.use_photo
+
   loading.value = false
 })
 </script>
-
+ 
 <style>
+/* estilos de la vista */
 .card-img-top {
   width: 50%;
   height: auto;

@@ -1,3 +1,4 @@
+<!-- modal de cambiar contraseña -->
 <template>
   <div class="container p-5">
     <!-- Modal -->
@@ -22,6 +23,7 @@
               @click="cancelChanges()"
             ></button>
           </div>
+          <!-- cuerpo del modal donde se pediran los datos -->
           <div class="modal-body">
             <form @submit.prevent="changePassword">
               <label for="currentPassword">{{ $t('profile.password') }} </label>
@@ -111,9 +113,6 @@
                       <span role="status"> {{ $t('errors.loading') }}</span>
                     </span>
                   </button>
-                  <!-- <button type="button" class="btn btn-danger ml-5 fw-semibold" data-bs-dismiss="modal" @click="cancelChanges">
-                    {{ $t('buttons.cancel') }}
-                  </button> -->
                 </div>
               </div>
             </form>
@@ -125,19 +124,21 @@
 </template>
 
 <script setup>
+//se importan las funciones utiizadas
 import { useProfileStore } from '../stores/profileStore'
 import {  showPassword, validatePassword, validateSame} from '../validation'
 import { ref , computed} from 'vue'
-//import CryptoJS from 'crypto-js'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const profileStore = useProfileStore()
+//se instancian las variables
 const currentPassword = ref('')
 const newPassword = ref('')
 const confirmPassword = ref('')
 const message = ref('')
 const status= ref('')
 const loading = ref(false)
+//funcion para cambiar la contraseña
 const changePassword = async () => {
   try {
     const password = await profileStore.updatePassword(currentPassword.value, newPassword.value, confirmPassword.value);

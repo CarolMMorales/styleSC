@@ -1,3 +1,4 @@
+<!-- estructura que se muestra antes de iniciar sesion -->
 <template>
     <div class="app-container">
       <headerMain></headerMain>
@@ -18,6 +19,7 @@
  
   
   <style scoped>
+  /* estilo */
   .app-container {
     display: flex;
     flex-direction: column;
