@@ -23,16 +23,10 @@
                 {{ $t("persons.rol") }}
               </th>
               <th class="lila-color-bg text-light text-center">
-                {{ $t("persons.document") }}
-              </th>
-              <th class="lila-color-bg text-light text-center">
-                {{ $t("persons.address") }}
+                {{ $t("persons.user") }}
               </th>
               <th class="lila-color-bg text-light text-center">
                 {{ $t("buttons.detalle") }}
-              </th>
-              <th class="lila-color-bg text-light text-center">
-                {{ $t("buttons.editPerson") }}
               </th>
               <th class="lila-color-bg text-light text-center">
                 {{ $t("buttons.editUser") }}
@@ -47,8 +41,7 @@
             <tr v-for="(Item, index) in paginated" :key="index">
               <td>{{ Item.per_name }} {{ Item.per_lastname }}</td>
               <td>{{ Item.rol_name }}</td>
-              <td>{{ Item.typ_doc_name }} {{ Item.per_document }}</td>
-              <td>{{ Item.per_address }}</td>
+              <td>{{ Item.use_email }}</td>
               <td>
                 <div class="text-light text-center align-items-center justify-content-center">
                   <button @click="prepareDetail(Item)" type="button" data-bs-toggle="modal" data-bs-target="#verModal"
@@ -57,14 +50,7 @@
                   </button>
                 </div>
               </td>
-              <td>
-                <div class="text-light text-center align-items-center justify-content-center">
-                  <button @click="prepareEditForm(Item)" type="button" data-bs-toggle="modal"
-                    data-bs-target="#editModal" class="btn btn-outline-success">
-                    <i class="ri-pencil-fill"></i>
-                  </button>
-                </div>
-              </td>
+
               <td>
                 <div class="text-light text-center align-items-center justify-content-center">
                   <button @click="prepareEditUserForm(Item)" type="button" data-bs-toggle="modal"
@@ -89,10 +75,6 @@
     </div>
   </div>
   <!-- Llamar a los modales correspondiente y mandar los datos necesarios -->
-  <!-- Modal para editar personas -->
-  <ModalPersons :per_id="parseInt(per_id)" :per_name="per_name" :per_lastname="per_lastname"
-    :typ_doc_id="parseInt(typ_doc_id)" :per_document="per_document" :per_address="per_address" :edit="true">
-  </ModalPersons>
   <!-- Modal para eliminar personas -->
   <ModalDelete :per_id="parseInt(per_id)" :use_id="parseInt(use_id)"></ModalDelete>
   <!-- Modal para ver detalles de la persona -->
@@ -106,16 +88,15 @@
 
 <script setup>
 // Importar dependencias y stores necesarias
-import { usePersonStore } from "../../stores/personsStore";
+import { useAuthStore } from "../../stores/authStore";
 import PaginationComponent from "../PaginationComponent.vue";
 import LoadingComponent from "../LoadingComponent.vue";
-import ModalPersons from "./EditPersonComponent.vue";
 import ModalDetails from "./modalDetailsComponent.vue";
 import { ref, computed, onMounted, watch } from "vue";
 import ModalDelete from "./DeleteComponent.vue";
 import ModalEditUser from "./EditUserComponent.vue"
 
-const personStore = usePersonStore(); // Inicializar store
+const authStore = useAuthStore(); // Inicializar store
 
 // Definir variables reactivas
 const per_id = ref("");
@@ -136,20 +117,10 @@ const itemsPerPage = 10;
 // Función para cargar las personas en la tabla
 onMounted(async () => {
   loading.value = true;
-  await personStore.readPerson();
+  await authStore.readPerson();
   loading.value = false;
 });
 
-// Función para enviar los datos correspondientes al modal de editar persona
-const prepareEditForm = (Item) => {
-  per_id.value = Item.per_id;
-  per_name.value = Item.per_name;
-  per_lastname.value = Item.per_lastname;
-  typ_doc_id.value = Item.typ_doc_id;
-  per_document.value = Item.per_document;
-  per_address.value = Item.per_address;
-  editing.value = true;
-};
 
 // Función para enviar los datos correspondientes al modal de editar usuario
 const prepareEditUserForm = (Item) => {
@@ -179,7 +150,7 @@ const prepareDeleteForm = (Item) => {
 // Filtro de búsqueda de datos en la tabla
 const filter = computed(() => {
   const lowerSearchTerm = searchTerm.value.toLowerCase();
-  return personStore.person.filter((Item) => {
+  return authStore.person.filter((Item) => {
     const matchesName = Item.per_name.toLowerCase().includes(lowerSearchTerm);
     const matchesLastname = Item.per_lastname.toLowerCase().includes(lowerSearchTerm);
     const matchesAddress = Item.per_address.toLowerCase().includes(lowerSearchTerm);

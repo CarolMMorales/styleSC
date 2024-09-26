@@ -33,12 +33,31 @@ const router = createRouter({
           }
         },
         {
-          path: '/asesores',
-          name: 'asesores',
+          path: '/usersData',
+          name: 'users',
           component: () => import('../views/AsesoresView.vue'),
           meta:{
             auth:true
-          }
+          },
+          redirect: { name: 'byPersons' },
+          children: [
+            {
+              path: 'persons',
+              name: 'byPersons',
+              component: () => import('../views/PersonView.vue'),
+              meta: {
+                 auth: true
+              }
+            },
+            {
+              path: 'users',
+              name: 'byPersonsUser',
+              component: () => import('../views/UserView.vue'),
+              meta: {
+                auth: true
+              }
+            }
+          ]
         },
         {
           path: '/categories',

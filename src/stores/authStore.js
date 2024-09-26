@@ -10,13 +10,13 @@ export const useAuthStore = defineStore('user', () => {
   const router = useRouter();
   const URL_LOGIN = '/auth/login';
   const URL_LOGOUT = '/auth/logout';
-
+  const URL_PERSONS = `/persons`
   // Recuperar token y ID del usuario desde localStorage al cargar la aplicación
+  const person = ref([])
   const token = ref(localStorage.getItem('Accept') || null);
   const use_id = ref(localStorage.getItem('id') || null);
   const rol_id = ref(localStorage.getItem('rol_id') || null);
   const authUser = ref(null);
-  const persons = ref([])
   // Variable que verifica si el usuario está autenticado
   const isAuthenticated = ref(!!token.value);
 
@@ -105,7 +105,9 @@ export const useAuthStore = defineStore('user', () => {
         text: 'Usuario creado correctamente',
         confirmButtonText: 'Aceptar'
       });
+      readPerson()
       return true;
+      
     } catch (error) {
       Swal.fire({
         icon: 'error',
@@ -138,6 +140,7 @@ export const useAuthStore = defineStore('user', () => {
         text: 'Usuario actualizado correctamente',
         confirmButtonText: 'Aceptar'
       });
+      readPerson()
       return true;
     } catch (error) {
 
@@ -150,22 +153,7 @@ export const useAuthStore = defineStore('user', () => {
     }
   };
   //funcion para leer todas las personas 
-  const readPersons = async () => {
-    try {
-      const res = await axios({
-        url: `personsUser`,
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('Accept')}`
-        }
-      })
-      persons.value = res.data;
-      return persons.value;
 
-    } catch (error) {
-      console.log('')
-    }
-  };
   //funció para eliminar el usuario
   const deleteUser = async (use_id) => {
     try {
@@ -184,6 +172,7 @@ export const useAuthStore = defineStore('user', () => {
         text: 'Usuario eliminado correctamente',
         confirmButtonText: 'Aceptar'
       });
+      readPerson()
       return true;
     } catch (error) {
       Swal.fire({
@@ -209,7 +198,27 @@ export const useAuthStore = defineStore('user', () => {
     router.push('/login');
   };
 
-  readPersons()
+    //funcion para leer y utilizar datos
+    const readPerson = async () => {
+      try {
+        const res = await axios({
+          url: URL_PERSONS,
+          method: 'GET',
+          headers: {
+           Authorization: `Bearer ${localStorage.getItem('Accept')}`
+          }
+        })
+        person.value = res.data
+        return person.value
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error al leer el usuario',
+          confirmButtonText: 'Aceptar'
+        });
+    }
+  }
   //retornan las funciones y los arreglos utilizados para que se puedan expotar y utilizar en otra tiendas
   return {
     token,
@@ -217,9 +226,9 @@ export const useAuthStore = defineStore('user', () => {
     rol_id,
     authUser,
     isAuthenticated,
-    persons,
+    person,
     access,
-    readPersons,
+    readPerson,
     deleteUser,
     registerUser,
     updateUser,

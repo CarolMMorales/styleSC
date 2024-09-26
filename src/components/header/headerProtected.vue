@@ -32,8 +32,8 @@
           <!-- Asegurarnos de que el menú se oculte correctamente cuando está colapsado -->
           <div class="collapse navbar-collapse justify-content-center" :class="{ show: isMenuOpen }" id="navbarNavAltMarkup">
             <div class="menu-items d-flex">
-              <div  class="menu-item" v-if="isRoleAdmin">
-                <RouterLink to="/asesores" @click="closeMenu" active-class="active" class="side-btn">
+              <div  class="menu-item" >
+                <RouterLink to="/usersData" @click="closeMenu" active-class="active" class="side-btn">
                   {{ $t('titles.asesores') }}
                 </RouterLink>
               </div>
@@ -48,7 +48,7 @@
                 </RouterLink>
               </div>
               <div class="menu-item">
-                <RouterLink v-if="isRoleAdmin" to="/proveedores" @click="closeMenu" active-class="active" class="side-btn">
+                <RouterLink  to="/proveedores" @click="closeMenu" active-class="active" class="side-btn">
                   {{ $t('titles.proveedores') }}
                 </RouterLink>
               </div>
@@ -67,13 +67,12 @@
 
 <script setup>
 //importar componente y funciones necesarias
-import { ref, computed } from 'vue'
+import { ref} from 'vue'
 import ProfileComponent from '../../components/ProfileComponent.vue'
-import { useAuthStore } from '../../stores/authStore';
-const authStore = useAuthStore(); 
+
 const isMenuOpen = ref(false)
 
-const isRoleAdmin = computed(() => authStore.rol_id === '1');
+
 
 //funciones para ocultar y desocultar el menu
 const toggleMenu = () => {

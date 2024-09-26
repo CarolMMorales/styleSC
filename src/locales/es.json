@@ -19,7 +19,9 @@
     "asesores": "Usuarios",
     "search": "Buscar",
     "profile": "Perfil",
-    "exit": "Cerrar Sesión"
+    "exit": "Cerrar Sesión",
+    "persons": "Personas",
+    "users": "Usuarios"
   },
 
 "buttons":{
@@ -34,9 +36,11 @@
   "close": "Cerrar",
   "create": "Crear nuevo usuario",
   "detalle": "Detalle persona",
+  "contacts": "Contactos Personales",
   "editPerson": "Editar Persona",
   "editUser": "Editar Usuario",
-  "deleteUser": "Eliminar Usuario"
+  "deleteUser": "Eliminar Usuario",
+  "createPerson": "Crear Persona"
 },
 
 "messages": {
@@ -59,11 +63,14 @@
   "document": "Documento",
   "address": "Dirección",
   "rol": "Rol",
-  "datosPerson": "Datos de la persona"
+  "datosPerson": "Datos de la persona",
+  "deletePerson": "Eliminar persona",
+  "personDelete": "Esta seguro que desea eliminar esa persona, debe verificar que esta persona no tenga un usuario activo"
 },
 
 
 "contacts": {
+  "contacts": "Contactos personales",
  "create": "Agregar contacto",
  "edit": "Editar contacto",
  "delete": "Eliminar contacto",

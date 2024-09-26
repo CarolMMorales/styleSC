@@ -4,11 +4,11 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="deleteModalLabel">{{ $t("persons.deletePerson") }}</h5>
+          <h5 class="modal-title" id="deleteModalLabel">{{ $t("users.deleteUser") }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body text-center">
-          <p>{{ $t("persons.personDelete") }}</p>
+          <p>{{ $t("users.deletePerson") }}</p>
         </div>
         <div class="modal-footer justify-content-center">
           <button type="button" class="btn btn-secondary btn-custom" data-bs-dismiss="modal">
@@ -24,17 +24,17 @@
 </template>
 
 <script setup>
-import { usePersonStore } from "../../stores/personsStore"; // Importar store
-const personStore = usePersonStore(); // Inicializar store
+import { useAuthStore } from "../../stores/authStore"; // Importar store
+const authStore = useAuthStore(); // Inicializar store
 
 // Definir las propiedades que recibirá el componente para eliminar el usuario correspondiente
 const props = defineProps({
-  per_id: Number,
+  use_id: Number,
 });
 
 // Mandar los datos a la función deleteUser para eliminar el usuario
 const deleteUser = async () => {
-  const success = await personStore.deletePerson(props.per_id);
+  const success = await authStore.deleteUser(props.use_id);
   if (success) {
     console.log('');
   } else {
