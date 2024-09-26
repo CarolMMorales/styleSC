@@ -37,7 +37,6 @@
                 </span>
               </div>
               <div class="mb-3 col-12">
-
                 <label for="rol" class="form-label">{{ $t("profile.rol") }}</label>
                 <select v-model="rol_id" class="form-select" id="rol">
                   <option v-for="(Item, index) in filteredRol" :key="index" :value="Item.rol_id">
@@ -51,63 +50,13 @@
                 <button type="submit" class="btn btn-custom fw-semibold" data-bs-dismiss="modal"
                   :disabled="!isFormValid">
                   <span v-if="!loading">{{ $t("buttons.save") }}</span>
-                 
+                  <span v-else>
                     <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-
-                  <label for="person" class="form-label">{{ $t("users.person") }}</label>
-                  <select
-                    v-model="per_id"
-                    class="form-select"
-                    id="person"
-                    filterable>
-                    
-                    <option
-                      v-for="(Item, index) in filteredPersons"
-                      :key="index"
-                      :value="Item.per_id"
-                    >
-                      {{ Item.per_name }} {{ Item.per_lastname }}
-                    </option>
-                  </select>
-                </div>
-              <div class="row p-2">
-                <div class="mb-3">
-                  <label for="username" class="form-label">{{ $t("login.email") }}</label>
-                  
-                    <input
-                      type="text"
-                      id="username"
-                      v-model="use_email"
-                      class="form-control"
-                      :placeholder="$t('login.email')"
-                      required
-                    />
-                  
-                </div>
-  
-                <label for="use_password">{{ $t('profile.changePassword') }} </label>
-                <div class="input-group flex-nowrap">
-                  <input
-                    type="password"
-                    class="form-control ps-3"
-                    aria-describedby="password"
-                    v-model="use_password"
-                    id="txtNewPassword"
-                    required
-                    autocomplete="new-password"
-                  />
-                  <span
-                    v-on:click="showPassword('txtNewPassword')"
-                    id="show_newpassword"
-                    class="btn btn-outline-dark"
-                    type="button"
-                  ></span>
-                    <span class="icon fa fa-eye-slash"></span>
+                    <span role="status">{{ $t("errors.loading") }}</span>
+                  </span>
                 </button>
               </div>
             </div>
-            </div>
-            
           </form>
         </div>
       </div>
@@ -116,26 +65,24 @@
 </template>
 
 <script setup>
-// Importar las dependencias necesarias de 'vue'
+// Importar las dependencias y stores necesarias
 import { ref, computed, onMounted } from "vue";
-// Importar las validaciones y tiendas correspondientes
 import { showPassword } from '../../validation';
 import { useAuthStore } from "../../stores/authStore";
 import { useRolStore } from "../../stores/rolStore";
 
 const loading = ref(false);
 const submitting = ref(false);
-// Inicializar stores
 const rolStore = useRolStore();
 const authStore = useAuthStore();
 
-// Definir variables reactivas
+// Definir las variables reactivas
 const per_id = ref('');
 const use_email = ref("");
 const use_password = ref("");
 const rol_id = ref("");
 
-// Funciones para filtrar los datos de las stores
+// Funciones para filtrar los datos de los stores
 const filteredRol = computed(() => {
   return rolStore.rol.filter((item) => item.rol_name != 0);
 });
@@ -187,7 +134,7 @@ const clearForm = () => {
   rol_id.value = "";
 };
 
-// Función para cargar los datos en la vista correspondiente
+// Función para cargar los datos de los stores en el componente
 onMounted(async () => {
   await rolStore.readRol();
   await authStore.readPersons();
@@ -195,7 +142,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/** Estilos del modal */
+/* Estilos del modal*/
 .btn-custom {
   background-color: var(--purple-color);
   color: #ffffff;
